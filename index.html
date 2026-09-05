@@ -6,7 +6,6 @@
     <title>위대한 전환: 공유지의 비극</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 우아한 세리프 폰트 적용 */
         @font-face {
             font-family: 'ElegantSerif';
             src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/ElegantSerif-Medium.woff2') format('woff2');
@@ -22,7 +21,9 @@
             overflow-x: hidden;
         }
         
-        .font-title { font-family: 'ElegantSerif', 'Pretendard', serif; }
+        .font-title, h1, h2, h3, .dynamic-font { 
+            font-family: 'ElegantSerif', 'Pretendard', serif !important; 
+        }
         
         .glass-panel {
             background: rgba(255, 255, 255, 0.05);
@@ -50,85 +51,134 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-6">
 
-    <!-- 1. 초기 화면 (역할 선택) -->
-    <div id="panel-home" class="w-full max-w-3xl text-center fade-in-up">
-        <h1 class="text-7xl md:text-8xl font-title text-emerald-400 mb-6 drop-shadow-[0_0_20px_rgba(52,211,153,0.4)] tracking-wider">위대한 전환</h1>
-        <p class="text-xl md:text-2xl text-slate-300 mb-16 font-light tracking-wide">모두가 풍요로운 생태 문명으로 나아갈 수 있을까요?</p>
+    <!-- 1. 초기 화면 -->
+    <div id="panel-home" class="w-full max-w-4xl text-center fade-in-up">
+        <h1 class="text-7xl md:text-8xl text-emerald-400 mb-6 drop-shadow-[0_0_20px_rgba(52,211,153,0.4)] tracking-wider font-title">위대한 전환</h1>
+        <p class="text-xl md:text-2xl text-slate-300 mb-12 font-light tracking-wide">모두가 풍요로운 생태 문명으로 나아갈 수 있을까요?</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-indigo-600/40 p-10 rounded-2xl group transition-all duration-300 hover:scale-105 hover:border-indigo-400/50">
+            <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-indigo-600/40 p-10 rounded-2xl group transition-all duration-300 hover:scale-105">
                 <div class="text-6xl mb-4 group-hover:-translate-y-2 transition-transform duration-300">🖥️</div>
-                <div class="font-bold text-3xl text-indigo-300">진행자 <span class="text-lg text-slate-400 font-normal">(교사용)</span></div>
+                <div class="font-bold text-3xl text-indigo-300 font-title">진행자 <span class="text-lg text-slate-400 block mt-2 font-sans">(방 만들기 / 메인 전광판)</span></div>
             </button>
-            <button onclick="showPanel('panel-student-login')" class="glass-panel hover:bg-emerald-600/40 p-10 rounded-2xl group transition-all duration-300 hover:scale-105 hover:border-emerald-400/50">
+            <button onclick="showPanel('panel-student-login')" class="glass-panel hover:bg-emerald-600/40 p-10 rounded-2xl group transition-all duration-300 hover:scale-105">
                 <div class="text-6xl mb-4 group-hover:-translate-y-2 transition-transform duration-300">📱</div>
-                <div class="font-bold text-3xl text-emerald-300">참여자 <span class="text-lg text-slate-400 font-normal">(학생용)</span></div>
+                <div class="font-bold text-3xl text-emerald-300 font-title">참여자 <span class="text-lg text-slate-400 block mt-2 font-sans">(방 접속 / 비밀 리모컨)</span></div>
             </button>
         </div>
     </div>
 
-    <!-- 2. 교사용 방 개설 화면 -->
+    <!-- 1-5. 규칙 설명 화면 -->
+    <div id="panel-rules" class="w-full max-w-4xl hidden text-center fade-in-up">
+        <div class="glass-panel p-10 rounded-3xl text-left relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 text-8xl opacity-10">📖</div>
+            <h2 class="text-5xl text-emerald-400 mb-8 drop-shadow-md font-title">게임 규칙 안내</h2>
+            <div class="space-y-6 text-xl text-slate-200 mb-10 leading-relaxed">
+                <p>🌿 공유지(숲)의 초기 생태 점수는 <strong>100점</strong>입니다.</p>
+                <p>매 라운드, 모든 참여자는 숲에서 행동을 하나씩 <strong>비밀리에 선택</strong>합니다.</p>
+                <ul class="list-disc pl-8 space-y-4 bg-slate-900/50 p-6 rounded-xl border border-slate-700">
+                    <li><span class="text-red-400 font-bold text-2xl">😈 욕심내기</span><br>나만 큰 자산을 얻지만(+5💰), 숲이 크게 파괴됩니다(-15🌿). <br><span class="text-sm text-slate-400">* 3명 이상 겹치면 싸우느라 자산을 얻지 못합니다(0💰)!</span></li>
+                    <li><span class="text-amber-400 font-bold text-2xl">⛏️ 적당히</span><br>생존을 위한 최소한의 수확(+2💰)을 하며, 숲이 조금 손상됩니다(-3🌿).</li>
+                    <li><span class="text-emerald-400 font-bold text-2xl">💖 돌보기</span><br>수확을 포기하는(0💰) 대신, 숲을 돌보고 치유합니다(+10🌿).</li>
+                </ul>
+                <p class="text-red-400 font-bold text-2xl mt-4">⚠️ 경고: 숲의 점수가 0이 되면 아무도 승리할 수 없습니다!</p>
+            </div>
+            <div class="text-center">
+                <button id="btn-start-after-rules" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-5 rounded-xl font-bold text-2xl shadow-lg transition-all hover:scale-105 font-title tracking-wider">규칙을 이해했습니다 (시작)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 교사(방장)용 방 개설 화면 -->
     <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-10 rounded-3xl">
-            <h2 class="text-5xl font-title text-indigo-400 mb-10 drop-shadow-md">수업 방 개설</h2>
-            <input type="text" id="input-room-name" placeholder="방 이름 (예: 1반)" class="w-full p-5 mb-5 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-xl text-center transition-all">
-            <input type="number" id="input-team-count" placeholder="모둠 수 (예: 6)" min="2" max="10" class="w-full p-5 mb-10 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-xl text-center transition-all">
-            <button id="btn-create-room" class="w-full bg-indigo-600 hover:bg-indigo-500 p-5 rounded-xl font-bold text-2xl shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all hover:scale-105">게임 시작하기</button>
+            <h2 class="text-5xl text-indigo-400 mb-8 drop-shadow-md font-title">방 만들기</h2>
+            
+            <div class="mb-6 flex flex-col gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-700 text-left">
+                <label class="cursor-pointer flex items-center gap-3 text-lg font-bold text-indigo-200">
+                    <input type="radio" name="room-mode" value="class" checked class="w-5 h-5 accent-indigo-500"> 🏫 학급 전체 (모둠별 경쟁)
+                </label>
+                <label class="cursor-pointer flex items-center gap-3 text-lg font-bold text-emerald-200">
+                    <input type="radio" name="room-mode" value="group" class="w-5 h-5 accent-emerald-500"> 🧑‍🤝‍🧑 개별 조 (조원 개인 경쟁)
+                </label>
+            </div>
+
+            <input type="text" id="input-room-name" placeholder="방 이름 (예: 5반 1조)" class="w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-xl text-center">
+            <input type="number" id="input-team-count" placeholder="총 참여 인원 수 (예: 4)" min="2" max="10" class="w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-xl text-center">
+            <input type="number" id="input-host-num" placeholder="방장(내) 번호 (예: 1)" min="1" max="10" class="w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-indigo-500/50 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-xl text-center placeholder-indigo-300">
+            
+            <button id="btn-create-room" class="w-full bg-indigo-600 hover:bg-indigo-500 p-5 rounded-xl font-bold text-2xl shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all hover:scale-105 font-title">개설하기</button>
         </div>
     </div>
 
     <!-- 3. 학생용 접속 화면 -->
     <div id="panel-student-login" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-10 rounded-3xl">
-            <h2 class="text-5xl font-title text-emerald-400 mb-10 drop-shadow-md">모둠 접속</h2>
-            <input type="text" id="student-room-name" placeholder="선생님이 알려준 방 이름" class="w-full p-5 mb-5 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-xl text-center transition-all">
-            <input type="number" id="student-team-num" placeholder="우리 모둠 번호 (숫자만)" class="w-full p-5 mb-10 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-xl text-center transition-all">
-            <button id="btn-join-room" class="w-full bg-emerald-600 hover:bg-emerald-500 p-5 rounded-xl font-bold text-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all hover:scale-105">입장하기</button>
+            <h2 class="text-5xl text-emerald-400 mb-10 drop-shadow-md font-title">방 접속</h2>
+            <input type="text" id="student-room-name" placeholder="조장이 만든 방 이름" class="w-full p-5 mb-5 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
+            <input type="number" id="student-team-num" placeholder="나의 번호 (예: 2)" class="w-full p-5 mb-10 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
+            <button id="btn-join-room" class="w-full bg-emerald-600 hover:bg-emerald-500 p-5 rounded-xl font-bold text-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all hover:scale-105 font-title">입장하기</button>
         </div>
     </div>
 
-    <!-- 4. 교사용 대시보드 (메인 스크린) -->
-    <div id="panel-dashboard" class="w-full max-w-7xl hidden flex-col items-center fade-in-up">
+    <!-- 4. 메인 대시보드 (전광판) -->
+    <div id="panel-dashboard" class="w-full max-w-7xl hidden flex-col items-center fade-in-up relative pb-20">
         <div class="w-full flex justify-between items-end mb-8 px-6">
-            <div class="text-2xl text-slate-400 bg-slate-800/50 px-6 py-2 rounded-full border border-slate-700">접속 방: <span id="display-room-name" class="text-white font-bold"></span></div>
-            <div class="text-5xl font-title text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)]">제 <span id="display-round">1</span> 라운드</div>
-            <div id="narrative-text" class="text-xl glass-panel px-6 py-3 rounded-full text-yellow-300 font-bold border-yellow-500/30">학생들의 선택을 기다립니다...</div>
+            <div class="text-2xl text-slate-400 bg-slate-800/50 px-6 py-2 rounded-full border border-slate-700">접속 방: <span id="display-room-name" class="text-white font-bold dynamic-font"></span></div>
+            <div class="text-5xl text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.5)] font-title">제 <span id="display-round">1</span> 라운드</div>
+            <div id="narrative-text" class="text-xl glass-panel px-6 py-3 rounded-full text-yellow-300 font-bold border-yellow-500/30 dynamic-font">선택을 기다립니다...</div>
         </div>
         
         <div class="w-full max-w-5xl bg-slate-900/80 h-16 rounded-3xl mb-12 overflow-hidden border border-slate-600 relative shadow-[0_0_30px_rgba(0,0,0,0.5)]">
             <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
-            <div class="absolute inset-0 flex items-center justify-center font-title text-3xl drop-shadow-lg tracking-widest text-white">공유지 생태 점수: <span id="hp-text" class="ml-2">100</span></div>
+            <div class="absolute inset-0 flex items-center justify-center text-3xl drop-shadow-lg tracking-widest text-white font-title">생태 점수: <span id="hp-text" class="ml-2 font-bold font-sans">100</span></div>
         </div>
 
-        <div id="team-cards-container" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12"></div>
+        <div id="team-cards-container" class="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-12"></div>
 
-        <button id="btn-reveal" class="hidden bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-12 py-5 rounded-full font-bold text-3xl shadow-[0_0_30px_rgba(225,29,72,0.6)] transition-all hover:scale-105 animate-pulse">결과 동시 공개!</button>
-        <button id="btn-next-round" class="hidden bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 px-12 py-5 rounded-full font-bold text-3xl shadow-[0_0_30px_rgba(79,70,229,0.6)] transition-all hover:scale-105">다음 라운드 준비</button>
+        <button id="btn-reveal" class="hidden bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 px-12 py-5 rounded-full font-bold text-4xl shadow-[0_0_30px_rgba(225,29,72,0.6)] transition-all hover:scale-105 animate-pulse font-title">결과 동시 공개!</button>
+        <button id="btn-next-round" class="hidden bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 px-12 py-5 rounded-full font-bold text-4xl shadow-[0_0_30px_rgba(79,70,229,0.6)] transition-all hover:scale-105 font-title">다음 라운드 준비</button>
+
+        <!-- 방장 전용 플로팅 투표 버튼 -->
+        <button id="btn-host-vote" onclick="openHostVote()" class="hidden fixed bottom-10 right-10 bg-indigo-500 hover:bg-indigo-400 text-white px-8 py-4 rounded-full font-bold text-2xl shadow-[0_0_20px_rgba(99,102,241,0.6)] transition-all hover:scale-110 z-40 font-title border-2 border-white/50 animate-bounce">
+            📱 내 투표하기
+        </button>
+    </div>
+
+    <!-- 방장 전용 투표 모달 (전체 화면 오버레이) -->
+    <div id="modal-host-vote" class="fixed inset-0 bg-slate-900/95 hidden flex-col items-center justify-center z-50 fade-in-up backdrop-blur-sm">
+        <h2 class="text-5xl text-emerald-400 mb-8 font-title dynamic-font" id="host-vote-title">방장 투표</h2>
+        <div class="grid gap-5 w-full max-w-md px-6">
+            <button onclick="hostSubmitAction('greed')" class="bg-red-900/80 border border-red-500 p-6 rounded-2xl text-3xl font-bold hover:bg-red-600 transition-all font-title">😈 욕심내기</button>
+            <button onclick="hostSubmitAction('need')" class="bg-amber-900/80 border border-amber-500 p-6 rounded-2xl text-3xl font-bold hover:bg-amber-600 transition-all font-title">⛏️ 적당히</button>
+            <button onclick="hostSubmitAction('care')" class="bg-emerald-900/80 border border-emerald-500 p-6 rounded-2xl text-3xl font-bold hover:bg-emerald-600 transition-all font-title">💖 돌보기</button>
+        </div>
+        <button onclick="closeHostVote()" class="mt-12 text-slate-400 hover:text-white underline text-xl transition-colors">전광판으로 돌아가기</button>
     </div>
 
     <!-- 5. 학생용 리모컨 -->
     <div id="panel-remote" class="w-full max-w-md hidden text-center flex-col items-center justify-center h-[80vh] fade-in-up">
         <div class="glass-panel w-full p-8 rounded-3xl">
-            <h2 class="text-4xl font-title text-emerald-400 mb-4"><span id="remote-team-name"></span></h2>
+            <h2 class="text-4xl text-emerald-400 mb-4 dynamic-font" id="remote-team-name"></h2>
             <p class="text-slate-300 mb-10 text-lg">이번 라운드의 행동을 선택하세요.</p>
             
             <div id="remote-buttons" class="w-full grid gap-5">
-                <button onclick="submitAction('greed')" class="bg-red-900/60 border border-red-500/50 p-6 rounded-2xl text-2xl font-bold hover:bg-red-600 hover:scale-105 transition-all group shadow-lg">
-                    <span class="text-3xl mr-2 group-hover:animate-bounce inline-block">😈</span> 욕심내기
-                    <div class="text-sm text-red-300 font-normal mt-2 bg-red-950/50 py-1 rounded">나만 +5💰 / 숲 -15🌿</div>
+                <button onclick="submitAction('greed')" class="bg-red-900/60 border border-red-500/50 p-6 rounded-2xl text-3xl font-bold hover:bg-red-600 transition-all group font-title">
+                    <span class="mr-2 group-hover:animate-bounce inline-block">😈</span> 욕심내기
+                    <div class="text-sm text-red-300 font-normal mt-2 bg-red-950/50 py-1 rounded font-sans">나만 +5💰 / 숲 -15🌿</div>
                 </button>
-                <button onclick="submitAction('need')" class="bg-amber-900/60 border border-amber-500/50 p-6 rounded-2xl text-2xl font-bold hover:bg-amber-600 hover:scale-105 transition-all group shadow-lg">
-                    <span class="text-3xl mr-2 group-hover:animate-bounce inline-block">⛏️</span> 적당히
-                    <div class="text-sm text-amber-300 font-normal mt-2 bg-amber-950/50 py-1 rounded">모두 +2💰 / 숲 -3🌿</div>
+                <button onclick="submitAction('need')" class="bg-amber-900/60 border border-amber-500/50 p-6 rounded-2xl text-3xl font-bold hover:bg-amber-600 transition-all group font-title">
+                    <span class="mr-2 group-hover:animate-bounce inline-block">⛏️</span> 적당히
+                    <div class="text-sm text-amber-300 font-normal mt-2 bg-amber-950/50 py-1 rounded font-sans">모두 +2💰 / 숲 -3🌿</div>
                 </button>
-                <button onclick="submitAction('care')" class="bg-emerald-900/60 border border-emerald-500/50 p-6 rounded-2xl text-2xl font-bold hover:bg-emerald-600 hover:scale-105 transition-all group shadow-lg">
-                    <span class="text-3xl mr-2 group-hover:animate-bounce inline-block">💖</span> 돌보기
-                    <div class="text-sm text-emerald-300 font-normal mt-2 bg-emerald-950/50 py-1 rounded">포기 0💰 / 숲 +10🌿</div>
+                <button onclick="submitAction('care')" class="bg-emerald-900/60 border border-emerald-500/50 p-6 rounded-2xl text-3xl font-bold hover:bg-emerald-600 transition-all group font-title">
+                    <span class="mr-2 group-hover:animate-bounce inline-block">💖</span> 돌보기
+                    <div class="text-sm text-emerald-300 font-normal mt-2 bg-emerald-950/50 py-1 rounded font-sans">포기 0💰 / 숲 +10🌿</div>
                 </button>
             </div>
             <div id="remote-waiting" class="hidden flex flex-col items-center justify-center mt-10">
                 <div class="text-6xl mb-6 animate-bounce">🔒</div>
-                <div class="text-2xl font-bold text-indigo-300 bg-indigo-900/50 px-6 py-3 rounded-xl border border-indigo-500/30">선택 완료!<br><span class="text-lg font-normal text-slate-400 mt-2 block">교실 앞 화면을 주목하세요.</span></div>
+                <div class="text-3xl font-bold text-indigo-300 bg-indigo-900/50 px-6 py-4 rounded-xl border border-indigo-500/30 font-title">선택 완료!<br><span class="text-lg font-normal text-slate-400 mt-2 block font-sans">결과를 기다리세요.</span></div>
             </div>
         </div>
     </div>
@@ -154,9 +204,10 @@
         let currentRoom = "";
         let myTeamNum = 0;
         let isTeacher = false;
-        
+        let roomMode = 'class'; // 'class' or 'group'
+
         window.showPanel = (panelId) => {
-            document.querySelectorAll('body > div').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('body > div[id^="panel-"]').forEach(el => el.classList.add('hidden'));
             document.getElementById(panelId).classList.remove('hidden');
             if(panelId === 'panel-dashboard') document.getElementById('panel-dashboard').classList.add('flex');
             if(panelId === 'panel-remote') document.getElementById('panel-remote').classList.add('flex');
@@ -165,74 +216,112 @@
         const withTimeout = (promise, ms = 5000) => {
             return Promise.race([
                 promise,
-                new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과 (데이터베이스 규칙이 잠겨있거나 주소가 잘못되었습니다.)')), ms))
+                new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과')), ms))
             ]);
         };
 
+        let nextPanelAfterRules = '';
+        document.getElementById('btn-start-after-rules').addEventListener('click', () => {
+            showPanel(nextPanelAfterRules);
+        });
+
+        // ============================
+        // [방장] 개설 로직
+        // ============================
         document.getElementById('btn-create-room').addEventListener('click', async () => {
             const roomName = document.getElementById('input-room-name').value.trim();
             const teamCount = parseInt(document.getElementById('input-team-count').value);
-            if(!roomName || teamCount < 2) return alert("방 이름과 2 이상의 모둠 수를 정확히 입력하세요.");
+            const hostNum = parseInt(document.getElementById('input-host-num').value);
+            const selectedMode = document.querySelector('input[name="room-mode"]:checked').value;
+            
+            if(!roomName || teamCount < 2 || !hostNum) return alert("방 이름, 인원 수, 방장 번호를 정확히 입력하세요.");
+            if(hostNum > teamCount) return alert("방장 번호는 총 인원 수보다 클 수 없습니다.");
             
             const btn = document.getElementById('btn-create-room');
-            btn.innerText = "개설 중...";
-            btn.disabled = true;
+            btn.innerText = "개설 중..."; btn.disabled = true;
 
             try {
                 currentRoom = roomName;
-                isTeacher = true;
+                myTeamNum = hostNum; // 방장도 플레이어 번호를 가짐
+                isTeacher = true; 
+                roomMode = selectedMode;
+
                 const initialTeams = {};
-                for(let i=1; i<=teamCount; i++) {
-                    initialTeams[i] = { choice: null, gold: 0 };
-                }
+                for(let i=1; i<=teamCount; i++) initialTeams[i] = { choice: null, gold: 0 };
 
                 await withTimeout(set(ref(db, `rooms/${currentRoom}`), {
-                    state: { round: 1, hp: 100, phase: 'betting' },
+                    state: { round: 1, hp: 100, phase: 'betting', mode: selectedMode },
                     teams: initialTeams
                 }));
                 
                 document.getElementById('display-room-name').innerText = roomName;
-                showPanel('panel-dashboard');
+                nextPanelAfterRules = 'panel-dashboard';
+                showPanel('panel-rules');
                 listenRoom();
             } catch (error) {
-                alert(`방 개설 실패!\n원인: ${error.message}\n\n* 파이어베이스 [Realtime Database] -> [규칙(Rules)] 탭에서 .read와 .write가 true로 설정되어 있는지 반드시 확인하세요.`);
-                btn.innerText = "게임 시작하기";
-                btn.disabled = false;
+                alert(`방 개설 실패: ${error.message}`);
+                btn.innerText = "개설하기"; btn.disabled = false;
             }
         });
 
+        // ============================
+        // [학생] 접속 로직
+        // ============================
         document.getElementById('btn-join-room').addEventListener('click', async () => {
             const roomName = document.getElementById('student-room-name').value.trim();
             const teamNum = parseInt(document.getElementById('student-team-num').value);
-            if(!roomName || !teamNum) return alert("방 이름과 모둠 번호를 입력하세요.");
+            if(!roomName || !teamNum) return alert("방 이름과 번호를 입력하세요.");
             
             try {
                 const roomSnapshot = await withTimeout(get(ref(db, `rooms/${roomName}`)));
-                if (!roomSnapshot.exists()) {
-                    return alert("존재하지 않는 방입니다. 선생님이 개설한 방 이름을 확인하세요.");
-                }
+                if (!roomSnapshot.exists()) return alert("존재하지 않는 방입니다.");
 
+                const roomData = roomSnapshot.val();
                 currentRoom = roomName;
                 myTeamNum = teamNum;
-                document.getElementById('remote-team-name').innerText = `${teamNum}모둠 접속 완료`;
+                roomMode = roomData.state.mode || 'class';
                 
-                showPanel('panel-remote');
+                const displayName = roomMode === 'class' ? `${teamNum}모둠` : `플레이어 ${teamNum}`;
+                document.getElementById('remote-team-name').innerHTML = `${displayName} <span class="text-3xl text-emerald-200">접속 완료</span>`;
+                
+                nextPanelAfterRules = 'panel-remote';
+                showPanel('panel-rules');
                 listenRoom();
             } catch (error) {
                 alert(`접속 오류: ${error.message}`);
             }
         });
 
+        // 공통 투표 로직 (학생 리모컨)
         window.submitAction = async (choice) => {
             try {
                 await update(ref(db, `rooms/${currentRoom}/teams/${myTeamNum}`), { choice: choice });
                 document.getElementById('remote-buttons').classList.add('hidden');
                 document.getElementById('remote-waiting').classList.remove('hidden');
-            } catch (error) {
-                alert("선택 전송에 실패했습니다. 다시 시도해주세요.");
-            }
+            } catch (error) { alert("전송 실패"); }
         };
 
+        // 방장 전용 투표 로직
+        window.openHostVote = () => {
+            const displayName = roomMode === 'class' ? `${myTeamNum}모둠` : `플레이어 ${myTeamNum}`;
+            document.getElementById('host-vote-title').innerText = `${displayName} 투표 (방장)`;
+            document.getElementById('modal-host-vote').classList.remove('hidden');
+            document.getElementById('modal-host-vote').classList.add('flex');
+        };
+        
+        window.closeHostVote = () => {
+            document.getElementById('modal-host-vote').classList.add('hidden');
+            document.getElementById('modal-host-vote').classList.remove('flex');
+        };
+
+        window.hostSubmitAction = async (choice) => {
+            try {
+                await update(ref(db, `rooms/${currentRoom}/teams/${myTeamNum}`), { choice: choice });
+                closeHostVote();
+            } catch (error) { alert("전송 실패"); }
+        };
+
+        // 데이터 감지
         function listenRoom() {
             onValue(ref(db, `rooms/${currentRoom}`), (snapshot) => {
                 const data = snapshot.val();
@@ -240,21 +329,28 @@
 
                 if(isTeacher) {
                     renderDashboard(data);
+                    
+                    // 방장 투표 버튼 활성화/비활성화
+                    const hostData = data.teams[myTeamNum];
+                    if (data.state.phase === 'betting' && hostData && hostData.choice === null) {
+                        document.getElementById('btn-host-vote').classList.remove('hidden');
+                    } else {
+                        document.getElementById('btn-host-vote').classList.add('hidden');
+                        closeHostVote(); // 투표가 끝났거나 결과 공개 시 팝업 강제 종료
+                    }
                 } else {
                     if(data.state.phase === 'betting' && data.teams[myTeamNum].choice === null) {
                         document.getElementById('remote-buttons').classList.remove('hidden');
                         document.getElementById('remote-waiting').classList.add('hidden');
                     } else if (data.state.phase === 'reveal') {
                         document.body.classList.add('shake-screen');
-                        document.getElementById('remote-waiting').innerHTML = `<div class="text-6xl mb-6">👀</div><div class="text-3xl font-bold text-red-400 bg-red-950/80 px-6 py-4 rounded-xl border border-red-500 animate-pulse">결과 공개 중!<br>교실 앞 화면을 보세요.</div>`;
                         setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                    } else if (data.state.phase === 'betting') {
-                        document.getElementById('remote-waiting').innerHTML = `<div class="text-6xl mb-6 animate-bounce">🔒</div><div class="text-2xl font-bold text-indigo-300 bg-indigo-900/50 px-6 py-3 rounded-xl border border-indigo-500/30">선택 완료!<br><span class="text-lg font-normal text-slate-400 mt-2 block">교실 앞 화면을 주목하세요.</span></div>`;
                     }
                 }
             });
         }
 
+        // 대시보드 렌더링
         function renderDashboard(data) {
             document.getElementById('display-round').innerText = data.state.round;
             document.getElementById('hp-bar').style.width = `${Math.max(0, data.state.hp)}%`;
@@ -268,27 +364,32 @@
             container.innerHTML = '';
             
             let allChosen = true;
+            const mode = data.state.mode || 'class';
 
             Object.keys(data.teams).forEach(teamNum => {
                 const team = data.teams[teamNum];
                 if(team.choice === null) allChosen = false;
                 
+                // 방장 번호면 (방장) 표시 추가
+                const isHost = (parseInt(teamNum) === myTeamNum);
+                const hostTag = isHost ? '<span class="text-sm text-yellow-300 ml-1">(방장)</span>' : '';
+                const displayName = mode === 'class' ? `${teamNum}모둠${hostTag}` : `${teamNum}번${hostTag}`;
+                
                 let cardHTML = '';
+                
                 if(data.state.phase === 'betting') {
                     cardHTML = team.choice 
-                        ? `<div class="glass-panel rounded-2xl flex flex-col items-center justify-center h-56 border-t border-indigo-400/50 bg-indigo-900/40 shadow-[0_0_20px_rgba(79,70,229,0.3)] transform transition hover:scale-105"><div class="text-5xl mb-4 animate-bounce">🔒</div><div class="font-bold text-xl text-indigo-200">${teamNum}모둠 완료</div></div>`
-                        : `<div class="bg-slate-800/50 rounded-2xl border border-slate-700 border-dashed flex flex-col items-center justify-center h-56"><div class="text-slate-500 font-bold text-lg">${teamNum}모둠<br>고민 중...</div></div>`;
+                        ? `<div class="glass-panel rounded-2xl flex flex-col items-center justify-center h-56 bg-indigo-900/40 shadow-[0_0_20px_rgba(79,70,229,0.3)]"><div class="text-5xl mb-3 animate-bounce">🔒</div><div class="font-bold text-2xl text-indigo-200 dynamic-font">${displayName} 완료</div></div>`
+                        : `<div class="bg-slate-800/50 rounded-2xl border border-slate-700 border-dashed flex flex-col items-center justify-center h-56"><div class="text-slate-400 font-bold text-xl dynamic-font">${displayName}<br>고민 중...</div></div>`;
                 } else {
                     const icons = { greed: '😈', need: '⛏️', care: '💖' };
                     const bgColors = { greed: 'bg-red-900/80 border-red-500', need: 'bg-amber-900/80 border-amber-500', care: 'bg-emerald-900/80 border-emerald-500' };
-                    const actionName = { greed: '욕심내기', need: '적당히', care: '돌보기' };
                     
                     cardHTML = `
                         <div class="${bgColors[team.choice]} rounded-2xl p-5 flex flex-col items-center justify-center h-56 border-2 shadow-2xl fade-in-up">
                             <div class="text-6xl mb-3 drop-shadow-lg">${icons[team.choice]}</div>
-                            <div class="font-bold text-2xl text-white mb-1">${teamNum}모둠</div>
-                            <div class="text-sm text-slate-300 mb-3">${actionName[team.choice]}</div>
-                            <div class="bg-black/60 px-4 py-1.5 rounded-lg text-yellow-400 font-bold text-xl border border-yellow-500/30">${team.gold} 💰</div>
+                            <div class="font-bold text-2xl text-white mb-3 dynamic-font">${displayName}</div>
+                            <div class="bg-black/60 px-5 py-2 rounded-lg text-yellow-400 font-bold text-2xl border border-yellow-500/30">${team.gold} 💰</div>
                         </div>`;
                 }
                 container.innerHTML += `<div>${cardHTML}</div>`;
@@ -299,7 +400,7 @@
             
             if(data.state.phase === 'betting' && allChosen) {
                 btnReveal.classList.remove('hidden');
-                document.getElementById('narrative-text').innerText = "모든 모둠 선택 완료! 숲의 운명은?";
+                document.getElementById('narrative-text').innerText = "모두 선택을 마쳤습니다. 결과를 확인하세요!";
             } else {
                 btnReveal.classList.add('hidden');
             }
@@ -319,51 +420,35 @@
         }
 
         document.getElementById('btn-reveal').addEventListener('click', async () => {
-            try {
-                const snapshot = await get(ref(db, `rooms/${currentRoom}`));
-                const data = snapshot.val();
-                
-                let totalHpChange = 0;
-                let greedCount = 0;
-                
-                Object.values(data.teams).forEach(t => { if(t.choice === 'greed') greedCount++; });
-
-                Object.keys(data.teams).forEach(key => {
-                    const choice = data.teams[key].choice;
-                    if(choice === 'greed') {
-                        totalHpChange -= 15;
-                        data.teams[key].gold += (greedCount >= 3) ? 0 : (greedCount === 2 ? 2 : 5);
-                    } else if(choice === 'need') {
-                        totalHpChange -= 3;
-                        data.teams[key].gold += 2;
-                    } else if(choice === 'care') {
-                        totalHpChange += 10;
-                    }
-                });
-
-                data.state.hp += totalHpChange;
-                if(data.state.hp > 100) data.state.hp = 100;
-                data.state.phase = 'reveal';
-
-                await update(ref(db, `rooms/${currentRoom}`), data);
-            } catch (error) {
-                alert("정산 오류: " + error.message);
-            }
+            const snapshot = await get(ref(db, `rooms/${currentRoom}`));
+            const data = snapshot.val();
+            
+            let totalHpChange = 0; let greedCount = 0;
+            Object.values(data.teams).forEach(t => { if(t.choice === 'greed') greedCount++; });
+            
+            Object.keys(data.teams).forEach(key => {
+                const choice = data.teams[key].choice;
+                if(choice === 'greed') { totalHpChange -= 15; data.teams[key].gold += (greedCount >= 3) ? 0 : (greedCount === 2 ? 2 : 5); }
+                else if(choice === 'need') { totalHpChange -= 3; data.teams[key].gold += 2; }
+                else if(choice === 'care') { totalHpChange += 10; }
+            });
+            
+            data.state.hp += totalHpChange;
+            if(data.state.hp > 100) data.state.hp = 100;
+            data.state.phase = 'reveal';
+            
+            await update(ref(db, `rooms/${currentRoom}`), data);
         });
 
         document.getElementById('btn-next-round').addEventListener('click', async () => {
-            try {
-                const snapshot = await get(ref(db, `rooms/${currentRoom}`));
-                const data = snapshot.val();
-                
-                data.state.round++;
-                data.state.phase = 'betting';
-                Object.keys(data.teams).forEach(key => data.teams[key].choice = null);
-                
-                await update(ref(db, `rooms/${currentRoom}`), data);
-            } catch (error) {
-                alert("오류: " + error.message);
-            }
+            const snapshot = await get(ref(db, `rooms/${currentRoom}`));
+            const data = snapshot.val();
+            
+            data.state.round++;
+            data.state.phase = 'betting';
+            Object.keys(data.teams).forEach(key => data.teams[key].choice = null);
+            
+            await update(ref(db, `rooms/${currentRoom}`), data);
         });
     </script>
 </body>
