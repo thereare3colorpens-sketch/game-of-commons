@@ -37,11 +37,13 @@
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* 점수 깎일 때: 위험 진동 애니메이션 */
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
         .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8); }
 
-        @keyframes healGlow { 0% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } 50% { box-shadow: 0 0 35px rgba(52, 211, 153, 0.8); } 100% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } }
-        .heal-screen { animation: healGlow 1s ease-in-out; }
+        /* 점수 오를 때: 평화로운 초록빛 치유 글로우 애니메이션 */
+        @keyframes healGlow { 0% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } 50% { box-shadow: 0 0 45px rgba(52, 211, 153, 0.9); } 100% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } }
+        .heal-screen { animation: healGlow 1.2s ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -69,7 +71,7 @@
     <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-8 rounded-3xl">
             <h2 class="text-4xl text-indigo-400 mb-8 font-title font-bold">학급 일괄 개설</h2>
-            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
+            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
             <input type="number" id="input-group-count" placeholder="총 조(모둠) 개수 (예: 6)" min="1" max="12" class="font-body w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
             <button id="btn-create-class" class="font-title w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl font-bold text-2xl shadow-lg transition-all hover:scale-105">전체 조 만들기</button>
         </div>
@@ -88,22 +90,22 @@
 
     <!-- 3-5. 교사용 대형 규칙 설명 화면 -->
     <div id="panel-teacher-rules" class="w-full max-w-6xl hidden text-center fade-in-up">
-        <div class="glass-panel p-10 md:p-14 rounded-3xl text-left shadow-2xl">
-            <h2 class="text-3xl md:text-5xl text-emerald-400 mb-8 font-title font-bold border-b border-emerald-500/30 pb-6 leading-snug">📖 [교실 전용] 상세 규칙 및 생태 문명 가이드</h2>
+        <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl text-emerald-400 mb-8 font-title font-bold border-b border-emerald-500/30 pb-6 whitespace-nowrap overflow-hidden text-ellipsis">📖 [교실 전용] 상세 규칙 및 생태 문명 가이드</h2>
             
-            <div class="space-y-6 font-body text-slate-100 text-xl md:text-2xl mb-12 leading-relaxed">
+            <div class="space-y-6 font-body text-slate-100 text-lg md:text-xl mb-12 leading-relaxed">
                 <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600 shadow-inner">
-                    <h3 class="text-2xl md:text-3xl text-yellow-300 font-title mb-3 font-bold">🏭 1. 개인 성장 테크 트리 (산업화의 유혹)</h3>
+                    <h3 class="text-2xl text-yellow-300 font-title mb-3 font-bold">🏭 1. 개인 성장 테크 트리 (산업화의 유혹)</h3>
                     <p>부유해지기 위해 <strong>2단계 [산업화]</strong>(비용 15💰)로 업그레이드하면 수익이 폭증(+10💰)하지만 숲 파괴 데미지도 2배(-30🌿)로 커집니다. 이를 극복하려면 <strong>3단계 [생태 전환 기술]</strong>(비용 30💰)로 나아가야 합니다.</p>
                 </div>
 
                 <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600 shadow-inner">
-                    <h3 class="text-2xl md:text-3xl text-teal-300 font-title mb-3 font-bold">⚖️ 2. 긴급 법안과 쿨타임 (무분별한 스팸 방지)</h3>
+                    <h3 class="text-2xl text-teal-300 font-title mb-3 font-bold">⚖️ 2. 긴급 법안과 쿨타임 (무분별한 스팸 방지)</h3>
                     <p>자치 회의를 통해 통과시킨 긴급 법안(강제 돌보기, 욕심 삭감 등)은 <strong>딱 1라운드만 지속</strong>되며, 직전 라운드와 <strong>동일한 법안을 연속으로 통과시킬 수 없는 쿨타임 규칙</strong>이 적용됩니다. 또한 '모두 돌보기' 발동 시 고도화된 산업 시설(2/3단계)은 유지비(2💰)를 지불해야 합니다.</p>
                 </div>
 
                 <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600 shadow-inner">
-                    <h3 class="text-2xl md:text-3xl text-emerald-300 font-title mb-3 font-bold">🌿 3. 자연재생 및 생태 보조금</h3>
+                    <h3 class="text-2xl text-emerald-300 font-title mb-3 font-bold">🌿 3. 자연재생 및 생태 보조금</h3>
                     <p>숲은 건강할 때 알아서 회복(+5/+2)되지만 30점 이하에선 회복력이 완전히 상실됩니다. 또한 자치 회의를 통해 생태 보조금 갹출 비중을 2원, 3원으로 높여 보호자들에게 더 큰 보상을 줄 수 있습니다.</p>
                 </div>
             </div>
@@ -118,9 +120,9 @@
     <div id="panel-student-login" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-8 rounded-3xl">
             <h2 class="text-4xl text-emerald-400 mb-8 font-title font-bold">우리 조 접속</h2>
-            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
+            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
             <input type="number" id="student-group-num" placeholder="우리 조 번호 (예: 2)" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
-            <input type="text" id="student-nickname" placeholder="내 이름 또는 번호 (예: 김철수)" lang="ko" inputmode="text" x-inputmode="korean" class="font-body w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
+            <input type="text" id="student-nickname" placeholder="내 이름 또는 번호 (예: 김철수)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
             <button id="btn-join-group" class="font-title w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl font-bold text-2xl shadow-lg transition-all hover:scale-105">입장하기</button>
         </div>
     </div>
@@ -190,13 +192,18 @@
             <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-5 py-2.5 rounded-xl text-base font-bold transition">◀ 현황판</button>
         </div>
         
-        <!-- 생태 점수 바 -->
-        <div class="w-full bg-slate-950/80 h-16 md:h-20 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg w-full">
-            <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl drop-shadow-md text-white font-title font-bold gap-4">
-                <span id="forest-icon" class="text-4xl">🌿</span> 
-                <span>생태 점수: <span id="hp-text" class="font-body font-bold text-3xl md:text-4xl">100</span></span>
-                <span id="forest-status-label" class="text-base font-body px-3 py-1.5 rounded-xl bg-emerald-800/80 text-emerald-200 ml-2">풍요로운 숲</span>
+        <!-- 생태 점수 바 (숲과 공동체 서사 상시 시각화 배너 통합) -->
+        <div class="w-full bg-slate-950/80 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg w-full p-4 flex flex-col gap-3">
+            <div class="relative h-14 md:h-16 rounded-xl overflow-hidden border border-slate-700">
+                <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl drop-shadow-md text-white font-title font-bold gap-4">
+                    <span id="forest-icon" class="text-4xl">🌿</span> 
+                    <span>생태 점수: <span id="hp-text" class="font-body font-bold text-3xl md:text-4xl">100</span></span>
+                </div>
+            </div>
+            <!-- 실시간 숲과 공동체 상태 스토리 배너 -->
+            <div id="forest-story-banner" class="text-center font-body text-base md:text-lg font-bold py-2 px-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200">
+                🌿 푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)
             </div>
         </div>
 
@@ -419,7 +426,7 @@
             listenGroupMicro();
         };
 
-        // 학생 접속: 게임 시작 후에도 *동일한 닉네임(기존 참여자)*이면 재접속 허용, 새 참여자는 차단
+        // 학생 접속: 게임 시작 후에도 동일한 닉네임(기존 참여자)이면 재접속 허용, 새 참여자는 차단
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value.trim();
@@ -436,7 +443,6 @@
                 const gData = snapshot.val();
                 const isExistingPlayer = gData.players && gData.players[nickname];
 
-                // 게임이 이미 시작되었는데 새로운 사람이 들어오려고 하면 차단
                 if (gData.state.phase !== 'waiting' && !isExistingPlayer) {
                     return alert("이미 게임이 진행 중이어서 새로운 참여자는 입장할 수 없습니다. (기존 참여자라면 같은 이름으로 재입장 가능합니다)");
                 }
@@ -453,7 +459,6 @@
                     isGroupLeader = true;
                 }
 
-                // 처음 들어온 사람이면 플레이어 생성, 재접속한 사람이면 기존 자산/테크 유지
                 if (!isExistingPlayer) {
                     await set(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), { choice: "", gold: 0, techTier: 1 });
                 }
@@ -461,7 +466,6 @@
                 document.getElementById('display-class-group').innerText = `${myClass} ${myGroup}조`;
                 if(isGroupLeader) document.getElementById('my-role-badge').classList.remove('hidden');
                 
-                // 이미 게임 중인 방에 재접속한 거라면 규칙 화면을 건너뛰고 바로 게임판으로 복구
                 if (gData.state.phase !== 'waiting') {
                     showPanel('panel-group-game');
                 } else {
@@ -525,7 +529,7 @@
             });
         };
 
-        // 법안 투표 발동 (연속 쿨타임 체크 포함)
+        // 법안 투표 발동 (쿨타임 체크)
         window.startLawVote = async (lawType) => {
             const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
             const snapshot = await get(groupRef);
@@ -605,35 +609,41 @@
                 const fIcon = document.getElementById('forest-icon');
                 const fLabel = document.getElementById('forest-status-label');
                 const hpBarEl = document.getElementById('hp-bar');
+                const storyBanner = document.getElementById('forest-story-banner');
 
                 if (currentHp >= 70) {
                     fIcon.innerText = "🌿";
                     fLabel.innerText = "풍요로운 숲 (자연재생 +5)";
-                    fLabel.className = "text-base font-body px-3 py-1.5 rounded-xl bg-emerald-800/80 text-emerald-200 ml-2";
                     hpBarEl.className = "h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out";
+                    storyBanner.innerText = "🌿 푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)";
+                    storyBanner.className = "text-center font-body text-base md:text-lg font-bold py-2 px-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200";
                 } else if (currentHp >= 40) {
                     fIcon.innerText = "🍂";
                     fLabel.innerText = "주의 깊은 숲 (자연재생 +2)";
-                    fLabel.className = "text-base font-body px-3 py-1.5 rounded-xl bg-amber-800/80 text-amber-200 ml-2";
                     hpBarEl.className = "h-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-1000 ease-out";
+                    storyBanner.innerText = "🍂 조금씩 신음하는 숲 (나무들이 베여나가고 공동체에 갈등이 싹텉습니다)";
+                    storyBanner.className = "text-center font-body text-base md:text-lg font-bold py-2 px-4 rounded-xl bg-amber-950/70 border border-amber-500/40 text-amber-200";
                 } else if (currentHp > 0) {
                     fIcon.innerText = "⚠️";
                     fLabel.innerText = "위험한 숲 (자연재생 없음 +0)";
-                    fLabel.className = "text-base font-body px-3 py-1.5 rounded-xl bg-red-800/80 text-red-200 ml-2";
                     hpBarEl.className = "h-full bg-gradient-to-r from-red-600 to-red-400 animate-pulse transition-all duration-1000 ease-out";
+                    storyBanner.innerText = "⚠️ 황폐해진 공유지 (매연이 자욱하고 주민들의 불신이 극에 달했습니다)";
+                    storyBanner.className = "text-center font-body text-base md:text-lg font-bold py-2 px-4 rounded-xl bg-red-950/70 border border-red-500/40 text-red-200";
                 } else {
                     fIcon.innerText = "💀";
                     fLabel.innerText = "파국 붕괴됨";
-                    fLabel.className = "text-base font-body px-3 py-1.5 rounded-xl bg-slate-800 text-slate-400 ml-2";
                     hpBarEl.className = "h-full bg-slate-600";
+                    storyBanner.innerText = "💀 완전한 파국 (모든 생명이 사라지고 공동체는 파멸했습니다)";
+                    storyBanner.className = "text-center font-body text-base md:text-lg font-bold py-2 px-4 rounded-xl bg-slate-950 border border-slate-700 text-slate-400";
                 }
 
+                // 애니메이션 복구 로직 (깎이면 지진, 오르면 치유 글로우)
                 if (currentHp < lastHp && currentPhase === 'reveal' && !isTeacher) {
                     document.body.classList.add('shake-screen');
                     setTimeout(() => document.body.classList.remove('shake-screen'), 500);
                 } else if (currentHp > lastHp && currentPhase === 'reveal' && !isTeacher) {
                     document.body.classList.add('heal-screen');
-                    setTimeout(() => document.body.classList.remove('heal-screen'), 1000);
+                    setTimeout(() => document.body.classList.remove('heal-screen'), 1200);
                 }
                 lastHp = currentHp;
 
@@ -860,11 +870,14 @@
                                     update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${sVoteData.target}`), { gold: 0 });
                                     alert(`⚖️ 다수결 가결! [${sVoteData.target}]님의 수익이 몰수되었습니다.`);
                                 } else if (sVoteData.type === 'law') {
-                                    update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { 
-                                        activeLaw: sVoteData.lawType,
-                                        lastLaw: sVoteData.lawType // 쿨타임 기록
-                                    });
-                                    alert(`📜 새로운 긴급 법안 통과! 이번 라운드에 적용됩니다.`);
+                                    let updateObj = { activeLaw: sVoteData.lawType, lastLaw: sVoteData.lawType };
+                                    if (sVoteData.lawType === 'subsidy_2') { updateObj.activeLaw = null; updateObj.subsidyAmount = 2; alert("💖 생태 보조금 갹출 비중이 2원으로 상향되었습니다!"); }
+                                    if (sVoteData.lawType === 'subsidy_3') { updateObj.activeLaw = null; updateObj.subsidyAmount = 3; alert("💖 생태 보조금 갹출 비중이 3원으로 상향되었습니다!"); }
+                                    
+                                    update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), updateObj);
+                                    if (sVoteData.lawType !== 'subsidy_2' && sVoteData.lawType !== 'subsidy_3') {
+                                        alert(`📜 새로운 긴급 법안 통과! 이번 라운드에 적용됩니다.`);
+                                    }
                                 }
                             } else {
                                 alert(`⚖️ 다수결 부결! 기각되었습니다.`);
@@ -933,13 +946,12 @@
                     totalHpChange += 10; 
                 }
 
-                // 모두 돌보기 강제 의무 발동 시 2단계 이상 산업화 시설 보유자는 유지비 2원 부과
                 if (activeLaw === 'mandatory_care' && tier >= 2) {
                     data.players[k].gold = Math.max(0, data.players[k].gold - 2);
                 }
             });
 
-            // 생태 보조금 갹출 적용 (subsidy_2 / subsidy_3 법안 통과 시 비중 반영)
+            // 생태 보조금 갹출 적용
             if (careCount > 0) {
                 pKeys.forEach(k => {
                     if (data.players[k].choice === 'care') {
@@ -968,8 +980,6 @@
             data.state.hp += totalHpChange;
             if(data.state.hp > 100) data.state.hp = 100;
 
-            let nextLaw = null; // 1회성 법안 자동 소멸
-
             if(data.state.hp <= 0) {
                 data.state.hp = 0;
                 data.state.phase = 'gameover';
@@ -978,7 +988,6 @@
                 data.state.phase = 'reveal';
             }
 
-            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { activeLaw: nextLaw });
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
         });
 
@@ -1001,6 +1010,7 @@
 
             data.state.round++;
             data.state.phase = 'betting';
+            data.state.activeLaw = null; // 다음 라운드로 넘어갈 때 활성 법안 확실히 초기화
             data.state.sanctionVote = null;
             Object.keys(data.players).forEach(k => data.players[k].choice = "");
             
