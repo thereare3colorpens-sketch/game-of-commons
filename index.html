@@ -6,9 +6,11 @@
     <title>위대한 전환: 공유지의 비극</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* 프리텐다드 본문용 폰트 */
         @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
         @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
         
+        /* 우아한 세리프 제목용 폰트 (GraceSerif) */
         @font-face { font-family: 'ElegantSerif'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/GraceSerif-Regular.woff2') format('woff2'); font-weight: 500; font-display: swap; }
         @font-face { font-family: 'ElegantSerif'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/GraceSerif-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 
@@ -21,6 +23,7 @@
             touch-action: pan-y;
         }
         
+        /* 폰트 지정 클래스 (강제 적용) */
         .font-title { font-family: 'ElegantSerif', serif !important; }
         .font-body { font-family: 'Pretendard', sans-serif !important; }
         
@@ -36,13 +39,6 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
         .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 100px rgba(239, 68, 68, 0.6); }
-
-        .responsive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            width: 100%;
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -78,26 +74,26 @@
 
     <!-- 3. 교사: 매크로 현황판 (모든 조 보기) -->
     <div id="panel-teacher-macro" class="w-full max-w-7xl hidden flex-col items-center fade-in-up">
-        <div class="w-full flex justify-between items-center mb-8 bg-slate-900/60 p-4 rounded-2xl border border-slate-700">
+        <div class="w-full flex justify-between items-center mb-8 bg-slate-900/60 p-4 rounded-2xl border border-slate-700 w-full">
             <h2 class="text-3xl text-emerald-400 font-title font-bold"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
-            <button onclick="showPanel('panel-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg font-body font-bold shadow-md">📖 칠판에 규칙 띄우기</button>
+            <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg font-body font-bold shadow-md">📖 칠판에 규칙 띄우기</button>
         </div>
         <div id="macro-grid" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </div>
 
-    <!-- 3-5. 규칙 설명 화면 (교사가 칠판에 띄움) -->
-    <div id="panel-rules" class="w-full max-w-5xl hidden text-center fade-in-up">
+    <!-- 3-5. 교사용 규칙 설명 화면 (칠판 띄우기용) -->
+    <div id="panel-teacher-rules" class="w-full max-w-5xl hidden text-center fade-in-up">
         <div class="glass-panel p-10 rounded-3xl text-left shadow-2xl">
             <h2 class="text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">게임 규칙 및 목표</h2>
             <div class="bg-emerald-950/50 p-5 rounded-2xl mb-6 border border-emerald-500/30">
                 <p class="text-xl font-body leading-relaxed text-emerald-50">이 게임은 가장 돈을 많이 버는 1등을 가리는 것이 아닙니다.<br><strong>끝없는 탐욕이 부르는 공유지(숲)의 파괴를 막고, 조원들이 협력하여 생존하는 것</strong>이 목표입니다.</p>
             </div>
-            <div class="grid md:grid-cols-3 gap-6 font-body text-center">
+            <div class="grid md:grid-cols-3 gap-6 font-body text-center mb-8">
                 <div class="bg-red-950/60 p-6 rounded-2xl border border-red-500/30 flex flex-col items-center">
                     <div class="text-4xl mb-2">😈</div>
                     <div class="font-title text-2xl text-red-400 font-bold mb-2">욕심내기</div>
                     <p class="text-lg">나만 자산 획득 <span class="text-yellow-400 font-bold">+5💰</span><br>숲 파괴 <span class="text-red-400 font-bold">-15🌿</span></p>
-                    <p class="text-xs text-slate-400 mt-2">*3명 이상 겹치면 자산 획득 0</p>
+                    <p class="text-sm text-slate-400 mt-2">*3명 겹치면 자산 획득 0</p>
                 </div>
                 <div class="bg-amber-950/60 p-6 rounded-2xl border border-amber-500/30 flex flex-col items-center">
                     <div class="text-4xl mb-2">⛏️</div>
@@ -110,7 +106,7 @@
                     <p class="text-lg">자산 포기 <span class="text-slate-400 font-bold">0💰</span><br>숲 치유 <span class="text-emerald-400 font-bold">+10🌿</span></p>
                 </div>
             </div>
-            <div class="text-center mt-8">
+            <div class="text-center">
                 <button onclick="showPanel('panel-teacher-macro')" class="font-title bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-xl font-bold text-xl transition-all">현황판으로 돌아가기</button>
             </div>
         </div>
@@ -127,7 +123,41 @@
         </div>
     </div>
 
-    <!-- 5. 학생용 게임 화면 (마이크로 뷰 - 조 단위 독립 플레이) -->
+    <!-- 4-5. 학생용 게임 규칙 안내 (방 접속 직후) -->
+    <div id="panel-student-rules" class="w-full max-w-4xl hidden text-center fade-in-up">
+        <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl">
+            <h2 class="text-4xl md:text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">게임 규칙 숙지</h2>
+            <div class="bg-emerald-950/50 p-5 rounded-2xl mb-6 border border-emerald-500/30">
+                <p class="text-lg md:text-xl font-body leading-relaxed text-emerald-50">
+                    이 게임의 진짜 목표는 혼자 1등을 하는 것이 아니라,<br>
+                    <strong>자원의 고갈을 막고 조원 모두가 살아남는 것</strong>입니다.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-body text-center mb-8 w-full">
+                <div class="bg-red-950/60 p-5 rounded-2xl border border-red-500/30">
+                    <div class="text-3xl mb-1">😈</div>
+                    <div class="font-title text-xl text-red-400 font-bold mb-2">욕심내기</div>
+                    <p class="text-base text-slate-200">나만 <span class="text-yellow-400 font-bold">+5💰</span><br>숲 파괴 <span class="text-red-400 font-bold">-15🌿</span></p>
+                    <p class="text-xs text-slate-400 mt-2">*3명 겹치면 +0💰</p>
+                </div>
+                <div class="bg-amber-950/60 p-5 rounded-2xl border border-amber-500/30">
+                    <div class="text-3xl mb-1">⛏️</div>
+                    <div class="font-title text-xl text-amber-400 font-bold mb-2">적당히</div>
+                    <p class="text-base text-slate-200">모두 <span class="text-yellow-400 font-bold">+2💰</span><br>숲 손상 <span class="text-amber-400 font-bold">-3🌿</span></p>
+                </div>
+                <div class="bg-emerald-950/60 p-5 rounded-2xl border border-emerald-500/30">
+                    <div class="text-3xl mb-1">💖</div>
+                    <div class="font-title text-xl text-emerald-400 font-bold mb-2">돌보기</div>
+                    <p class="text-base text-slate-200">포기 <span class="text-slate-400 font-bold">0💰</span><br>숲 치유 <span class="text-emerald-400 font-bold">+10🌿</span></p>
+                </div>
+            </div>
+            <div class="text-center">
+                <button id="btn-enter-room" class="font-title w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 px-12 py-5 rounded-2xl font-bold text-2xl shadow-lg transition-all hover:scale-105">숙지했습니다 (대기실 입장)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 학생용 게임 화면 (조 단위 독립 플레이) -->
     <div id="panel-group-game" class="w-full max-w-5xl hidden flex-col items-center fade-in-up relative pb-24">
         
         <div class="w-full flex flex-wrap justify-between items-center mb-6 bg-slate-900/70 p-4 rounded-2xl border border-slate-700 backdrop-blur-sm gap-4">
@@ -135,10 +165,10 @@
                 <span id="display-class-group"></span> <span id="my-role-badge" class="ml-2 bg-indigo-600 text-white text-sm px-2 py-1 rounded hidden font-body">👑 방장</span>
             </div>
             <div class="text-2xl md:text-4xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/50 px-6 py-2 rounded-xl">제 <span id="display-round">1</span> 라운드</div>
-            <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-bold transition">◀ 전체 현황</button>
+            <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-bold transition">◀ 현황판</button>
         </div>
         
-        <div class="w-full bg-slate-950/80 h-12 md:h-14 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg">
+        <div class="w-full bg-slate-950/80 h-12 md:h-14 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg w-full">
             <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
             <div class="absolute inset-0 flex items-center justify-center text-xl md:text-2xl drop-shadow-md text-white font-title font-bold">생태 점수: <span id="hp-text" class="ml-2 font-body font-bold text-2xl md:text-3xl">100</span></div>
         </div>
@@ -151,27 +181,30 @@
         </div>
 
         <div id="section-betting" class="w-full hidden flex-col items-center">
-            <p class="text-xl md:text-2xl text-emerald-100 mb-6 font-body font-bold">이번 라운드의 행동을 선택하세요.</p>
-            <div id="action-buttons-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-4xl mb-10">
-                <button onclick="submitAction('greed')" class="bg-red-950/80 border border-red-500/50 p-6 rounded-2xl hover:bg-red-800 transition group font-title shadow-md">
+            <p class="text-xl md:text-2xl text-emerald-100 mb-6 font-body font-bold w-full text-left md:text-center">이번 라운드의 행동을 선택하세요.</p>
+            
+            <!-- 버튼 좌우 꽉 차게 변경 -->
+            <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                <button onclick="submitAction('greed')" class="w-full bg-red-950/80 border border-red-500/50 p-6 rounded-2xl hover:bg-red-800 transition group font-title shadow-md">
                     <div class="text-4xl mb-2 group-hover:scale-110 transition">😈</div><div class="text-2xl font-bold">욕심내기</div>
                 </button>
-                <button onclick="submitAction('need')" class="bg-amber-950/80 border border-amber-500/50 p-6 rounded-2xl hover:bg-amber-800 transition group font-title shadow-md">
+                <button onclick="submitAction('need')" class="w-full bg-amber-950/80 border border-amber-500/50 p-6 rounded-2xl hover:bg-amber-800 transition group font-title shadow-md">
                     <div class="text-4xl mb-2 group-hover:scale-110 transition">⛏️</div><div class="text-2xl font-bold">적당히</div>
                 </button>
-                <button onclick="submitAction('care')" class="bg-emerald-950/80 border border-emerald-500/50 p-6 rounded-2xl hover:bg-emerald-800 transition group font-title shadow-md">
+                <button onclick="submitAction('care')" class="w-full bg-emerald-950/80 border border-emerald-500/50 p-6 rounded-2xl hover:bg-emerald-800 transition group font-title shadow-md">
                     <div class="text-4xl mb-2 group-hover:scale-110 transition">💖</div><div class="text-2xl font-bold">돌보기</div>
                 </button>
             </div>
             
-            <div id="betting-status-grid" class="responsive-grid mb-10"></div>
+            <!-- 학생 상태도 꽉 차게 변경 -->
+            <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"></div>
             
             <button id="btn-reveal" class="hidden font-title bg-red-600 hover:bg-red-500 px-12 py-5 rounded-2xl font-bold text-3xl shadow-[0_0_20px_rgba(239,68,68,0.5)] transition hover:scale-105">결과 공개하기</button>
         </div>
 
         <div id="section-reveal" class="w-full hidden flex-col items-center">
             <h3 class="text-3xl font-title text-indigo-300 mb-6">라운드 결과</h3>
-            <div id="reveal-grid" class="responsive-grid mb-10"></div>
+            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"></div>
             <button id="btn-next-round" class="hidden font-title bg-indigo-600 hover:bg-indigo-500 px-12 py-5 rounded-2xl font-bold text-3xl shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105">다음 라운드 준비</button>
         </div>
         
@@ -202,10 +235,7 @@
         let isGroupLeader = false;
 
         window.addEventListener('beforeunload', (e) => {
-            if (myClass && !isTeacher) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
+            if (myClass && !isTeacher) { e.preventDefault(); e.returnValue = ''; }
         });
 
         window.showPanel = (panelId) => {
@@ -216,10 +246,7 @@
         };
 
         const withTimeout = (promise, ms = 5000) => {
-            return Promise.race([
-                promise,
-                new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과')), ms))
-            ]);
+            return Promise.race([ promise, new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과')), ms)) ]);
         };
 
         document.getElementById('btn-create-class').addEventListener('click', async () => {
@@ -234,14 +261,10 @@
             try {
                 const classData = { config: { groupCount: groupCount }, groups: {} };
                 for(let i=1; i<=groupCount; i++) {
-                    classData.groups[i] = {
-                        state: { round: 1, hp: 100, phase: 'waiting', leader: null },
-                        players: {}
-                    };
+                    classData.groups[i] = { state: { round: 1, hp: 100, phase: 'waiting', leader: null }, players: {} };
                 }
 
                 await withTimeout(set(ref(db, `classes/${className}`), classData));
-                
                 myClass = className;
                 isTeacher = true;
                 
@@ -269,7 +292,7 @@
                     const hpColor = g.state.hp > 40 ? 'text-emerald-400' : 'text-red-400 animate-pulse';
 
                     grid.innerHTML += `
-                        <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer glass-panel p-5 rounded-2xl hover:bg-slate-800 transition-all border border-slate-700 hover:border-indigo-500">
+                        <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer glass-panel p-5 rounded-2xl hover:bg-slate-800 transition-all border border-slate-700 hover:border-indigo-500 w-full">
                             <h3 class="text-2xl font-title font-bold text-white mb-2">${gId}조</h3>
                             <div class="font-body text-sm text-slate-300 mb-3 flex justify-between">
                                 <span>참여: ${pCount}명</span>
@@ -289,13 +312,12 @@
             myGroup = groupId;
             document.getElementById('btn-back-macro').classList.remove('hidden');
             document.getElementById('display-class-group').innerText = `${myClass} ${groupId}조 (관전)`;
-            
             document.querySelectorAll('#section-waiting button, #section-betting > p, #action-buttons-container, #btn-reveal, #btn-next-round').forEach(el => el.classList.add('hidden'));
-            
             showPanel('panel-group-game');
             listenGroupMicro();
         };
 
+        // 학생 로그인 후 규칙 화면으로 이동
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value.trim();
@@ -306,8 +328,7 @@
             try {
                 const groupRef = ref(db, `classes/${className}/groups/${groupNum}`);
                 const snapshot = await withTimeout(get(groupRef));
-                
-                if (!snapshot.exists()) return alert("존재하지 않는 방입니다. 선생님이 개설한 학급 이름과 조 번호를 확인하세요.");
+                if (!snapshot.exists()) return alert("존재하지 않는 방입니다.");
 
                 myClass = className;
                 myGroup = groupNum;
@@ -323,7 +344,6 @@
                     isGroupLeader = true;
                 }
 
-                // 새로고침 시 자산 0으로 덮어쓰기 방지 처리
                 if (!gData.players || !gData.players[myName]) {
                     await set(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), { choice: "", gold: 0 });
                 }
@@ -331,17 +351,21 @@
                 document.getElementById('display-class-group').innerText = `${myClass} ${myGroup}조`;
                 if(isGroupLeader) document.getElementById('my-role-badge').classList.remove('hidden');
                 
-                showPanel('panel-group-game');
+                showPanel('panel-student-rules'); // 바로 게임화면으로 가지 않고 규칙 화면 띄우기
                 listenGroupMicro();
             } catch (error) {
                 alert(`접속 오류: ${error.message}`);
             }
         });
 
+        // 규칙을 모두 읽고 대기실 입장
+        document.getElementById('btn-enter-room').addEventListener('click', () => {
+            showPanel('panel-group-game');
+        });
+
         window.submitAction = async (choice) => {
-            try {
-                await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), { choice: choice });
-            } catch (error) { alert("전송 실패"); }
+            try { await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), { choice: choice }); } 
+            catch (error) { alert("전송 실패"); }
         };
 
         let currentPhase = '';
@@ -369,12 +393,17 @@
                 const players = data.players || {};
                 const pKeys = Object.keys(players);
 
+                // 방장이 나갔거나 리스트에 없을 경우 자가 치유(다음 사람에게 방장 넘김)
+                if (data.state.leader && !pKeys.includes(data.state.leader) && pKeys.length > 0) {
+                    if (pKeys[0] === myName) { update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { leader: myName }); }
+                }
+
                 if (data.state.phase === 'waiting') {
                     sWait.classList.remove('hidden');
                     const wContainer = document.getElementById('waiting-players');
                     wContainer.innerHTML = '';
                     pKeys.forEach(pName => {
-                        const isL = data.state.leader === pName;
+                        const isL = (data.state.leader === pName);
                         wContainer.innerHTML += `<div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-600">${isL ? '👑 ' : ''}${pName}</div>`;
                     });
                     
@@ -387,7 +416,7 @@
                     sBet.classList.remove('hidden');
                     const myChoice = players[myName]?.choice;
                     
-                    if (!isTeacher && (myChoice === "" || myChoice === undefined)) {
+                    if (!isTeacher && (!myChoice || myChoice === "")) {
                         document.getElementById('action-buttons-container').classList.remove('hidden');
                     } else if (!isTeacher) {
                         document.getElementById('action-buttons-container').classList.add('hidden');
@@ -399,11 +428,16 @@
                     
                     pKeys.forEach(pName => {
                         const pChoice = players[pName].choice;
-                        if (pChoice === "" || pChoice === undefined) allChosen = false;
+                        if (!pChoice || pChoice === "") allChosen = false; // 빈 값이면 버튼 안 뜸
                         
-                        grid.innerHTML += (pChoice && pChoice !== "") 
-                            ? `<div class="bg-indigo-950/60 p-4 rounded-2xl border border-indigo-500/50 flex flex-col items-center justify-center h-32"><div class="text-3xl mb-1">🔒</div><div class="font-body text-indigo-200">${pName} 완료</div></div>`
-                            : `<div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-600 border-dashed flex flex-col items-center justify-center h-32"><div class="font-body text-slate-400">${pName}<br>고민 중...</div></div>`;
+                        const isL = (data.state.leader === pName);
+                        const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1 drop-shadow-md">👑</span>' : '';
+                        
+                        if (pChoice && pChoice !== "") {
+                            grid.innerHTML += `<div class="w-full bg-indigo-950/60 p-4 rounded-2xl border border-indigo-500/50 flex flex-col items-center justify-center h-32"><div class="text-3xl mb-1">🔒</div><div class="font-body text-indigo-200 font-bold flex items-center">${pName}${hostTag}</div><div class="font-body text-sm mt-1">선택 완료</div></div>`;
+                        } else {
+                            grid.innerHTML += `<div class="w-full bg-slate-800/40 p-4 rounded-2xl border border-slate-600 border-dashed flex flex-col items-center justify-center h-32"><div class="font-body text-slate-300 font-bold flex items-center">${pName}${hostTag}</div><div class="font-body text-sm mt-1 text-slate-400">고민 중...</div></div>`;
+                        }
                     });
 
                     if (isGroupLeader && allChosen) document.getElementById('btn-reveal').classList.remove('hidden');
@@ -418,11 +452,13 @@
                         const pData = players[pName];
                         const icons = { greed: '😈', need: '⛏️', care: '💖' };
                         const bgColors = { greed: 'bg-red-950/80 border-red-500/50', need: 'bg-amber-950/80 border-amber-500/50', care: 'bg-emerald-950/80 border-emerald-500/50' };
+                        const isL = (data.state.leader === pName);
+                        const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1 drop-shadow-md">👑</span>' : '';
                         
                         grid.innerHTML += `
-                            <div class="${bgColors[pData.choice]} p-5 rounded-2xl border-2 shadow-lg flex flex-col items-center justify-center fade-in-up h-40">
+                            <div class="w-full ${bgColors[pData.choice]} p-5 rounded-2xl border-2 shadow-lg flex flex-col items-center justify-center fade-in-up h-40">
                                 <div class="text-5xl mb-2">${icons[pData.choice]}</div>
-                                <div class="font-title font-bold text-white mb-2">${pName}</div>
+                                <div class="font-title font-bold text-white mb-2 flex items-center">${pName}${hostTag}</div>
                                 <div class="bg-black/60 px-3 py-1 rounded-lg text-yellow-400 font-body font-bold text-sm border border-yellow-500/30">${pData.gold} 💰</div>
                             </div>
                         `;
@@ -469,8 +505,7 @@
             
             data.state.round++;
             data.state.phase = 'betting';
-            // 다음 라운드 준비 시 null 대신 빈 문자열("") 사용
-            Object.keys(data.players).forEach(k => data.players[k].choice = "");
+            Object.keys(data.players).forEach(k => data.players[k].choice = ""); // null 오류 방지
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
         });
