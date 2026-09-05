@@ -34,8 +34,14 @@
 
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 깎일 때: 위험 진동 애니메이션 */
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
         .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8); }
+
+        /* 올라갈 때: 긍정적 치유 글로우 애니메이션 */
+        @keyframes healGlow { 0% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } 50% { box-shadow: 0 0 35px rgba(52, 211, 153, 0.8); } 100% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } }
+        .heal-screen { animation: healGlow 1s ease-in-out; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -63,7 +69,7 @@
     <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-8 rounded-3xl">
             <h2 class="text-4xl text-indigo-400 mb-8 font-title font-bold">학급 일괄 개설</h2>
-            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
+            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" x-inputmode="korean" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
             <input type="number" id="input-group-count" placeholder="총 조(모둠) 개수 (예: 6)" min="1" max="12" class="font-body w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
             <button id="btn-create-class" class="font-title w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl font-bold text-2xl shadow-lg transition-all hover:scale-105">전체 조 만들기</button>
         </div>
@@ -74,7 +80,7 @@
         <div class="w-full flex justify-between items-center mb-8 bg-slate-900/60 p-4 rounded-2xl border border-slate-700 w-full flex-wrap gap-4">
             <h2 class="text-3xl text-emerald-400 font-title font-bold"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
             <div class="flex gap-3">
-                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-lg font-body font-bold shadow-md">📖 상세 규칙 안내</button>
+                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-lg font-body font-bold shadow-md">📖 규칙 안내</button>
             </div>
         </div>
         <div id="macro-grid" class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
@@ -96,10 +102,6 @@
                     - <strong>주의 (40~69점):</strong> 매 라운드 자연 회복 <span class="text-amber-400 font-bold">+2🌿</span><br>
                     - <strong>위험 (30점 이하):</strong> 자연 회복력 완전 상실 <span class="text-red-400 font-bold">+0🌿</span> (오직 인간의 '돌보기'로만 살려야 함)</p>
                 </div>
-                <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700">
-                    <h3 class="text-2xl text-indigo-300 font-title mb-2">💖 3. 생태 보조금 제도</h3>
-                    <p>희생을 감수하고 <strong>'돌보기'</strong>를 선택한 기여자에게, 그 라운드에 수익을 올린 다른 조원들이 자산을 조금씩 갹출하여 보조금을 지급합니다. (이타적 행동에 대한 정당한 사회적 보상)</p>
-                </div>
             </div>
             <div class="text-center">
                 <button onclick="showPanel('panel-teacher-macro')" class="font-title bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-xl font-bold text-xl transition-all">현황판으로 돌아가기</button>
@@ -111,9 +113,9 @@
     <div id="panel-student-login" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-8 rounded-3xl">
             <h2 class="text-4xl text-emerald-400 mb-8 font-title font-bold">우리 조 접속</h2>
-            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" autocapitalize="off" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
+            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" x-inputmode="korean" autocapitalize="off" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
             <input type="number" id="student-group-num" placeholder="우리 조 번호 (예: 2)" class="font-body w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
-            <input type="text" id="student-nickname" placeholder="내 이름 또는 번호 (예: 김철수)" lang="ko" autocapitalize="off" class="font-body w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
+            <input type="text" id="student-nickname" placeholder="내 이름 또는 번호 (예: 김철수)" lang="ko" x-inputmode="korean" autocapitalize="off" class="font-body w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
             <button id="btn-join-group" class="font-title w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl font-bold text-2xl shadow-lg transition-all hover:scale-105">입장하기</button>
         </div>
     </div>
@@ -145,10 +147,6 @@
                         <p class="text-sm">0💰 / +10🌿<br><span class="text-xs text-yellow-300">*(동료들의 보조금 획득 가능)</span></p>
                     </div>
                 </div>
-
-                <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700 text-sm">
-                    <p>💡 <strong>팁:</strong> 위기 상황(40점 이하)이 오면 조원들과 자치 회의를 열어 <strong>무임승차자 제재</strong>나 <strong>생태 법안(욕심 삭감, 강제 돌보기, 보조금 확대 등)</strong>을 투표로 제정할 수 있습니다.</p>
-                </div>
             </div>
 
             <div class="text-center">
@@ -168,15 +166,20 @@
             <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-bold transition">◀ 현황판</button>
         </div>
         
-        <div class="w-full bg-slate-950/80 h-12 md:h-14 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg w-full">
+        <!-- 생태 점수 바 (숲 아이콘 및 상태 시각화 적용) -->
+        <div class="w-full bg-slate-950/80 h-14 md:h-16 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg w-full">
             <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-xl md:text-2xl drop-shadow-md text-white font-title font-bold">생태 점수: <span id="hp-text" class="ml-2 font-body font-bold text-2xl md:text-3xl">100</span></div>
+            <div class="absolute inset-0 flex items-center justify-center text-xl md:text-2xl drop-shadow-md text-white font-title font-bold gap-3">
+                <span id="forest-icon" class="text-3xl">🌿</span> 
+                <span>생태 점수: <span id="hp-text" class="font-body font-bold text-2xl md:text-3xl">100</span></span>
+                <span id="forest-status-label" class="text-sm font-body px-2 py-1 rounded bg-emerald-800/80 text-emerald-200 ml-2">풍요로운 숲</span>
+            </div>
         </div>
 
         <!-- 긴급 자치 회의 알림 배너 -->
         <div id="crisis-banner" class="w-full hidden bg-red-950/90 border-2 border-red-500 p-4 rounded-2xl mb-6 text-center animate-pulse">
             <h3 class="text-2xl font-title text-red-300 font-bold">🚨 긴급 마을 자치 회의 발동! (생태 점수 40점 이하)</h3>
-            <p class="font-body text-slate-200 mt-1">숲이 위험합니다! 조원들과 대화하여 아래 패널에서 제재 투표나 새로운 생태 법안을 통과시키세요.</p>
+            <p class="font-body text-slate-200 mt-1">숲이 파괴되고 있습니다! 아래 패널에서 무임승차자 제재나 생태 법안을 통과시켜 위기를 극복하세요.</p>
         </div>
 
         <!-- 게임 오버 / 승리 배너 -->
@@ -233,10 +236,10 @@
 
             <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"></div>
             
-            <!-- 자치 회의 제재 및 확장된 법안 투표 패널 (방장/교사 발동 -> 다수결 투표) -->
+            <!-- 자치 회의 제재 및 법안 투표 패널 (방장 및 모든 참여자가 사용 가능하도록 수정) -->
             <div id="sanction-panel" class="hidden w-full bg-slate-900/90 border border-indigo-500/50 p-6 rounded-2xl mb-8 text-center shadow-xl">
                 <h4 class="text-xl font-title text-yellow-300 mb-2">⚖️ 마을 자치 회의 & 생태 법안 제정</h4>
-                <p class="font-body text-sm text-slate-300 mb-4">무임승차자 제재나, 갹출 비중 조절 및 강제 돌보기 등 다양한 생태 법안 투표를 발동하세요.</p>
+                <p class="font-body text-sm text-slate-300 mb-4">무임승차자 제재나 생태 법안 투표를 발동하여 조원들과 함께 토론하고 결정하세요.</p>
                 
                 <div class="flex flex-wrap justify-center gap-3 mb-4">
                     <button onclick="startLawVote('tax')" class="bg-indigo-700 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl font-body text-sm font-bold border border-indigo-400">📜 [법안] 욕심내기 수익 절반 삭감</button>
@@ -247,14 +250,15 @@
 
                 <div id="sanction-targets-container" class="flex flex-wrap justify-center gap-3 mb-4 border-t border-slate-700 pt-4"></div>
                 
-                <!-- 실제 투표 진행중일 때 표시되는 영역 -->
-                <div id="active-sanction-vote" class="hidden bg-indigo-950/90 p-4 rounded-xl border border-indigo-400 mt-4">
-                    <p class="font-body text-indigo-200 mb-3 font-bold text-lg" id="sanction-vote-question"></p>
+                <!-- 실제 투표 진행중일 때 표시되는 영역 (방장뿐만 아니라 모든 참여자에게 버튼이 뜨도록 고침) -->
+                <div id="active-sanction-vote" class="hidden bg-indigo-950/90 p-4 rounded-xl border border-indigo-400 mt-4 text-left">
+                    <p class="font-body text-indigo-200 mb-2 font-bold text-lg text-center" id="sanction-vote-question"></p>
+                    <div id="sanction-vote-desc" class="font-body text-sm text-slate-300 mb-4 bg-slate-900/60 p-3 rounded-lg border border-slate-700"></div>
                     <div class="flex justify-center gap-4">
-                        <button onclick="voteSanction(true)" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-2 rounded-lg font-bold font-body">찬성</button>
-                        <button onclick="voteSanction(false)" class="bg-red-600 hover:bg-red-500 px-6 py-2 rounded-lg font-bold font-body">반대</button>
+                        <button onclick="voteSanction(true)" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-3 rounded-xl font-bold font-body text-lg shadow-md transition hover:scale-105">찬성</button>
+                        <button onclick="voteSanction(false)" class="bg-red-600 hover:bg-red-500 px-8 py-3 rounded-xl font-bold font-body text-lg shadow-md transition hover:scale-105">반대</button>
                     </div>
-                    <div class="font-body text-sm text-slate-300 mt-3" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
+                    <div class="font-body text-sm text-slate-300 mt-3 text-center" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
                 </div>
             </div>
 
@@ -442,13 +446,14 @@
                 sanctionVote: {
                     type: 'sanction',
                     target: targetName,
-                    question: `"${targetName}"님의 이번 라운드 수익을 몰수(0원)할까요?`,
+                    question: `⚖️ [제재 투표] "${targetName}"님의 이번 라운드 수익을 몰수(0원)할까요?`,
+                    description: `이유 없는 탐욕이나 무임승차로 공동체의 숲을 위협하는 조원을 민주적으로 심판합니다. 과반수가 찬성하면 해당 조원의 수익이 0원이 됩니다.`,
                     votes: initialVotes
                 }
             });
         };
 
-        // 법안 투표 발동
+        // 법안 투표 발동 (자세한 설명 포함)
         window.startLawVote = async (lawType) => {
             const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
             const snapshot = await get(groupRef);
@@ -459,16 +464,28 @@
             pKeys.forEach(p => { initialVotes[p] = null; });
 
             let qText = "";
-            if (lawType === 'tax') qText = "[법안] 다음 라운드부터 '욕심내기' 수익을 절반으로 삭감할까요?";
-            else if (lawType === 'mandatory_care') qText = "[법안] 다음 라운드부터 모든 조원이 '돌보기'를 강제로 의무화할까요?";
-            else if (lawType === 'subsidy_2') qText = "[법안] 생태 보조금 갹출 비중을 2원으로 올릴까요?";
-            else if (lawType === 'subsidy_3') qText = "[법안] 생태 보조금 갹출 비중을 최대치인 3원으로 올릴까요?";
+            let descText = "";
+
+            if (lawType === 'tax') {
+                qText = "📜 [생태 법안] 욕심내기 수익 절반 삭감 법안";
+                descText = "통과 시: 다음 라운드부터 '욕심내기'를 선택하여 얻는 기본 자산 수익이 50% 절반으로 깎입니다. 개인의 과도한 탐욕을 줄이고 숲의 파괴를 억제합니다.";
+            } else if (lawType === 'mandatory_care') {
+                qText = "📜 [생태 법안] 모든 조원 돌보기 강제 의무 법안";
+                descText = "통과 시: 다음 라운드 투표에서 모든 조원의 선택이 강제로 '돌보기(💖)'로 고정되어 숲을 급격히 치유합니다! (단, 이 라운드에는 자산을 벌 수 없습니다)";
+            } else if (lawType === 'subsidy_2') {
+                qText = "📜 [생태 법안] 생태 보조금 갹출 비중 2원 상향 법안";
+                descText = "통과 시: '돌보기'를 한 기여자에게 다른 조원들이 나누어 주는 생태 보조금이 기본 1원에서 2원으로 늘어납니다. 이타적 행동에 더 큰 보상을 줍니다.";
+            } else if (lawType === 'subsidy_3') {
+                qText = "📜 [생태 법안] 생태 보조금 갹출 비중 최대 3원 상향 법안";
+                descText = "통과 시: '돌보기' 기여자에게 지급되는 생태 보조금이 최대 3원으로 폭등합니다. 협력과 돌보기를 강력하게 장려하는 공동체 룰입니다.";
+            }
 
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
                 sanctionVote: {
                     type: 'law',
                     lawType: lawType,
                     question: qText,
+                    description: descText,
                     votes: initialVotes
                 }
             });
@@ -485,19 +502,58 @@
         };
 
         let currentPhase = '';
+        let lastHp = 100; // HP 변화 감지용
+
         function listenGroupMicro() {
             onValue(ref(db, `classes/${myClass}/groups/${myGroup}`), (snapshot) => {
                 const data = snapshot.val();
                 if(!data) return;
 
+                const currentHp = data.state.hp;
                 document.getElementById('display-round').innerText = data.state.round;
-                document.getElementById('hp-bar').style.width = `${Math.max(0, data.state.hp)}%`;
-                document.getElementById('hp-text').innerText = data.state.hp;
-                document.getElementById('hp-bar').className = data.state.hp > 40 ? "h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" : "h-full bg-gradient-to-r from-red-600 to-red-400 animate-pulse transition-all duration-1000 ease-out";
+                document.getElementById('hp-bar').style.width = `${Math.max(0, currentHp)}%`;
+                document.getElementById('hp-text').innerText = currentHp;
+
+                // 생태 점수에 따른 아이콘 및 상태 라벨 변경
+                const fIcon = document.getElementById('forest-icon');
+                const fLabel = document.getElementById('forest-status-label');
+                const hpBarEl = document.getElementById('hp-bar');
+
+                if (currentHp >= 70) {
+                    fIcon.innerText = "🌿";
+                    fLabel.innerText = "풍요로운 숲 (자연재생 +5)";
+                    fLabel.className = "text-sm font-body px-2 py-1 rounded bg-emerald-800/80 text-emerald-200 ml-2";
+                    hpBarEl.className = "h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out";
+                } else if (currentHp >= 40) {
+                    fIcon.innerText = "🍂";
+                    fLabel.innerText = "주의 깊은 숲 (자연재생 +2)";
+                    fLabel.className = "text-sm font-body px-2 py-1 rounded bg-amber-800/80 text-amber-200 ml-2";
+                    hpBarEl.className = "h-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-1000 ease-out";
+                } else if (currentHp > 0) {
+                    fIcon.innerText = "⚠️";
+                    fLabel.innerText = "위험한 숲 (자연재생 없음 +0)";
+                    fLabel.className = "text-sm font-body px-2 py-1 rounded bg-red-800/80 text-red-200 ml-2";
+                    hpBarEl.className = "h-full bg-gradient-to-r from-red-600 to-red-400 animate-pulse transition-all duration-1000 ease-out";
+                } else {
+                    fIcon.innerText = "💀";
+                    fLabel.innerText = "파국 붕괴됨";
+                    fLabel.className = "text-sm font-body px-2 py-1 rounded bg-slate-800 text-slate-400 ml-2";
+                    hpBarEl.className = "h-full bg-slate-600";
+                }
+
+                // 점수 증감에 따른 애니메이션 처리 (깎이면 지진, 오르면 치유 글로우)
+                if (currentHp < lastHp && currentPhase === 'reveal' && !isTeacher) {
+                    document.body.classList.add('shake-screen');
+                    setTimeout(() => document.body.classList.remove('shake-screen'), 500);
+                } else if (currentHp > lastHp && currentPhase === 'reveal' && !isTeacher) {
+                    document.body.classList.add('heal-screen');
+                    setTimeout(() => document.body.classList.remove('heal-screen'), 1000);
+                }
+                lastHp = currentHp;
 
                 // 긴급 회의 배너 (HP 40 이하)
                 const crisisBanner = document.getElementById('crisis-banner');
-                if (data.state.hp <= 40 && data.state.hp > 0 && data.state.phase !== 'victory' && data.state.phase !== 'extension_vote') {
+                if (currentHp <= 40 && currentHp > 0 && data.state.phase !== 'victory' && data.state.phase !== 'extension_vote') {
                     crisisBanner.classList.remove('hidden');
                 } else {
                     crisisBanner.classList.add('hidden');
@@ -510,7 +566,7 @@
                 gameoverBanner.classList.add('hidden');
                 extSection.classList.add('hidden');
 
-                if (data.state.hp <= 0 && data.state.phase === 'gameover') {
+                if (currentHp <= 0 && data.state.phase === 'gameover') {
                     gameoverBanner.classList.remove('hidden');
                     gameoverBanner.innerHTML = `<h3 class="text-5xl font-title text-red-500 font-bold mb-4">💀 파국 발생 (Game Over)</h3><p class="text-xl font-body text-slate-200">생태 점수가 0점이 되어 숲과 공동체가 완전히 붕괴되었습니다.<br>모든 자산이 몰수되었습니다.</p>`;
                 } else if (data.state.phase === 'victory') {
@@ -546,10 +602,6 @@
                     }
                 }
 
-                if (currentPhase !== 'reveal' && data.state.phase === 'reveal' && !isTeacher) {
-                    document.body.classList.add('shake-screen');
-                    setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                }
                 currentPhase = data.state.phase;
 
                 const sWait = document.getElementById('section-waiting');
@@ -625,10 +677,10 @@
                     if (data.state.activeLaw) {
                         lawBanner.classList.remove('hidden');
                         let lDesc = "";
-                        if (data.state.activeLaw === 'tax') lDesc = "욕심내기 수익 절반 삭감";
+                        if (data.state.activeLaw === 'tax' && data.state.subsidyAmount === 1) lDesc = "욕심내기 수익 절반 삭감";
                         else if (data.state.activeLaw === 'mandatory_care') lDesc = "모든 조원 돌보기 강제 의무";
-                        else if (data.state.activeLaw === 'subsidy_2') lDesc = "생태 보조금 갹출 비중 2원";
-                        else if (data.state.activeLaw === 'subsidy_3') lDesc = "생태 보조금 갹출 비중 3원";
+                        else if (data.state.activeLaw === 'tax' && data.state.subsidyAmount === 2) lDesc = "생태 보조금 갹출 비중 2원";
+                        else if (data.state.activeLaw === 'tax' && data.state.subsidyAmount === 3) lDesc = "생태 보조금 갹출 비중 3원";
                         lawText.innerText = lDesc;
                     } else {
                         lawBanner.classList.add('hidden');
@@ -653,60 +705,56 @@
                         `;
                     });
 
-                    // 자치 회의 및 투표 패널 제어 (방장 및 교사 권한)
-                    if (isGroupLeader || isTeacher) {
-                        document.getElementById('sanction-panel').classList.remove('hidden');
-                        const targetsContainer = document.getElementById('sanction-targets-container');
-                        targetsContainer.innerHTML = '';
-                        pKeys.forEach(pName => {
-                            targetsContainer.innerHTML += `<button onclick="startSanctionVote('${pName}')" class="bg-red-900/70 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl font-body text-sm font-bold border border-red-400">⚖️ [${pName}] 제재 투표</button>`;
+                    // 모든 참가자(방장 포함)가 투표 패널과 제재 버튼을 볼 수 있도록 수정
+                    document.getElementById('sanction-panel').classList.remove('hidden');
+                    const targetsContainer = document.getElementById('sanction-targets-container');
+                    targetsContainer.innerHTML = '';
+                    pKeys.forEach(pName => {
+                        targetsContainer.innerHTML += `<button onclick="startSanctionVote('${pName}')" class="bg-red-900/70 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl font-body text-sm font-bold border border-red-400">⚖️ [${pName}] 제재 투표</button>`;
+                    });
+
+                    // 활성화된 투표 상태 감지 (모든 조원 화면에 실시간 동기화)
+                    const sVoteData = data.state.sanctionVote;
+                    const activeVoteBox = document.getElementById('active-sanction-vote');
+                    if (sVoteData && sVoteData.question) {
+                        activeVoteBox.classList.remove('hidden');
+                        document.getElementById('sanction-vote-question').innerText = sVoteData.question;
+                        document.getElementById('sanction-vote-desc').innerText = sVoteData.description || "이 법안이나 제재에 대해 조원들과 상의 후 찬성 또는 반대를 투표해주세요.";
+                        
+                        const votes = sVoteData.votes || {};
+                        let agreeCount = 0, disagreeCount = 0, totalVoted = 0;
+                        Object.keys(votes).forEach(k => {
+                            if (votes[k] === true) agreeCount++;
+                            if (votes[k] === false) disagreeCount++;
+                            if (votes[k] !== null && votes[k] !== undefined) totalVoted++;
                         });
 
-                        // 활성화된 투표 상태 감지 (참여자도 이 영역을 볼 수 있게 공유)
-                        const sVoteData = data.state.sanctionVote;
-                        const activeVoteBox = document.getElementById('active-sanction-vote');
-                        if (sVoteData && sVoteData.question) {
-                            activeVoteBox.classList.remove('hidden');
-                            document.getElementById('sanction-vote-question').innerText = sVoteData.question;
-                            
-                            const votes = sVoteData.votes || {};
-                            let agreeCount = 0, disagreeCount = 0, totalVoted = 0;
-                            Object.keys(votes).forEach(k => {
-                                if (votes[k] === true) agreeCount++;
-                                if (votes[k] === false) disagreeCount++;
-                                if (votes[k] !== null && votes[k] !== undefined) totalVoted++;
-                            });
+                        document.getElementById('sanction-vote-count').innerText = `찬성: ${agreeCount}명 / 반대: ${disagreeCount}명 (총 참여: ${totalVoted}/${pKeys.length}명)`;
 
-                            document.getElementById('sanction-vote-count').innerText = `찬성: ${agreeCount}명 / 반대: ${disagreeCount}명 (총 참여: ${totalVoted}/${pKeys.length}명)`;
+                        // 과반수 달성 시 (방장 또는 누군가 다음 라운드를 누를 때 자동 확정되거나 투표 완료 시 즉시 처리)
+                        if ((isGroupLeader || isTeacher) && totalVoted >= pKeys.length) {
+                            if (agreeCount > disagreeCount) {
+                                if (sVoteData.type === 'sanction') {
+                                    update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${sVoteData.target}`), { gold: 0 });
+                                    alert(`⚖️ 다수결 가결! [${sVoteData.target}]님의 수익이 몰수되었습니다.`);
+                                } else if (sVoteData.type === 'law') {
+                                    let updateObj = { activeLaw: sVoteData.lawType };
+                                    if (sVoteData.lawType === 'subsidy_2') updateObj = { activeLaw: 'tax', subsidyAmount: 2 };
+                                    if (sVoteData.lawType === 'subsidy_3') updateObj = { activeLaw: 'tax', subsidyAmount: 3 };
 
-                            // 과반수 달성 시 (방장 권한으로 집행)
-                            if ((isGroupLeader || isTeacher) && totalVoted >= pKeys.length) {
-                                if (agreeCount > disagreeCount) {
-                                    if (sVoteData.type === 'sanction') {
-                                        update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${sVoteData.target}`), { gold: 0 });
-                                        alert(`⚖️ 다수결 가결! [${sVoteData.target}]님의 수익이 몰수되었습니다.`);
-                                    } else if (sVoteData.type === 'law') {
-                                        let lSet = sVoteData.lawType;
-                                        let subVal = 1;
-                                        if (lSet === 'subsidy_2') { lSet = 'tax'; subVal = 2; } // 임시 매핑 또는 확장
-                                        if (lSet === 'subsidy_3') { lSet = 'tax'; subVal = 3; }
-                                        
-                                        let updateObj = { activeLaw: sVoteData.lawType };
-                                        if (sVoteData.lawType === 'subsidy_2') updateObj = { activeLaw: 'tax', subsidyAmount: 2 };
-                                        if (sVoteData.lawType === 'subsidy_3') updateObj = { activeLaw: 'tax', subsidyAmount: 3 };
-
-                                        update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), updateObj);
-                                        alert(`📜 새로운 생태 법안 통과! 다음 라운드부터 적용됩니다.`);
-                                    }
-                                } else {
-                                    alert(`⚖️ 다수결 부결! 기각되었습니다.`);
+                                    update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), updateObj);
+                                    alert(`📜 새로운 생태 법안 통과! 다음 라운드부터 적용됩니다.`);
                                 }
-                                update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { sanctionVote: null });
+                            } else {
+                                alert(`⚖️ 다수결 부결! 기각되었습니다.`);
                             }
-                        } else {
-                            activeVoteBox.classList.add('hidden');
+                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { sanctionVote: null });
                         }
+                    } else {
+                        activeVoteBox.classList.add('hidden');
+                    }
 
+                    if (isGroupLeader) {
                         document.getElementById('btn-next-round').classList.remove('hidden');
                     }
                 }
