@@ -257,6 +257,7 @@
         let gameState = null;
         let meetingUsed = false;
         let isHostAnimating = false; // 진행자 애니메이션 중 데이터 덮어쓰기 방지
+        let isLocalMode = false; // Firebase 연결 실패 시 로컬(싱글플레이) 모드 전환
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-great-transition';
         
@@ -270,7 +271,11 @@
         async function initFirebase() {
             try {
                 const configStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
-                if (!configStr) throw new Error("Firebase config missing");
+                if (!configStr) {
+                    console.warn("Firebase config is missing. Falling back to Local Mode for testing.");
+                    isLocalMode = true;
+                    return true;
+                }
                 
                 const firebaseConfig = JSON.parse(configStr);
                 const app = initializeApp(firebaseConfig);
@@ -285,8 +290,10 @@
                 return true;
             } catch (e) {
                 console.error("Firebase init failed:", e);
-                alert("멀티플레이 서버 연결에 실패했습니다. (환경 설정 오류)");
-                return false;
+                console.warn("Falling back to Local Mode due to Firebase connection error.");
+                // alert("멀티플레이 서버 연결에 실패했습니다. (환경 설정 오류)"); // 에러 팝업 대신 로컬 모드로 조용히 전환
+                isLocalMode = true;
+                return true;
             }
         }
 
@@ -314,18 +321,19 @@
                     elLobby.classList.add('hidden');
                     elPlayer.classList.remove('hidden');
                     elPlayer.classList.add('flex');
-                    document.getElementById('player-team-name').innerText = `${myRole}모둠`;
-                    startSync();
-                }
-            });
-        });
-
-        document.getElementById('btn-reset').addEventListener('click', () => {
-            if(confirm("정말 게임을 초기화하시겠습니까?")) resetGameToDB();
-        });
-
-        // 3. Database Sync
+        // 3. Database Sync (and Local Fallback)
         function startSync() {
+            if (isLocalMode) {
+                // Local Mode Mock Sync
+                if (!gameState) {
+                    resetGameToDB(); // This will populate local gameState
+                }
+                // Initial Render
+                if (myRole === 'host') updateHostUI();
+                if (myRole !== 'host') updatePlayerUI();
+                return;
+            }
+
             unsubscribe = onSnapshot(roomRef, (docSnap) => {
                 if (docSnap.exists()) {
                     gameState = docSnap.data();
@@ -358,7 +366,14 @@
                 }
             };
             meetingUsed = false;
-            await setDoc(roomRef, initialState);
+            
+            if (isLocalMode) {
+                gameState = initialState;
+                if (myRole === 'host') updateHostUI();
+                if (myRole !== 'host') updatePlayerUI();
+            } else {
+                await setDoc(roomRef, initialState);
+            }
         }
 
         // 4. Host UI Updates
@@ -579,6 +594,14 @@
             teamData.choice = choiceKey;
             updatePlayerUI();
 
+            if (isLocalMode) {
+                 // In Local Mode, we just update the in-memory object.
+                 // To simulate multiplayer, you would need to open multiple tabs, 
+                 // but since Local Mode uses local variables, they won't sync across tabs.
+                 // This allows a single user to test the host screen.
+                 return;
+            }
+
             // Firebase update
             const updatePath = `teams.${myRole}.choice`;
             await setDoc(roomRef, {
@@ -630,10 +653,16 @@
             const newHp = Math.min(100, Math.max(0, gameState.hp + totalHpChange));
 
             // 2) Set DB to animating state so players see "Look at screen"
-            await setDoc(roomRef, { 
-                phase: 'reveal_animating',
-                teams: updatedTeams // Push computed results so host UI can use them during animation
-            }, { merge: true });
+            if (isLocalMode) {
+                gameState.phase = 'reveal_animating';
+                gameState.teams = updatedTeams;
+                updateHostUI();
+            } else {
+                await setDoc(roomRef, { 
+                    phase: 'reveal_animating',
+                    teams: updatedTeams 
+                }, { merge: true });
+            }
 
             // 3) Run Local Animation for Host
             const cards = document.querySelectorAll('#host-teams .card');
@@ -656,10 +685,17 @@
                     
                     // Finalize to DB
                     isHostAnimating = false;
-                    await setDoc(roomRef, { 
-                        phase: 'revealed_all',
-                        hp: newHp
-                    }, { merge: true });
+                    
+                    if (isLocalMode) {
+                        gameState.phase = 'revealed_all';
+                        gameState.hp = newHp;
+                        updateHostUI();
+                    } else {
+                        await setDoc(roomRef, { 
+                            phase: 'revealed_all',
+                            hp: newHp
+                        }, { merge: true });
+                    }
 
                     if (greedCount > 0) {
                         document.body.classList.add('shake-screen');
@@ -675,7 +711,8 @@
 
             // Check Ends
             if (gameState.hp <= 0) {
-                await setDoc(roomRef, { phase: 'gameover' }, { merge: true });
+                if(isLocalMode) { gameState.phase = 'gameover'; updateHostUI(); }
+                else await setDoc(roomRef, { phase: 'gameover' }, { merge: true });
                 return;
             }
 
@@ -686,17 +723,26 @@
                 [1,2,3,4].forEach(i => {
                     finalTeams[i] = { ...gameState.teams[i], gold: gameState.teams[i].gold + 10 };
                 });
-                await setDoc(roomRef, { 
-                    phase: 'end', 
-                    hp: 100, 
-                    teams: finalTeams 
-                }, { merge: true });
+                
+                if (isLocalMode) {
+                    gameState.phase = 'end';
+                    gameState.hp = 100;
+                    gameState.teams = finalTeams;
+                    updateHostUI();
+                } else {
+                    await setDoc(roomRef, { 
+                        phase: 'end', 
+                        hp: 100, 
+                        teams: finalTeams 
+                    }, { merge: true });
+                }
                 return;
             }
 
             // Normal End (Round 5)
             if (gameState.round >= 5) {
-                await setDoc(roomRef, { phase: 'end' }, { merge: true });
+                if (isLocalMode) { gameState.phase = 'end'; updateHostUI(); }
+                else await setDoc(roomRef, { phase: 'end' }, { merge: true });
                 return;
             }
 
@@ -706,12 +752,20 @@
                 resetTeams[i] = { ...gameState.teams[i], choice: null, roundResult: null };
             });
 
-            await setDoc(roomRef, {
-                round: gameState.round + 1,
-                phase: 'betting',
-                eventIndex: Math.floor(Math.random() * EVENTS.length),
-                teams: resetTeams
-            }, { merge: true });
+            if (isLocalMode) {
+                gameState.round += 1;
+                gameState.phase = 'betting';
+                gameState.eventIndex = Math.floor(Math.random() * EVENTS.length);
+                gameState.teams = resetTeams;
+                updateHostUI();
+            } else {
+                await setDoc(roomRef, {
+                    round: gameState.round + 1,
+                    phase: 'betting',
+                    eventIndex: Math.floor(Math.random() * EVENTS.length),
+                    teams: resetTeams
+                }, { merge: true });
+            }
         });
 
         // 9. Modals (Host Local UI)
