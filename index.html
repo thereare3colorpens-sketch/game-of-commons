@@ -6,11 +6,9 @@
     <title>위대한 전환: 공유지의 비극</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 프리텐다드 본문용 폰트 */
         @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
         @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
         
-        /* 우아한 세리프 제목용 폰트 (GraceSerif) */
         @font-face { font-family: 'ElegantSerif'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/GraceSerif-Regular.woff2') format('woff2'); font-weight: 500; font-display: swap; }
         @font-face { font-family: 'ElegantSerif'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/GraceSerif-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 
@@ -23,7 +21,6 @@
             touch-action: pan-y;
         }
         
-        /* 폰트 지정 클래스 (강제 적용) */
         .font-title { font-family: 'ElegantSerif', serif !important; }
         .font-body { font-family: 'Pretendard', sans-serif !important; }
         
@@ -38,15 +35,15 @@
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
-        .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 100px rgba(239, 68, 68, 0.6); }
+        .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
 
-    <!-- 1. 초기 화면 -->
+    <!-- 1. 초기 홈 화면 -->
     <div id="panel-home" class="w-full max-w-4xl text-center fade-in-up">
         <h1 class="text-6xl md:text-8xl text-emerald-400 mb-4 drop-shadow-lg font-title font-bold">위대한 전환</h1>
-        <p class="text-xl md:text-2xl text-emerald-100 mb-12 font-body font-light">공유지의 비극을 넘어 생태 문명으로</p>
+        <p class="text-xl md:text-2xl text-emerald-100 mb-12 font-body font-light">공유지의 비극을 넘어 생태 문명으로 (기본 15라운드)</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-indigo-900/60 p-10 rounded-3xl transition-all hover:scale-[1.02] border-t-2 border-t-indigo-400/30">
@@ -72,38 +69,44 @@
         </div>
     </div>
 
-    <!-- 3. 교사: 매크로 현황판 (모든 조 보기) -->
+    <!-- 3. 교사: 매크로 현황판 -->
     <div id="panel-teacher-macro" class="w-full max-w-7xl hidden flex-col items-center fade-in-up">
-        <div class="w-full flex justify-between items-center mb-8 bg-slate-900/60 p-4 rounded-2xl border border-slate-700 w-full">
+        <div class="w-full flex justify-between items-center mb-8 bg-slate-900/60 p-4 rounded-2xl border border-slate-700 w-full flex-wrap gap-4">
             <h2 class="text-3xl text-emerald-400 font-title font-bold"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
-            <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg font-body font-bold shadow-md">📖 칠판에 규칙 띄우기</button>
+            <div class="flex gap-3">
+                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-lg font-body font-bold shadow-md">📖 규칙 안내</button>
+            </div>
         </div>
-        <div id="macro-grid" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        <div id="macro-grid" class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
     </div>
 
-    <!-- 3-5. 교사용 규칙 설명 화면 (칠판 띄우기용) -->
+    <!-- 3-5. 규칙 설명 화면 -->
     <div id="panel-teacher-rules" class="w-full max-w-5xl hidden text-center fade-in-up">
         <div class="glass-panel p-10 rounded-3xl text-left shadow-2xl">
-            <h2 class="text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">게임 규칙 및 목표</h2>
+            <h2 class="text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">게임 규칙 및 목표 (15라운드)</h2>
             <div class="bg-emerald-950/50 p-5 rounded-2xl mb-6 border border-emerald-500/30">
-                <p class="text-xl font-body leading-relaxed text-emerald-50">이 게임은 가장 돈을 많이 버는 1등을 가리는 것이 아닙니다.<br><strong>끝없는 탐욕이 부르는 공유지(숲)의 파괴를 막고, 조원들이 협력하여 생존하는 것</strong>이 목표입니다.</p>
+                <p class="text-xl font-body leading-relaxed text-emerald-50">
+                    이 게임은 <strong>15라운드 동안 숲을 지키며 함께 살아남는 것</strong>이 목표입니다.<br>
+                    ⚠️ <strong>생태 점수가 0점이 되면 게임 오버(공멸)</strong>되며 모든 자산이 몰수됩니다!<br>
+                    ⚖️ 위기 시 자치 회의를 열어 <strong>무임승차자 제재 투표</strong>를 진행할 수 있습니다.
+                </p>
             </div>
             <div class="grid md:grid-cols-3 gap-6 font-body text-center mb-8">
                 <div class="bg-red-950/60 p-6 rounded-2xl border border-red-500/30 flex flex-col items-center">
                     <div class="text-4xl mb-2">😈</div>
                     <div class="font-title text-2xl text-red-400 font-bold mb-2">욕심내기</div>
-                    <p class="text-lg">나만 자산 획득 <span class="text-yellow-400 font-bold">+5💰</span><br>숲 파괴 <span class="text-red-400 font-bold">-15🌿</span></p>
-                    <p class="text-sm text-slate-400 mt-2">*3명 겹치면 자산 획득 0</p>
+                    <p class="text-lg">자산 획득 <span class="text-yellow-400 font-bold">+5💰</span><br>숲 파괴 <span class="text-red-400 font-bold">-15🌿</span></p>
+                    <p class="text-xs text-slate-400 mt-2">*3명 겹치면 0💰 / 30점 이하는 +1💰</p>
                 </div>
                 <div class="bg-amber-950/60 p-6 rounded-2xl border border-amber-500/30 flex flex-col items-center">
                     <div class="text-4xl mb-2">⛏️</div>
                     <div class="font-title text-2xl text-amber-400 font-bold mb-2">적당히</div>
-                    <p class="text-lg">모두 조금씩 <span class="text-yellow-400 font-bold">+2💰</span><br>숲 손상 <span class="text-amber-400 font-bold">-3🌿</span></p>
+                    <p class="text-lg">모두 <span class="text-yellow-400 font-bold">+2💰</span><br>숲 손상 <span class="text-amber-400 font-bold">-3🌿</span></p>
                 </div>
                 <div class="bg-emerald-950/60 p-6 rounded-2xl border border-emerald-500/30 flex flex-col items-center">
                     <div class="text-4xl mb-2">💖</div>
                     <div class="font-title text-2xl text-emerald-400 font-bold mb-2">돌보기</div>
-                    <p class="text-lg">자산 포기 <span class="text-slate-400 font-bold">0💰</span><br>숲 치유 <span class="text-emerald-400 font-bold">+10🌿</span></p>
+                    <p class="text-lg">포기 <span class="text-slate-400 font-bold">0💰</span><br>숲 치유 <span class="text-emerald-400 font-bold">+10🌿</span></p>
                 </div>
             </div>
             <div class="text-center">
@@ -123,32 +126,31 @@
         </div>
     </div>
 
-    <!-- 4-5. 학생용 게임 규칙 안내 (방 접속 직후) -->
+    <!-- 4-5. 학생용 규칙 안내 화면 -->
     <div id="panel-student-rules" class="w-full max-w-4xl hidden text-center fade-in-up">
         <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl">
-            <h2 class="text-4xl md:text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">게임 규칙 숙지</h2>
+            <h2 class="text-4xl md:text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">게임 규칙 및 목표 (15라운드)</h2>
             <div class="bg-emerald-950/50 p-5 rounded-2xl mb-6 border border-emerald-500/30">
                 <p class="text-lg md:text-xl font-body leading-relaxed text-emerald-50">
-                    이 게임의 진짜 목표는 혼자 1등을 하는 것이 아니라,<br>
-                    <strong>자원의 고갈을 막고 조원 모두가 살아남는 것</strong>입니다.
+                    이 게임은 <strong>15라운드 동안 숲을 지키며 함께 살아남는 것</strong>이 목표입니다.<br>
+                    ⚠️ <strong>생태 점수가 0점이 되면 게임 오버</strong>되어 모든 돈이 사라집니다!
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-body text-center mb-8 w-full">
                 <div class="bg-red-950/60 p-5 rounded-2xl border border-red-500/30">
                     <div class="text-3xl mb-1">😈</div>
                     <div class="font-title text-xl text-red-400 font-bold mb-2">욕심내기</div>
-                    <p class="text-base text-slate-200">나만 <span class="text-yellow-400 font-bold">+5💰</span><br>숲 파괴 <span class="text-red-400 font-bold">-15🌿</span></p>
-                    <p class="text-xs text-slate-400 mt-2">*3명 겹치면 +0💰</p>
+                    <p class="text-base text-slate-200">+5💰 / -15🌿<br><span class="text-xs text-slate-400">*3명 겹치면 0💰 / 30점 이하는 +1💰</span></p>
                 </div>
                 <div class="bg-amber-950/60 p-5 rounded-2xl border border-amber-500/30">
                     <div class="text-3xl mb-1">⛏️</div>
                     <div class="font-title text-xl text-amber-400 font-bold mb-2">적당히</div>
-                    <p class="text-base text-slate-200">모두 <span class="text-yellow-400 font-bold">+2💰</span><br>숲 손상 <span class="text-amber-400 font-bold">-3🌿</span></p>
+                    <p class="text-base text-slate-200">+2💰 / -3🌿</p>
                 </div>
                 <div class="bg-emerald-950/60 p-5 rounded-2xl border border-emerald-500/30">
                     <div class="text-3xl mb-1">💖</div>
                     <div class="font-title text-xl text-emerald-400 font-bold mb-2">돌보기</div>
-                    <p class="text-base text-slate-200">포기 <span class="text-slate-400 font-bold">0💰</span><br>숲 치유 <span class="text-emerald-400 font-bold">+10🌿</span></p>
+                    <p class="text-base text-slate-200">0💰 / +10🌿</p>
                 </div>
             </div>
             <div class="text-center">
@@ -157,20 +159,43 @@
         </div>
     </div>
 
-    <!-- 5. 학생용 게임 화면 (조 단위 독립 플레이) -->
+    <!-- 5. 학생용 게임 화면 -->
     <div id="panel-group-game" class="w-full max-w-5xl hidden flex-col items-center fade-in-up relative pb-24">
         
         <div class="w-full flex flex-wrap justify-between items-center mb-6 bg-slate-900/70 p-4 rounded-2xl border border-slate-700 backdrop-blur-sm gap-4">
             <div class="text-xl font-title font-bold text-emerald-200 flex items-center">
                 <span id="display-class-group"></span> <span id="my-role-badge" class="ml-2 bg-indigo-600 text-white text-sm px-2 py-1 rounded hidden font-body">👑 방장</span>
             </div>
-            <div class="text-2xl md:text-4xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/50 px-6 py-2 rounded-xl">제 <span id="display-round">1</span> 라운드</div>
+            <div class="text-2xl md:text-4xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/50 px-6 py-2 rounded-xl">제 <span id="display-round">1</span> / 15 라운드</div>
             <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg text-sm font-bold transition">◀ 현황판</button>
         </div>
         
         <div class="w-full bg-slate-950/80 h-12 md:h-14 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg w-full">
             <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
             <div class="absolute inset-0 flex items-center justify-center text-xl md:text-2xl drop-shadow-md text-white font-title font-bold">생태 점수: <span id="hp-text" class="ml-2 font-body font-bold text-2xl md:text-3xl">100</span></div>
+        </div>
+
+        <!-- 긴급 자치 회의 알림 배너 -->
+        <div id="crisis-banner" class="w-full hidden bg-red-950/90 border-2 border-red-500 p-4 rounded-2xl mb-6 text-center animate-pulse">
+            <h3 class="text-2xl font-title text-red-300 font-bold">🚨 긴급 마을 자치 회의 발동! (생태 점수 40점 이하)</h3>
+            <p class="font-body text-slate-200 mt-1">숲이 파괴되고 있습니다. 조원들과 규칙을 정하고 무임승차자를 심판하기 위한 제재 투표를 발동하세요!</p>
+        </div>
+
+        <!-- 게임 오버 / 승리 / 연장 투표 배너 -->
+        <div id="gameover-banner" class="w-full hidden bg-black/95 border-4 border-red-600 p-8 rounded-3xl mb-6 text-center shadow-[0_0_50px_rgba(239,68,68,0.8)]">
+            <h3 class="text-5xl font-title text-red-500 font-bold mb-4">💀 파국 발생 (Game Over)</h3>
+            <p class="text-xl font-body text-slate-200 mb-6">생태 점수가 0점이 되어 숲과 공동체가 완전히 붕괴되었습니다.<br>모든 자산이 몰수되었습니다.</p>
+        </div>
+
+        <!-- 15라운드 도달 시 연장 투표 모달 / 배너 -->
+        <div id="extension-vote-section" class="w-full hidden bg-indigo-950/90 border-2 border-indigo-400 p-6 rounded-3xl mb-6 text-center shadow-2xl">
+            <h3 class="text-3xl font-title text-yellow-300 font-bold mb-3">🏆 기본 15라운드 달성 완료!</h3>
+            <p class="font-body text-slate-200 mb-6">여기서 게임을 마무리하고 생존을 축하할까요, 아니면 기록 경신을 위해 계속 도전할까요?<br>아래에서 투표해주세요!</p>
+            <div id="ext-vote-buttons" class="flex justify-center gap-4 mb-4">
+                <button onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-xl font-bold text-xl font-title">🌿 계속 도전 (연장)</button>
+                <button onclick="submitExtensionVote("end")" class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-xl font-bold text-xl font-title">🏁 여기서 종료</button>
+            </div>
+            <div id="ext-vote-status" class="font-body text-indigo-200 text-sm">찬성: 0명 / 반대: 0명</div>
         </div>
 
         <div id="section-waiting" class="w-full text-center py-10 glass-panel rounded-3xl hidden">
@@ -183,7 +208,6 @@
         <div id="section-betting" class="w-full hidden flex-col items-center">
             <p class="text-xl md:text-2xl text-emerald-100 mb-6 font-body font-bold w-full text-left md:text-center">이번 라운드의 행동을 선택하세요.</p>
             
-            <!-- 버튼 좌우 꽉 차게 변경 -->
             <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
                 <button onclick="submitAction('greed')" class="w-full bg-red-950/80 border border-red-500/50 p-6 rounded-2xl hover:bg-red-800 transition group font-title shadow-md">
                     <div class="text-4xl mb-2 group-hover:scale-110 transition">😈</div><div class="text-2xl font-bold">욕심내기</div>
@@ -196,7 +220,6 @@
                 </button>
             </div>
             
-            <!-- 학생 상태도 꽉 차게 변경 -->
             <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"></div>
             
             <button id="btn-reveal" class="hidden font-title bg-red-600 hover:bg-red-500 px-12 py-5 rounded-2xl font-bold text-3xl shadow-[0_0_20px_rgba(239,68,68,0.5)] transition hover:scale-105">결과 공개하기</button>
@@ -205,6 +228,24 @@
         <div id="section-reveal" class="w-full hidden flex-col items-center">
             <h3 class="text-3xl font-title text-indigo-300 mb-6">라운드 결과</h3>
             <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"></div>
+            
+            <!-- 자치 회의 제재 투표 패널 (교사/방장 발동 -> 다수결 투표 진행) -->
+            <div id="sanction-panel" class="hidden w-full bg-slate-900/90 border border-indigo-500/50 p-6 rounded-2xl mb-8 text-center shadow-xl">
+                <h4 class="text-xl font-title text-yellow-300 mb-2">⚖️ 마을 자치 회의 제재 발동 (다수결 투표)</h4>
+                <p class="font-body text-sm text-slate-300 mb-4">규칙을 위반한 의심 가는 조원을 지정하여 제재 투표를 부칠 수 있습니다.</p>
+                <div id="sanction-targets-container" class="flex flex-wrap justify-center gap-3 mb-4"></div>
+                
+                <!-- 실제 투표 진행중일 때 표시되는 영역 -->
+                <div id="active-sanction-vote" class="hidden bg-indigo-950/80 p-4 rounded-xl border border-indigo-400">
+                    <p class="font-body text-indigo-200 mb-3" id="sanction-vote-question"></p>
+                    <div class="flex justify-center gap-4">
+                        <button onclick="voteSanction(true)" class="bg-red-600 hover:bg-red-500 px-6 py-2 rounded-lg font-bold font-body">찬성 (수익 몰수)</button>
+                        <button onclick="voteSanction(false)" class="bg-slate-600 hover:bg-slate-500 px-6 py-2 rounded-lg font-bold font-body">반대</button>
+                    </div>
+                    <div class="font-body text-xs text-slate-400 mt-2" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
+                </div>
+            </div>
+
             <button id="btn-next-round" class="hidden font-title bg-indigo-600 hover:bg-indigo-500 px-12 py-5 rounded-2xl font-bold text-3xl shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105">다음 라운드 준비</button>
         </div>
         
@@ -261,7 +302,10 @@
             try {
                 const classData = { config: { groupCount: groupCount }, groups: {} };
                 for(let i=1; i<=groupCount; i++) {
-                    classData.groups[i] = { state: { round: 1, hp: 100, phase: 'waiting', leader: null }, players: {} };
+                    classData.groups[i] = { 
+                        state: { round: 1, hp: 100, phase: 'waiting', leader: null, sanctionVote: null, extVote: null }, 
+                        players: {} 
+                    };
                 }
 
                 await withTimeout(set(ref(db, `classes/${className}`), classData));
@@ -288,8 +332,14 @@
                 Object.keys(groups).forEach(gId => {
                     const g = groups[gId];
                     const pCount = g.players ? Object.keys(g.players).length : 0;
-                    const phaseText = g.state.phase === 'waiting' ? '대기 중' : (g.state.phase === 'betting' ? '투표 진행 중' : '결과 확인 중');
-                    const hpColor = g.state.hp > 40 ? 'text-emerald-400' : 'text-red-400 animate-pulse';
+                    let phaseText = '대기 중';
+                    if (g.state.phase === 'betting') phaseText = '투표 중';
+                    else if (g.state.phase === 'reveal') phaseText = '결과 확인';
+                    else if (g.state.phase === 'gameover') phaseText = '💀 게임 오버';
+                    else if (g.state.phase === 'victory') phaseText = '🎉 생존 성공';
+                    else if (g.state.phase === 'extension_vote') phaseText = '🏆 연장 투표 중';
+
+                    const hpColor = g.state.hp > 40 ? 'text-emerald-400' : (g.state.hp > 0 ? 'text-red-400 animate-pulse' : 'text-slate-500 line-through');
 
                     grid.innerHTML += `
                         <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer glass-panel p-5 rounded-2xl hover:bg-slate-800 transition-all border border-slate-700 hover:border-indigo-500 w-full">
@@ -299,7 +349,7 @@
                                 <span class="text-indigo-300">${phaseText}</span>
                             </div>
                             <div class="bg-black/50 p-3 rounded-xl text-center">
-                                <div class="text-xs text-slate-400 font-body mb-1">R${g.state.round} 생태 점수</div>
+                                <div class="text-xs text-slate-400 font-body mb-1">R${g.state.round}/15 생태 점수</div>
                                 <div class="text-3xl font-bold font-title ${hpColor}">${g.state.hp}🌿</div>
                             </div>
                         </div>
@@ -312,12 +362,11 @@
             myGroup = groupId;
             document.getElementById('btn-back-macro').classList.remove('hidden');
             document.getElementById('display-class-group').innerText = `${myClass} ${groupId}조 (관전)`;
-            document.querySelectorAll('#section-waiting button, #section-betting > p, #action-buttons-container, #btn-reveal, #btn-next-round').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('#section-waiting button, #section-betting > p, #action-buttons-container, #btn-reveal, #btn-next-round, #sanction-panel, #extension-vote-section').forEach(el => el.classList.add('hidden'));
             showPanel('panel-group-game');
             listenGroupMicro();
         };
 
-        // 학생 로그인 후 규칙 화면으로 이동
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value.trim();
@@ -351,14 +400,13 @@
                 document.getElementById('display-class-group').innerText = `${myClass} ${myGroup}조`;
                 if(isGroupLeader) document.getElementById('my-role-badge').classList.remove('hidden');
                 
-                showPanel('panel-student-rules'); // 바로 게임화면으로 가지 않고 규칙 화면 띄우기
+                showPanel('panel-student-rules');
                 listenGroupMicro();
             } catch (error) {
                 alert(`접속 오류: ${error.message}`);
             }
         });
 
-        // 규칙을 모두 읽고 대기실 입장
         document.getElementById('btn-enter-room').addEventListener('click', () => {
             showPanel('panel-group-game');
         });
@@ -366,6 +414,34 @@
         window.submitAction = async (choice) => {
             try { await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), { choice: choice }); } 
             catch (error) { alert("전송 실패"); }
+        };
+
+        // 교사나 방장이 제재 투표 발동
+        window.startSanctionVote = async (targetName) => {
+            const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
+            const snapshot = await get(groupRef);
+            const data = snapshot.val();
+            const pKeys = Object.keys(data.players || {});
+
+            const initialVotes = {};
+            pKeys.forEach(p => { initialVotes[p] = null; }); // 아직 투표 안 함
+
+            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
+                sanctionVote: {
+                    target: targetName,
+                    votes: initialVotes
+                }
+            });
+        };
+
+        // 학생들이 제재 투표 참여
+        window.voteSanction = async (isAgree) => {
+            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote/votes/${myName}`), isAgree);
+        };
+
+        // 15라운드 연장 투표 참여
+        window.submitExtensionVote = async (choice) => {
+            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/extVote/votes/${myName}`), choice);
         };
 
         let currentPhase = '';
@@ -378,6 +454,60 @@
                 document.getElementById('hp-bar').style.width = `${Math.max(0, data.state.hp)}%`;
                 document.getElementById('hp-text').innerText = data.state.hp;
                 document.getElementById('hp-bar').className = data.state.hp > 40 ? "h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" : "h-full bg-gradient-to-r from-red-600 to-red-400 animate-pulse transition-all duration-1000 ease-out";
+
+                // 긴급 회의 배너 (HP 40 이하)
+                const crisisBanner = document.getElementById('crisis-banner');
+                if (data.state.hp <= 40 && data.state.hp > 0 && data.state.phase !== 'victory' && data.state.phase !== 'extension_vote') {
+                    crisisBanner.classList.remove('hidden');
+                } else {
+                    crisisBanner.classList.add('hidden');
+                }
+
+                // 게임 오버 / 승리 배너
+                const gameoverBanner = document.getElementById('gameover-banner');
+                const extSection = document.getElementById('extension-vote-section');
+                
+                gameoverBanner.classList.add('hidden');
+                extSection.classList.add('hidden');
+
+                if (data.state.hp <= 0 && data.state.phase === 'gameover') {
+                    gameoverBanner.classList.remove('hidden');
+                    gameoverBanner.innerHTML = `<h3 class="text-5xl font-title text-red-500 font-bold mb-4">💀 파국 발생 (Game Over)</h3><p class="text-xl font-body text-slate-200">생태 점수가 0점이 되어 숲과 공동체가 완전히 붕괴되었습니다.<br>모든 자산이 몰수되었습니다.</p>`;
+                } else if (data.state.phase === 'victory') {
+                    gameoverBanner.classList.remove('hidden');
+                    gameoverBanner.innerHTML = `<h3 class="text-5xl font-title text-emerald-400 font-bold mb-4">🎉 생존 성공!</h3><p class="text-xl font-body text-slate-200">축하합니다! 여러분은 숲을 지켜내며 지속 가능한 생태 문명으로 전환했습니다!</p>`;
+                } else if (data.state.phase === 'extension_vote') {
+                    extSection.classList.remove('hidden');
+                    const votes = data.state.extVote?.votes || {};
+                    const pKeys = Object.keys(data.players || {});
+                    let agree = 0, end = 0, totalVoted = 0;
+                    
+                    Object.values(votes).forEach(v => {
+                        if (v === 'extend') agree++;
+                        if (v === 'end') end++;
+                        if (v !== null && v !== undefined) totalVoted++;
+                    });
+
+                    document.getElementById('ext-vote-status').innerText = `참여: ${totalVoted}/${pKeys.length}명 | 연장 찬성: ${agree}명 / 종료 찬성: ${end}명`;
+
+                    // 방장 권한으로 투표 과반수 달성 시 다음 단계 처리
+                    if (isGroupLeader && totalVoted >= pKeys.length) {
+                        if (agree > end) {
+                            // 연장 승인: 16라운드로 진입 및 phase를 betting으로 복귀
+                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
+                                round: data.state.round + 1,
+                                phase: 'betting',
+                                extVote: null
+                            });
+                        } else {
+                            // 종료 확정
+                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
+                                phase: 'victory',
+                                extVote: null
+                            });
+                        }
+                    }
+                }
 
                 if (currentPhase !== 'reveal' && data.state.phase === 'reveal' && !isTeacher) {
                     document.body.classList.add('shake-screen');
@@ -393,7 +523,6 @@
                 const players = data.players || {};
                 const pKeys = Object.keys(players);
 
-                // 방장이 나갔거나 리스트에 없을 경우 자가 치유(다음 사람에게 방장 넘김)
                 if (data.state.leader && !pKeys.includes(data.state.leader) && pKeys.length > 0) {
                     if (pKeys[0] === myName) { update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { leader: myName }); }
                 }
@@ -412,14 +541,16 @@
                         document.getElementById('msg-waiting-host').classList.add('hidden');
                     }
                 } 
-                else if (data.state.phase === 'betting') {
-                    sBet.classList.remove('hidden');
-                    const myChoice = players[myName]?.choice;
-                    
-                    if (!isTeacher && (!myChoice || myChoice === "")) {
-                        document.getElementById('action-buttons-container').classList.remove('hidden');
-                    } else if (!isTeacher) {
-                        document.getElementById('action-buttons-container').classList.add('hidden');
+                else if (data.state.phase === 'betting' || data.state.phase === 'gameover') {
+                    if (data.state.phase === 'betting') {
+                        sBet.classList.remove('hidden');
+                        const myChoice = players[myName]?.choice;
+                        
+                        if (!isTeacher && (!myChoice || myChoice === "")) {
+                            document.getElementById('action-buttons-container').classList.remove('hidden');
+                        } else if (!isTeacher) {
+                            document.getElementById('action-buttons-container').classList.add('hidden');
+                        }
                     }
 
                     const grid = document.getElementById('betting-status-grid');
@@ -428,7 +559,7 @@
                     
                     pKeys.forEach(pName => {
                         const pChoice = players[pName].choice;
-                        if (!pChoice || pChoice === "") allChosen = false; // 빈 값이면 버튼 안 뜸
+                        if (!pChoice || pChoice === "") allChosen = false;
                         
                         const isL = (data.state.leader === pName);
                         const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1 drop-shadow-md">👑</span>' : '';
@@ -440,7 +571,7 @@
                         }
                     });
 
-                    if (isGroupLeader && allChosen) document.getElementById('btn-reveal').classList.remove('hidden');
+                    if (isGroupLeader && allChosen && data.state.phase === 'betting') document.getElementById('btn-reveal').classList.remove('hidden');
                     else document.getElementById('btn-reveal').classList.add('hidden');
                 }
                 else if (data.state.phase === 'reveal') {
@@ -464,7 +595,50 @@
                         `;
                     });
 
-                    if (isGroupLeader) document.getElementById('btn-next-round').classList.remove('hidden');
+                    // 제재 투표 패널 제어 (방장 및 교사 권한)
+                    if (isGroupLeader || isTeacher) {
+                        document.getElementById('sanction-panel').classList.remove('hidden');
+                        const targetsContainer = document.getElementById('sanction-targets-container');
+                        targetsContainer.innerHTML = '';
+                        pKeys.forEach(pName => {
+                            targetsContainer.innerHTML += `<button onclick="startSanctionVote('${pName}')" class="bg-indigo-700 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-lg font-body text-sm font-bold border border-indigo-400">⚖️ [${pName}] 제재 투표 부치기</button>`;
+                        });
+
+                        // 활성화된 제재 투표 상태 감지
+                        const sanctionData = data.state.sanctionVote;
+                        const activeVoteBox = document.getElementById('active-sanction-vote');
+                        if (sanctionData && sanctionData.target) {
+                            activeVoteBox.classList.remove('hidden');
+                            document.getElementById('sanction-vote-question').innerText = `"${sanctionData.target}"님의 이번 라운드 수익을 몰수(0원)할까요? 조원들의 다수결을 모아주세요.`;
+                            
+                            const votes = sanctionData.votes || {};
+                            let agreeCount = 0, disagreeCount = 0, totalVoted = 0;
+                            Object.keys(votes).forEach(k => {
+                                if (votes[k] === true) agreeCount++;
+                                if (votes[k] === false) disagreeCount++;
+                                if (votes[k] !== null && votes[k] !== undefined) totalVoted++;
+                            });
+
+                            document.getElementById('sanction-vote-count').innerText = `찬성: ${agreeCount}명 / 반대: ${disagreeCount}명 (총 참여: ${totalVoted}/${pKeys.length}명)`;
+
+                            // 과반수 달성 시 즉시 제재 집행 (방장이 권한 가짐)
+                            if (isGroupLeader && totalVoted >= pKeys.length) {
+                                if (agreeCount > disagreeCount) {
+                                    // 찬성이 과반수면 수익 몰수 집행
+                                    update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${sanctionData.target}`), { gold: 0 });
+                                    alert(`⚖️ 자치 회의 다수결 가결! [${sanctionData.target}]님의 이번 라운드 수익이 몰수되었습니다.`);
+                                } else {
+                                    alert(`⚖️ 자치 회의 다수결 부결! 제재가 기각되었습니다.`);
+                                }
+                                // 투표 초기화
+                                update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { sanctionVote: null });
+                            }
+                        } else {
+                            activeVoteBox.classList.add('hidden');
+                        }
+
+                        document.getElementById('btn-next-round').classList.remove('hidden');
+                    }
                 }
             });
         }
@@ -484,16 +658,30 @@
             
             pKeys.forEach(k => { if(data.players[k].choice === 'greed') greedCount++; });
             
+            const isCrisis = data.state.hp <= 30;
+
             pKeys.forEach(k => {
                 const choice = data.players[k].choice;
-                if(choice === 'greed') { totalHpChange -= 15; data.players[k].gold += (greedCount >= 3) ? 0 : (greedCount === 2 ? 2 : 5); }
+                if(choice === 'greed') { 
+                    totalHpChange -= 15; 
+                    let earned = (greedCount >= 3) ? 0 : (greedCount === 2 ? 2 : 5);
+                    if(isCrisis && earned > 0) earned = 1; 
+                    data.players[k].gold += earned; 
+                }
                 else if(choice === 'need') { totalHpChange -= 3; data.players[k].gold += 2; }
                 else if(choice === 'care') { totalHpChange += 10; }
             });
             
             data.state.hp += totalHpChange;
             if(data.state.hp > 100) data.state.hp = 100;
-            data.state.phase = 'reveal';
+
+            if(data.state.hp <= 0) {
+                data.state.hp = 0;
+                data.state.phase = 'gameover';
+                pKeys.forEach(k => { data.players[k].gold = 0; });
+            } else {
+                data.state.phase = 'reveal';
+            }
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
         });
@@ -503,9 +691,23 @@
             const snapshot = await get(ref(db, `classes/${myClass}/groups/${myGroup}`));
             const data = snapshot.val();
             
+            // 15라운드 도달 시 연장 투표 모드로 전환
+            if(data.state.round >= 15 && data.state.hp > 0) {
+                const pKeys = Object.keys(data.players || {});
+                const initialExtVotes = {};
+                pKeys.forEach(p => { initialExtVotes[p] = null; });
+
+                await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
+                    phase: 'extension_vote',
+                    extVote: { votes: initialExtVotes }
+                });
+                return;
+            }
+
             data.state.round++;
             data.state.phase = 'betting';
-            Object.keys(data.players).forEach(k => data.players[k].choice = ""); // null 오류 방지
+            data.state.sanctionVote = null;
+            Object.keys(data.players).forEach(k => data.players[k].choice = "");
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
         });
