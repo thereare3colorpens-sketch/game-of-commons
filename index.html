@@ -19,7 +19,7 @@
             color: white; 
             overflow-x: hidden;
             touch-action: pan-y;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             word-break: keep-all;
         }
         
@@ -27,7 +27,7 @@
         .font-body { font-family: 'Pretendard', sans-serif !important; }
         
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -37,11 +37,9 @@
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 점수 깎일 때: 위험 진동 애니메이션 */
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
         .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8); }
 
-        /* 점수 오를 때: 평화로운 초록빛 치유 글로우 애니메이션 */
         @keyframes healGlow { 0% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } 50% { box-shadow: 0 0 45px rgba(52, 211, 153, 0.9); } 100% { box-shadow: 0 0 5px rgba(52, 211, 153, 0.2); } }
         .heal-screen { animation: healGlow 1.2s ease-in-out; }
     </style>
@@ -127,51 +125,61 @@
         </div>
     </div>
 
-    <!-- 4-5. 학생용 상세 규칙 안내 화면 -->
+    <!-- 4-5. 학생용 상세 규칙 안내 화면 (매우 상세하게 개편) -->
     <div id="panel-student-rules" class="w-full max-w-4xl hidden text-center fade-in-up">
         <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl">
-            <h2 class="text-4xl md:text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">📖 생존 규칙 완벽 가이드</h2>
+            <h2 class="text-4xl md:text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">📖 생존 규칙 및 성장 가이드 완벽 마스터</h2>
             
-            <div class="space-y-6 font-body text-slate-100 text-lg mb-8 leading-relaxed">
-                <div class="bg-emerald-950/70 p-6 rounded-2xl border border-emerald-500/50">
-                    <p class="text-emerald-100 font-bold text-xl">🎯 공동 목표: 15라운드 동안 생태 점수가 0점이 되지 않도록 사수하고 함께 생존하세요!</p>
+            <div class="space-y-6 font-body text-slate-100 text-base md:text-lg mb-8 leading-relaxed">
+                <div class="bg-emerald-950/80 p-6 rounded-2xl border border-emerald-500/50 shadow-inner">
+                    <p class="text-emerald-100 font-bold text-xl">🎯 공동의 목표: 15라운드 동안 생태 점수가 0점이 되지 않도록 사수하고, 조원들과 협력하여 지속 가능한 생태 문명으로 전환하세요!</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div class="bg-red-950/80 p-5 rounded-2xl border border-red-500/40">
-                        <div class="text-3xl mb-1">😈</div>
-                        <div class="font-title text-xl text-red-400 font-bold mb-1">욕심내기</div>
-                        <p class="text-sm">+5💰 / -15🌿<br><span class="text-xs text-slate-400">*3명 겹치면 0원 / 30점 이하 시 1원</span></p>
-                    </div>
-                    <div class="bg-amber-950/80 p-5 rounded-2xl border border-amber-500/40">
-                        <div class="text-3xl mb-1">⛏️</div>
-                        <div class="font-title text-xl text-amber-400 font-bold mb-1">적당히</div>
-                        <p class="text-sm">+2💰 / -3🌿<br><span class="text-xs text-slate-400">*안전하고 꾸준한 수확</span></p>
-                    </div>
-                    <div class="bg-emerald-950/80 p-5 rounded-2xl border border-emerald-500/40">
-                        <div class="text-3xl mb-1">💖</div>
-                        <div class="font-title text-xl text-emerald-400 font-bold mb-1">돌보기</div>
-                        <p class="text-sm">0💰 / +10🌿<br><span class="text-xs text-yellow-300">*조원들의 생태 보조금 획득</span></p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-700">
-                        <div class="font-title text-base text-slate-200 font-bold mb-1">1단계 [전통 방식]</div>
-                        <p class="text-xs text-slate-300">기본 상태</p>
-                    </div>
-                    <div class="bg-amber-950/80 p-4 rounded-2xl border border-amber-500/40">
-                        <div class="font-title text-base text-amber-300 font-bold mb-1">2단계 [산업화]</div>
-                        <p class="text-xs text-slate-200">비용 15💰 | 욕심 <strong>+10💰</strong> / 파괴 <strong>-30🌿</strong></p>
-                    </div>
-                    <div class="bg-teal-950/80 p-4 rounded-2xl border border-teal-500/40">
-                        <div class="font-title text-base text-teal-300 font-bold mb-1">3단계 [생태전환]</div>
-                        <p class="text-xs text-slate-200">비용 30💰 | 욕심 <strong>+10💰</strong> / 파괴 <strong>-5🌿</strong></p>
+                <!-- 행동 규칙 -->
+                <div>
+                    <h3 class="text-2xl font-title text-yellow-300 mb-3 font-bold">🕹️ 1. 매 라운드 세 가지 행동 선택</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-red-950/80 p-4 rounded-2xl border border-red-500/40">
+                            <div class="text-3xl mb-1">😈</div>
+                            <div class="font-title text-xl text-red-400 font-bold mb-1">욕심내기</div>
+                            <p class="text-sm">+5💰 / -15🌿<br><span class="text-xs text-slate-400">*3명 이상 겹치면 0원 / 30점 이하 시 1원 폭락</span></p>
+                        </div>
+                        <div class="bg-amber-950/80 p-4 rounded-2xl border border-amber-500/40">
+                            <div class="text-3xl mb-1">⛏️</div>
+                            <div class="font-title text-xl text-amber-400 font-bold mb-1">적당히</div>
+                            <p class="text-sm">+2💰 / -3🌿<br><span class="text-xs text-slate-400">*안전하고 꾸준한 최소 수확</span></p>
+                        </div>
+                        <div class="bg-emerald-950/80 p-4 rounded-2xl border border-emerald-500/40">
+                            <div class="text-3xl mb-1">💖</div>
+                            <div class="font-title text-xl text-emerald-400 font-bold mb-1">돌보기</div>
+                            <p class="text-sm">0💰 / +10🌿<br><span class="text-xs text-yellow-300">*조원들의 생태 보조금 획득 가능</span></p>
+                        </div>
                     </div>
                 </div>
 
+                <!-- 테크 트리 -->
+                <div>
+                    <h3 class="text-2xl font-title text-teal-300 mb-3 font-bold">🏭 2. 개인 성장 테크 트리 (산업화와 생태전환)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-700">
+                            <div class="font-title text-base text-slate-200 font-bold mb-1">1단계 [전통 채굴]</div>
+                            <p class="text-xs text-slate-300">기본 상태<br>욕심 +5💰 / 데미지 -15🌿</p>
+                        </div>
+                        <div class="bg-amber-950/80 p-4 rounded-2xl border border-amber-500/40">
+                            <div class="font-title text-base text-amber-300 font-bold mb-1">2단계 [산업화]</div>
+                            <p class="text-xs text-slate-200">비용 15💰<br>욕심 <strong>+10💰</strong> / 숲파괴 <strong>-30🌿</strong> (위험한 성장)</p>
+                        </div>
+                        <div class="bg-teal-950/80 p-4 rounded-2xl border border-teal-500/40">
+                            <div class="font-title text-base text-teal-300 font-bold mb-1">3단계 [생태전환]</div>
+                            <p class="text-xs text-slate-200">비용 30💰<br>욕심 <strong>+10💰</strong> / 숲파괴 <strong>-5🌿</strong> (성장과 보전)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 자연재생 및 법안 -->
                 <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700 space-y-2 text-base">
-                    <p>⚖️ <strong>긴급 법안 쿨타임:</strong> 회의를 통해 통과시킨 법안은 1회성(1라운드)이며, <strong>직전 라운드와 같은 법안을 연속으로 통과시킬 수 없습니다.</strong> 또한 '모두 돌보기' 발동 시 2/3단계 공장 보유자는 유지비(2💰)가 부과됩니다.</p>
+                    <p>🌿 <strong>자연재생 탄력성:</strong> 숲은 70점 이상일 때 +5, 40~69점일 때 +2 스스로 치유되지만, 30점 이하 위험 구간에서는 회복력이 완전히 사라집니다.</p>
+                    <p>⚖️ <strong>긴급 법안 및 쿨타임:</strong> 회의를 통해 통과시킨 법안은 1회성(1라운드)이며, <strong>직전 라운드와 동일한 법안을 연속으로 통과시킬 수 없습니다.</strong> 또한 '모두 돌보기' 발동 시 2/3단계 공장 보유자는 유지비(2💰)가 부과됩니다.</p>
                 </div>
             </div>
 
@@ -188,7 +196,11 @@
             <div class="text-2xl font-title font-bold text-emerald-200 flex items-center">
                 <span id="display-class-group"></span> <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-base px-3 py-1 rounded-lg hidden font-body">👑 방장</span>
             </div>
-            <div class="text-3xl md:text-5xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/50 px-6 py-3 rounded-2xl">제 <span id="display-round">1</span> / 15 라운드</div>
+            <div class="flex items-center gap-3">
+                <!-- 게임 중 언제든 규칙을 볼 수 있는 상시 버튼 -->
+                <button onclick="openIngameRuleModal()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2.5 rounded-xl text-base font-bold font-body shadow-md transition">📖 규칙 보기</button>
+                <div class="text-3xl md:text-5xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/50 px-6 py-3 rounded-2xl">제 <span id="display-round">1</span> / 15 라운드</div>
+            </div>
             <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-5 py-2.5 rounded-xl text-base font-bold transition">◀ 현황판</button>
         </div>
         
@@ -230,9 +242,10 @@
             <div class="font-body text-indigo-200 text-lg mt-3" id="ext-vote-status">찬성: 0명 / 반대: 0명</div>
         </div>
 
-        <div id="section-waiting" class="w-full text-center py-12 glass-panel rounded-3xl hidden">
+        <div id="section-waiting" class="w-full text-center py-12 glass-panel rounded-3xl hidden flex-col items-center">
             <h2 class="text-4xl font-title text-yellow-300 mb-6">조원들을 기다리는 중...</h2>
             <div id="waiting-players" class="flex flex-wrap justify-center gap-4 mb-8 font-body text-xl"></div>
+            <!-- 방장 시작 버튼 누락 수정 (항상 unhide 및 flex 정렬) -->
             <button id="btn-start-group" class="hidden bg-emerald-600 hover:bg-emerald-500 px-12 py-5 rounded-2xl font-title font-bold text-3xl shadow-lg transition hover:scale-105 animate-pulse">우리 조 게임 시작!</button>
             <p id="msg-waiting-host" class="text-slate-300 font-body text-base mt-4">방장(첫 접속자)이 시작 버튼을 누르면 시작됩니다.</p>
         </div>
@@ -310,6 +323,38 @@
         
     </div>
 
+    <!-- 6. 인게임 상시 규칙 확인 모달 -->
+    <div id="modal-ingame-rules" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-panel max-w-3xl w-full p-8 rounded-3xl max-h-[90vh] overflow-y-auto text-left relative shadow-2xl">
+            <button onclick="closeIngameRuleModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-3xl font-bold">&times;</button>
+            <h3 class="text-3xl font-title text-emerald-400 font-bold mb-6 border-b border-emerald-500/30 pb-4">📖 게임 규칙 다시보기</h3>
+            
+            <div class="space-y-6 font-body text-slate-100 text-base md:text-lg leading-relaxed">
+                <div>
+                    <h4 class="text-xl font-title text-yellow-300 font-bold mb-2">🕹️ 1. 행동 선택</h4>
+                    <p>• <strong>욕심내기(😈):</strong> 자산 +5 / 숲 파괴 -15 (3명 이상 겹치면 0원, 30점이하 시 1원 폭락)</p>
+                    <p>• <strong>적당히(⛏️):</strong> 자산 +2 / 숲 파괴 -3</p>
+                    <p>• <strong>돌보기(💖):</strong> 자산 0 / 숲 치유 +10 (동료들의 생태 보조금 획득)</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-title text-teal-300 font-bold mb-2">🏭 2. 개인 테크 트리</h4>
+                    <p>• <strong>1단계 [전통 채굴]:</strong> 기본</p>
+                    <p>• <strong>2단계 [산업화] (비용 15💰):</strong> 욕심 +10 / 숲 파괴 -30 (위험한 고속 성장)</p>
+                    <p>• <strong>3단계 [생태전환] (비용 30💰):</strong> 욕심 +10 / 숲 파괴 -5 (성장과 환경 공존)</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-title text-indigo-300 font-bold mb-2">🌿 3. 자연재생 & 자치 회의</h4>
+                    <p>• 숲은 70점 이상일 때 +5, 40~69점일 때 +2 자연 회복되며 30점 이하에선 회복력이 사라집니다.</p>
+                    <p>• 위기 시 긴급 법안(1회성)을 통과시켜 위기를 극복할 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <button onclick="closeIngameRuleModal()" class="bg-indigo-600 hover:bg-indigo-500 px-8 py-3 rounded-xl font-bold text-xl font-title">닫기</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -343,6 +388,14 @@
             document.getElementById(panelId).classList.remove('hidden');
             if(panelId === 'panel-teacher-macro') document.getElementById('panel-teacher-macro').classList.add('flex');
             if(panelId === 'panel-group-game') document.getElementById('panel-group-game').classList.add('flex');
+        };
+
+        // 상시 규칙 모달 제어 함수
+        window.openIngameRuleModal = () => {
+            document.getElementById('modal-ingame-rules').classList.remove('hidden');
+        };
+        window.closeIngameRuleModal = () => {
+            document.getElementById('modal-ingame-rules').classList.add('hidden');
         };
 
         const withTimeout = (promise, ms = 5000) => {
@@ -426,7 +479,7 @@
             listenGroupMicro();
         };
 
-        // 학생 접속: 게임 시작 후에도 동일한 닉네임(기존 참여자)이면 재접속 허용, 새 참여자는 차단
+        // 학생 접속: 게임 시작 후에도 동일 닉네임이면 재접속 허용
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value.trim();
@@ -529,7 +582,7 @@
             });
         };
 
-        // 법안 투표 발동 (쿨타임 체크)
+        // 법안 투표 발동
         window.startLawVote = async (lawType) => {
             const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
             const snapshot = await get(groupRef);
@@ -637,7 +690,6 @@
                     storyBanner.className = "text-center font-body text-base md:text-lg font-bold py-2 px-4 rounded-xl bg-slate-950 border border-slate-700 text-slate-400";
                 }
 
-                // 애니메이션 복구 로직 (깎이면 지진, 오르면 치유 글로우)
                 if (currentHp < lastHp && currentPhase === 'reveal' && !isTeacher) {
                     document.body.classList.add('shake-screen');
                     setTimeout(() => document.body.classList.remove('shake-screen'), 500);
@@ -739,6 +791,7 @@
 
                 if (data.state.phase === 'waiting') {
                     sWait.classList.remove('hidden');
+                    sWait.classList.add('flex'); // flex 정렬 보장
                     const wContainer = document.getElementById('waiting-players');
                     wContainer.innerHTML = '';
                     pKeys.forEach(pName => {
@@ -749,11 +802,15 @@
                     if (isGroupLeader) {
                         document.getElementById('btn-start-group').classList.remove('hidden');
                         document.getElementById('msg-waiting-host').classList.add('hidden');
+                    } else {
+                        document.getElementById('btn-start-group').classList.add('hidden');
+                        document.getElementById('msg-waiting-host').classList.remove('hidden');
                     }
                 } 
                 else if (data.state.phase === 'betting' || data.state.phase === 'gameover') {
                     if (data.state.phase === 'betting') {
                         sBet.classList.remove('hidden');
+                        sBet.classList.add('flex');
                         const myChoice = players[myName]?.choice;
                         
                         if (data.state.activeLaw === 'mandatory_care' && (!myChoice || myChoice === "")) {
@@ -802,6 +859,7 @@
                 }
                 else if (data.state.phase === 'reveal') {
                     sRev.classList.remove('hidden');
+                    sRev.classList.add('flex');
 
                     const lawBanner = document.getElementById('active-law-banner');
                     const lawText = document.getElementById('active-law-text');
