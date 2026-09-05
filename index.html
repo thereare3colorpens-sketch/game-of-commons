@@ -6,11 +6,11 @@
     <title>위대한 전환: 공유지의 비극</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 눈누 웹폰트 설정 */
+        /* 우아한 세리프 폰트 적용 */
         @font-face {
-            font-family: 'Distort';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/Distort-Bold.woff2') format('woff2');
-            font-weight: 700;
+            font-family: 'ElegantSerif';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/ElegantSerif-Medium.woff2') format('woff2');
+            font-weight: 500;
             font-style: normal;
         }
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
         
-        .font-title { font-family: 'Distort', 'Pretendard', sans-serif; }
+        .font-title { font-family: 'ElegantSerif', 'Pretendard', serif; }
         
         .glass-panel {
             background: rgba(255, 255, 255, 0.05);
@@ -52,8 +52,8 @@
 
     <!-- 1. 초기 화면 (역할 선택) -->
     <div id="panel-home" class="w-full max-w-3xl text-center fade-in-up">
-        <h1 class="text-8xl font-title text-emerald-400 mb-6 drop-shadow-[0_0_20px_rgba(52,211,153,0.4)] tracking-wider">위대한 전환</h1>
-        <p class="text-2xl text-slate-300 mb-16 font-light tracking-wide">모두가 풍요로운 생태 문명으로 나아갈 수 있을까요?</p>
+        <h1 class="text-7xl md:text-8xl font-title text-emerald-400 mb-6 drop-shadow-[0_0_20px_rgba(52,211,153,0.4)] tracking-wider">위대한 전환</h1>
+        <p class="text-xl md:text-2xl text-slate-300 mb-16 font-light tracking-wide">모두가 풍요로운 생태 문명으로 나아갈 수 있을까요?</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-indigo-600/40 p-10 rounded-2xl group transition-all duration-300 hover:scale-105 hover:border-indigo-400/50">
@@ -100,9 +100,7 @@
             <div class="absolute inset-0 flex items-center justify-center font-title text-3xl drop-shadow-lg tracking-widest text-white">공유지 생태 점수: <span id="hp-text" class="ml-2">100</span></div>
         </div>
 
-        <div id="team-cards-container" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12">
-            <!-- 자바스크립트로 자동 생성 -->
-        </div>
+        <div id="team-cards-container" class="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12"></div>
 
         <button id="btn-reveal" class="hidden bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-12 py-5 rounded-full font-bold text-3xl shadow-[0_0_30px_rgba(225,29,72,0.6)] transition-all hover:scale-105 animate-pulse">결과 동시 공개!</button>
         <button id="btn-next-round" class="hidden bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 px-12 py-5 rounded-full font-bold text-3xl shadow-[0_0_30px_rgba(79,70,229,0.6)] transition-all hover:scale-105">다음 라운드 준비</button>
@@ -139,11 +137,10 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // 사용자 제공 설정값에 databaseURL 강제 주입
         const firebaseConfig = {
             apiKey: "AIzaSyAJHyFYFVwC10Y1PMlecYCS-gerZ_HhQgo",
             authDomain: "game-of-commons.firebaseapp.com",
-            databaseURL: "https://game-of-commons-default-rtdb.firebaseio.com",
+            databaseURL: "https://game-of-commons-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "game-of-commons",
             storageBucket: "game-of-commons.firebasestorage.app",
             messagingSenderId: "532576302731",
@@ -165,6 +162,13 @@
             if(panelId === 'panel-remote') document.getElementById('panel-remote').classList.add('flex');
         };
 
+        const withTimeout = (promise, ms = 5000) => {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과 (데이터베이스 규칙이 잠겨있거나 주소가 잘못되었습니다.)')), ms))
+            ]);
+        };
+
         document.getElementById('btn-create-room').addEventListener('click', async () => {
             const roomName = document.getElementById('input-room-name').value.trim();
             const teamCount = parseInt(document.getElementById('input-team-count').value);
@@ -182,16 +186,16 @@
                     initialTeams[i] = { choice: null, gold: 0 };
                 }
 
-                await set(ref(db, `rooms/${currentRoom}`), {
+                await withTimeout(set(ref(db, `rooms/${currentRoom}`), {
                     state: { round: 1, hp: 100, phase: 'betting' },
                     teams: initialTeams
-                });
+                }));
                 
                 document.getElementById('display-room-name').innerText = roomName;
                 showPanel('panel-dashboard');
                 listenRoom();
             } catch (error) {
-                alert(`방 개설 실패! 파이어베이스 규칙(Rules)이나 설정을 확인하세요.\n에러: ${error.message}`);
+                alert(`방 개설 실패!\n원인: ${error.message}\n\n* 파이어베이스 [Realtime Database] -> [규칙(Rules)] 탭에서 .read와 .write가 true로 설정되어 있는지 반드시 확인하세요.`);
                 btn.innerText = "게임 시작하기";
                 btn.disabled = false;
             }
@@ -203,7 +207,7 @@
             if(!roomName || !teamNum) return alert("방 이름과 모둠 번호를 입력하세요.");
             
             try {
-                const roomSnapshot = await get(ref(db, `rooms/${roomName}`));
+                const roomSnapshot = await withTimeout(get(ref(db, `rooms/${roomName}`)));
                 if (!roomSnapshot.exists()) {
                     return alert("존재하지 않는 방입니다. 선생님이 개설한 방 이름을 확인하세요.");
                 }
