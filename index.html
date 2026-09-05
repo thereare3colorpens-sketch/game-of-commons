@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>위대한 전환: 공유지 시뮬레이션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 프리텐다드 본문용 폰트 */
+        @font-face {
+            font-family: 'Pretendard';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* 뒤틀림 제목용 폰트 */
+        @font-face {
+            font-family: 'Distort';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408@1.0/Distort-Medium.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #0f172a;
+            color: white;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        /* 제목용 커스텀 클래스 */
+        .font-title {
+            font-family: 'Distort', 'Pretendard', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .perspective { perspective: 1000px; }
+        .card-inner {
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-face {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .card-back { transform: rotateY(180deg); }
+
+        /* HP Bar Transition */
+        #hp-fill, #player-hp-fill {
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), background-color 1s ease;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; }
+            20% { transform: translate(-50%, -30px) scale(1.5); opacity: 1; }
+            100% { transform: translate(-50%, -100px) scale(1); opacity: 0; }
+        }
+        .float-up { animation: floatUp 1.5s ease-out forwards; }
+
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-10px, 5px); border-color: red; }
+            20%, 40%, 60%, 80% { transform: translate(10px, -5px); }
+        }
+        .shake-screen { 
+            animation: screenShake 0.5s ease-in-out;
+            box-shadow: inset 0 0 100px rgba(220, 38, 38, 0.5);
+        }
+
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="w-screen h-screen flex flex-col transition-all duration-300">
+
+    <!-- [1] LOBBY VIEW (Role Selection) -->
+    <div id="view-lobby" class="flex-1 flex flex-col items-center justify-center p-6 z-10 absolute inset-0 bg-slate-900">
+        <h1 class="text-6xl md:text-8xl font-title text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500 mb-6 text-center drop-shadow-lg">위대한 전환</h1>
+        <p class="text-xl text-slate-400 mb-12 text-center max-w-2xl leading-relaxed">모두가 풍요로운 생태 문명으로 나아갈 수 있을까요?<br>당신의 역할을 선택하세요.</p>
+        
+        <div class="w-full max-w-4xl grid md:grid-cols-2 gap-8">
+            <!-- Host Button -->
+            <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl flex flex-col items-center justify-center text-center shadow-xl">
+                <div class="text-6xl mb-4">🖥️</div>
+                <h2 class="text-4xl font-title text-white mb-4">진행자 <span class="text-2xl font-sans text-slate-400">(교사용)</span></h2>
+                <p class="text-slate-400 mb-6 font-medium">교실 앞 화면에 띄우는 메인 대시보드입니다.</p>
+                <button id="btn-role-host" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xl rounded-xl transition-colors shadow-[0_0_15px_rgba(79,70,229,0.4)]">
+                    대시보드 열기
+                </button>
+            </div>
+            
+            <!-- Teams Button -->
+            <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl flex flex-col items-center shadow-xl">
+                <div class="text-6xl mb-4">📱</div>
+                <h2 class="text-4xl font-title text-white mb-4">참여자 <span class="text-2xl font-sans text-slate-400">(학생용)</span></h2>
+                <p class="text-slate-400 mb-6 font-medium">자신의 모둠 번호를 선택하여 접속하세요.</p>
+                <div class="grid grid-cols-2 gap-4 w-full">
+                    <button class="btn-role-team py-4 bg-slate-700 hover:bg-slate-600 border border-slate-500 text-white font-bold text-xl rounded-xl transition-all" data-team="1">1모둠</button>
+                    <button class="btn-role-team py-4 bg-slate-700 hover:bg-slate-600 border border-slate-500 text-white font-bold text-xl rounded-xl transition-all" data-team="2">2모둠</button>
+                    <button class="btn-role-team py-4 bg-slate-700 hover:bg-slate-600 border border-slate-500 text-white font-bold text-xl rounded-xl transition-all" data-team="3">3모둠</button>
+                    <button class="btn-role-team py-4 bg-slate-700 hover:bg-slate-600 border border-slate-500 text-white font-bold text-xl rounded-xl transition-all" data-team="4">4모둠</button>
+                </div>
+            </div>
+        </div>
+        <div id="loading-msg" class="mt-8 text-yellow-400 font-bold hidden animate-pulse">서버에 연결 중입니다...</div>
+    </div>
+
+    <!-- [2] HOST VIEW (Main Dashboard) -->
+    <div id="view-host" class="hidden flex-1 flex-col p-4 md:p-8 h-full relative">
+        <!-- Header -->
+        <header class="flex justify-between items-end mb-6">
+            <div>
+                <h1 class="text-5xl font-title text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500 tracking-tight mb-2">위대한 전환</h1>
+                <div class="text-slate-400 font-medium">상도 마을의 자원 관리 시뮬레이션</div>
+            </div>
+            <div class="text-right">
+                <div class="text-lg text-slate-400 font-bold">Round <span id="host-round" class="text-4xl font-title text-white ml-2">1</span>/5</div>
+            </div>
+        </header>
+
+        <!-- Current Event Display -->
+        <div id="host-event-panel" class="w-full max-w-6xl mx-auto mb-4 bg-slate-800/80 border border-slate-600 p-4 rounded-xl text-center shadow-lg hidden">
+            <!-- Injected dynamically -->
+        </div>
+
+        <!-- HP Bar Area -->
+        <div class="w-full max-w-6xl mx-auto mb-8 bg-slate-800/50 p-6 rounded-2xl border border-slate-700 shadow-lg relative">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-2xl font-bold flex items-center gap-2">🌲 공유지 숲 생태 지수</span>
+                <span class="text-3xl font-black" id="host-hp-text">100 / 100</span>
+            </div>
+            <div class="w-full h-8 bg-slate-900 rounded-full overflow-hidden shadow-inner border border-slate-800">
+                <div id="hp-fill" class="h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
+            </div>
+            <div class="absolute -bottom-8 left-0 w-full flex justify-between text-xs text-slate-500 font-bold px-2">
+                <span>0 (파국)</span>
+                <span class="ml-16">40 (위기)</span>
+                <span>80 (풍요)</span>
+                <span>100 (완전 회복)</span>
+            </div>
+        </div>
+
+        <!-- Narrative Context -->
+        <div class="text-center mb-8 h-12 flex justify-center items-center">
+            <p id="host-narrative" class="text-xl bg-slate-800/80 px-8 py-3 rounded-full border border-slate-700 font-semibold text-slate-200 transition-all duration-300">
+                각 모둠은 기기에서 수확량을 선택하세요.
+            </p>
+        </div>
+
+        <!-- Teams Grid -->
+        <main id="host-teams" class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-6xl mx-auto flex-1">
+            <!-- Cards will be injected here -->
+        </main>
+
+        <!-- Admin Controls -->
+        <div class="mt-8 text-center flex justify-center gap-4">
+            <button id="btn-reveal" class="hidden px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-2xl rounded-full shadow-[0_0_20px_rgba(79,70,229,0.6)] transition-transform hover:scale-105">
+                👀 결과 공개하기
+            </button>
+            <button id="btn-next" class="hidden px-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-2xl rounded-full shadow-[0_0_20px_rgba(16,185,129,0.6)] transition-transform hover:scale-105">
+                ➡️ 다음 라운드 준비
+            </button>
+            <button id="btn-reset" class="px-4 py-2 bg-slate-800 hover:bg-red-900 text-slate-400 hover:text-white font-bold text-sm rounded-lg absolute top-4 right-4 transition-colors">
+                초기화
+            </button>
+        </div>
+    </div>
+
+    <!-- [3] PLAYER VIEW (Student Remote Control) -->
+    <div id="view-player" class="hidden flex-1 flex-col h-full bg-slate-900">
+        <!-- Header -->
+        <div class="p-4 bg-slate-800 border-b border-slate-700 flex justify-between items-center shadow-md">
+            <div class="text-2xl font-black text-white" id="player-team-name">1모둠</div>
+            <div class="text-xl font-bold text-yellow-400 bg-black/30 px-3 py-1 rounded-lg">자산: <span id="player-gold">0</span>💰</div>
+        </div>
+
+        <!-- Mini HP Bar -->
+        <div class="px-4 py-2 bg-slate-800/50 border-b border-slate-700 text-sm">
+            <div class="flex justify-between mb-1 text-slate-300 font-bold">
+                <span>숲 생태 지수</span>
+                <span id="player-hp-text">100</span>
+            </div>
+            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden">
+                <div id="player-hp-fill" class="h-full bg-emerald-500" style="width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Event & Info Area -->
+        <div class="p-4 text-center mt-4">
+            <div class="inline-block px-4 py-1 rounded-full bg-slate-800 text-slate-300 font-bold mb-4 text-sm">
+                Round <span id="player-round">1</span>
+            </div>
+            <div id="player-event" class="bg-slate-800 p-4 rounded-xl border border-slate-600 shadow-lg text-left">
+                <!-- Event info injected -->
+            </div>
+        </div>
+
+        <!-- Dynamic Content Area (Buttons OR Waiting Message) -->
+        <div id="player-content" class="flex-1 p-4 flex flex-col justify-center gap-4 max-w-md mx-auto w-full">
+            <!-- Injected via JS based on Phase -->
+        </div>
+    </div>
+
+    <!-- [Modals (Host View Only)] -->
+    <div id="modal-meeting" class="fixed inset-0 bg-black/95 flex-col justify-center items-center z-50 hidden opacity-0 transition-opacity duration-500">
+        <div class="text-8xl mb-4 animate-pulse">🚨</div>
+        <h2 class="text-7xl font-title text-red-500 mb-8 animate-bounce text-center drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">긴급 마을 자치 회의</h2>
+        <p class="text-2xl text-red-200 mb-8 text-center max-w-3xl leading-relaxed font-medium">
+            숲의 체력이 심각한 위기(40 이하)에 처했습니다.<br>
+            이대로 가면 마을은 공멸합니다. 3분간 생존을 위한 규칙을 토론하세요!
+        </p>
+        <div id="meeting-timer" class="text-9xl font-black text-white mb-12 font-mono tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]">03:00</div>
+        <button id="btn-skip-meeting" class="px-8 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-lg font-bold">회의 종료 및 재개</button>
+    </div>
+
+    <div id="modal-gameover" class="fixed inset-0 bg-red-950/95 flex-col justify-center items-center z-50 hidden opacity-0 transition-opacity duration-1000">
+        <h2 class="text-8xl font-title text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]">💀 공유지의 비극</h2>
+        <p class="text-3xl text-red-200 mb-8 text-center max-w-4xl leading-relaxed font-medium">
+            끝없는 탐욕이 숲을 완전히 파괴했습니다.<br>
+            상도 마을은 역사 속으로 사라집니다.
+        </p>
+        <div id="gameover-titles" class="w-full max-w-4xl grid grid-cols-2 gap-4 mb-12 text-xl text-white"></div>
+        <button onclick="location.reload()" class="px-8 py-4 bg-red-800 text-white text-xl font-bold rounded-lg shadow-lg">처음으로</button>
+    </div>
+
+    <div id="modal-end" class="fixed inset-0 bg-slate-900/95 flex-col justify-center items-center z-50 hidden opacity-0 transition-opacity duration-1000">
+        <h2 class="text-7xl font-title text-blue-400 mb-6 drop-shadow-lg" id="end-title">게임 종료</h2>
+        <p class="text-2xl text-slate-300 mb-8 text-center max-w-3xl font-medium" id="end-desc">결과를 확인합니다.</p>
+        <div id="final-scores" class="w-full max-w-4xl grid grid-cols-2 gap-6 mb-12 text-2xl text-white"></div>
+        <button onclick="location.reload()" class="px-8 py-4 bg-blue-600 text-white text-xl font-bold rounded-lg shadow-lg">처음으로</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Constants
+        const INITIAL_HP = 100;
+        const ACTIONS = {
+            greed: { name: "욕심내기", icon: "🪚", desc: "나만 대박을 노립니다.", baseGold: 5, baseHp: -15, color: "bg-red-600", border: "border-red-400", bgLight: "bg-red-500/20" },
+            moderate: { name: "적당히", icon: "🪓", desc: "필요한 만큼만 씁니다.", baseGold: 2, baseHp: -3, color: "bg-blue-600", border: "border-blue-400", bgLight: "bg-blue-500/20" },
+            care: { name: "돌보기", icon: "🌱", desc: "숲을 회복시킵니다.", baseGold: 0, baseHp: 10, color: "bg-emerald-600", border: "border-emerald-400", bgLight: "bg-emerald-500/20" }
+        };
+        const EVENTS = [
+            { id: 'normal', name: "☀️ 평온한 날", desc: "특이 사항이 없습니다. 기본 규칙이 적용됩니다.", color: "text-slate-200" },
+            { id: 'rain', name: "🌧️ 풍요로운 단비", desc: "[버프] '적당히'를 선택하면 보너스 1골드를 추가로 얻습니다.", color: "text-blue-300" },
+            { id: 'drought', name: "🔥 극심한 가뭄", desc: "[너프] 숲이 메말라 '돌보기'의 회복량이 절반(+5)으로 감소합니다.", color: "text-red-300" }
+        ];
+
+        // Global Variables
+        let db, auth, roomRef;
+        let myRole = null; // 'host' or '1', '2', '3', '4'
+        let unsubscribe = null;
+        let gameState = null;
+        let meetingUsed = false;
+        let isHostAnimating = false; // 진행자 애니메이션 중 데이터 덮어쓰기 방지
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-great-transition';
+        
+        // DOM Elements
+        const elLobby = document.getElementById('view-lobby');
+        const elHost = document.getElementById('view-host');
+        const elPlayer = document.getElementById('view-player');
+        const loadingMsg = document.getElementById('loading-msg');
+
+        // 1. Initialize Firebase & Auth
+        async function initFirebase() {
+            try {
+                const configStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+                if (!configStr) throw new Error("Firebase config missing");
+                
+                const firebaseConfig = JSON.parse(configStr);
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (token) await signInWithCustomToken(auth, token);
+                else await signInAnonymously(auth);
+
+                roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'gameRooms', 'mainRoom');
+                return true;
+            } catch (e) {
+                console.error("Firebase init failed:", e);
+                alert("멀티플레이 서버 연결에 실패했습니다. (환경 설정 오류)");
+                return false;
+            }
+        }
+
+        // 2. Role Selection Listeners
+        document.getElementById('btn-role-host').addEventListener('click', async () => {
+            loadingMsg.classList.remove('hidden');
+            const success = await initFirebase();
+            if (success) {
+                myRole = 'host';
+                elLobby.classList.add('hidden');
+                elHost.classList.remove('hidden');
+                elHost.classList.add('flex');
+                startSync();
+                // If no game state exists, create one
+                if(!gameState) await resetGameToDB();
+            }
+        });
+
+        document.querySelectorAll('.btn-role-team').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                loadingMsg.classList.remove('hidden');
+                const success = await initFirebase();
+                if (success) {
+                    myRole = e.target.dataset.team;
+                    elLobby.classList.add('hidden');
+                    elPlayer.classList.remove('hidden');
+                    elPlayer.classList.add('flex');
+                    document.getElementById('player-team-name').innerText = `${myRole}모둠`;
+                    startSync();
+                }
+            });
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            if(confirm("정말 게임을 초기화하시겠습니까?")) resetGameToDB();
+        });
+
+        // 3. Database Sync
+        function startSync() {
+            unsubscribe = onSnapshot(roomRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    gameState = docSnap.data();
+                    
+                    // Host view update
+                    if (myRole === 'host' && !isHostAnimating) {
+                        updateHostUI();
+                    }
+                    // Player view update
+                    if (myRole !== 'host') {
+                        updatePlayerUI();
+                    }
+                }
+            }, (error) => {
+                console.error("Sync Error:", error);
+            });
+        }
+
+        async function resetGameToDB() {
+            const initialState = {
+                hp: INITIAL_HP,
+                round: 1,
+                phase: 'betting', // betting, reveal_animating, revealed_all, gameover, end
+                eventIndex: 0,
+                teams: {
+                    1: { choice: null, gold: 0, greedCount: 0, careCount: 0, roundResult: null },
+                    2: { choice: null, gold: 0, greedCount: 0, careCount: 0, roundResult: null },
+                    3: { choice: null, gold: 0, greedCount: 0, careCount: 0, roundResult: null },
+                    4: { choice: null, gold: 0, greedCount: 0, careCount: 0, roundResult: null }
+                }
+            };
+            meetingUsed = false;
+            await setDoc(roomRef, initialState);
+        }
+
+        // 4. Host UI Updates
+        function updateHostUI() {
+            if(!gameState) return;
+
+            // Header info
+            document.getElementById('host-round').innerText = gameState.round;
+            document.getElementById('host-hp-text').innerText = `${gameState.hp} / 100`;
+            const hpBar = document.getElementById('hp-fill');
+            hpBar.style.width = `${Math.max(0, gameState.hp)}%`;
+            
+            if (gameState.hp <= 40) hpBar.classList.replace('bg-emerald-500', 'bg-red-500');
+            else hpBar.classList.replace('bg-red-500', 'bg-emerald-500');
+
+            if (gameState.hp <= 40 && gameState.phase === 'betting') hpBar.parentElement.classList.add('animate-pulse');
+            else hpBar.parentElement.classList.remove('animate-pulse');
+
+            // Event Panel
+            const currentEvent = EVENTS[gameState.eventIndex];
+            const eventPanel = document.getElementById('host-event-panel');
+            eventPanel.classList.remove('hidden');
+            eventPanel.innerHTML = `
+                <span class="font-bold text-xl ${currentEvent.color}">${currentEvent.name}</span>
+                <span class="text-slate-300 ml-4">${currentEvent.desc}</span>
+            `;
+
+            // Teams Render
+            const hostTeams = document.getElementById('host-teams');
+            hostTeams.innerHTML = '';
+            let allChosen = true;
+
+            [1, 2, 3, 4].forEach(id => {
+                const team = gameState.teams[id];
+                if(team.choice === null) allChosen = false;
+
+                const card = document.createElement('div');
+                card.className = `card perspective w-full h-80 md:h-96`;
+                
+                // If phase is revealed_all, keep it flipped
+                if(gameState.phase === 'revealed_all') card.classList.add('flipped');
+
+                // Front (Betting)
+                let frontContent = '';
+                if(gameState.phase === 'betting' && team.choice === null) {
+                    frontContent = `
+                        <div class="text-2xl font-bold text-slate-400 mb-4">${id}모둠</div>
+                        <div class="w-16 h-16 border-4 border-slate-600 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
+                        <div class="text-lg text-slate-500">결정 중...</div>
+                    `;
+                } else if (team.choice !== null && (gameState.phase === 'betting' || gameState.phase === 'reveal_animating')) {
+                    frontContent = `
+                        <div class="text-2xl font-bold text-slate-400 mb-2">${id}모둠</div>
+                        <div class="text-6xl mb-4 animate-bounce">🔒</div>
+                        <div class="text-xl font-bold text-indigo-400">선택 완료</div>
+                    `;
+                }
+
+                // Back (Revealed)
+                let backContent = '';
+                if (team.roundResult) {
+                    const action = ACTIONS[team.choice];
+                    const res = team.roundResult;
+                    
+                    let badges = '';
+                    if (res.isPenalty) badges = `<div class="absolute -top-4 -right-4 bg-red-600 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg border-2 border-white rotate-12 animate-pulse">💥과잉경쟁!</div>`;
+                    if (res.isBuff) badges = `<div class="absolute -top-4 -right-4 bg-blue-500 text-white font-bold text-sm px-3 py-1 rounded-full shadow-lg border-2 border-white -rotate-12">🎁단비 보너스</div>`;
+
+                    backContent = `
+                        <div class="w-full h-full rounded-2xl border-4 ${action.border} ${action.color} flex flex-col justify-center items-center shadow-lg p-2 relative">
+                            ${badges}
+                            <div class="text-xl font-bold text-white/80 mb-1">${id}모둠</div>
+                            <div class="text-6xl mb-2 drop-shadow-md">${action.icon}</div>
+                            <div class="text-3xl font-extrabold text-white mb-2 drop-shadow-md">${action.name}</div>
+                            <div class="bg-black/50 rounded-lg px-4 py-2 flex gap-4 font-bold text-xl mt-2 w-full justify-center">
+                                <span class="${res.gold === 0 ? 'text-slate-500 line-through' : 'text-yellow-300'}">+${res.gold}💰</span>
+                                <span class="${res.hp < 0 ? 'text-red-300' : 'text-emerald-300'}">${res.hp > 0 ? '+' : ''}${res.hp}🌿</span>
+                            </div>
+                            <div class="text-sm mt-2 text-white/70">누적: ${team.gold}💰</div>
+                        </div>
+                    `;
+                } else {
+                    backContent = `<div class="w-full h-full rounded-2xl bg-slate-800 flex items-center justify-center">대기</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="card-inner w-full h-full relative">
+                        <div class="card-face card-front absolute inset-0 w-full h-full bg-slate-800/80 rounded-2xl border border-slate-600 flex flex-col items-center justify-center shadow-md">
+                            ${frontContent}
+                        </div>
+                        <div class="card-face card-back absolute inset-0 w-full h-full">
+                            ${backContent}
+                        </div>
+                    </div>
+                `;
+                hostTeams.appendChild(card);
+            });
+
+            // Buttons & Narrative
+            const btnReveal = document.getElementById('btn-reveal');
+            const btnNext = document.getElementById('btn-next');
+            const elNarrative = document.getElementById('host-narrative');
+
+            if (gameState.phase === 'betting') {
+                btnNext.classList.add('hidden');
+                if (allChosen) {
+                    btnReveal.classList.remove('hidden');
+                    elNarrative.innerText = "모든 모둠이 선택을 마쳤습니다. 심호흡을 하세요...";
+                    elNarrative.className = "text-xl bg-indigo-900/90 px-8 py-3 rounded-full border border-indigo-500 font-bold text-yellow-300 shadow-[0_0_15px_rgba(99,102,241,0.5)]";
+                } else {
+                    btnReveal.classList.add('hidden');
+                    elNarrative.innerText = `[${gameState.round}라운드] 각 기기에서 수확량을 선택하세요.`;
+                    elNarrative.className = "text-xl bg-slate-800/80 px-8 py-3 rounded-full border border-slate-700 font-semibold text-slate-200";
+                }
+            } else if (gameState.phase === 'reveal_animating') {
+                btnReveal.classList.add('hidden');
+                btnNext.classList.add('hidden');
+                elNarrative.innerText = "결과 공개 중...";
+                elNarrative.className = "text-xl bg-red-900/90 px-8 py-3 rounded-full border border-red-500 font-bold text-white animate-pulse";
+            } else if (gameState.phase === 'revealed_all') {
+                btnReveal.classList.add('hidden');
+                btnNext.classList.remove('hidden');
+                if(gameState.hp <= 0) {
+                    btnNext.innerText = "💀 파국 결과 보기";
+                } else if(gameState.round >= 5 || gameState.hp >= 80 && gameState.round === 4) {
+                    btnNext.innerText = "🌟 최종 결과 보기";
+                } else {
+                    btnNext.innerText = "➡️ 다음 라운드 준비";
+                }
+            }
+
+            // Meeting trigger check (Host local evaluation to show modal)
+            if (gameState.hp <= 40 && gameState.hp > 0 && gameState.phase === 'betting' && gameState.round > 1 && !meetingUsed) {
+                showMeetingModal();
+                meetingUsed = true;
+            }
+            if (gameState.phase === 'gameover') showGameOver();
+            if (gameState.phase === 'end') showNormalEnd();
+        }
+
+        // 5. Player UI Updates
+        function updatePlayerUI() {
+            if(!gameState) return;
+            const myTeam = gameState.teams[myRole];
+            if(!myTeam) return;
+
+            document.getElementById('player-gold').innerText = myTeam.gold;
+            document.getElementById('player-round').innerText = gameState.round;
+            document.getElementById('player-hp-text').innerText = gameState.hp;
+            document.getElementById('player-hp-fill').style.width = `${Math.max(0, gameState.hp)}%`;
+            
+            const currentEvent = EVENTS[gameState.eventIndex];
+            document.getElementById('player-event').innerHTML = `
+                <div class="font-bold text-lg ${currentEvent.color}">${currentEvent.name}</div>
+                <div class="text-slate-300 text-sm mt-1 leading-tight">${currentEvent.desc}</div>
+            `;
+
+            const contentArea = document.getElementById('player-content');
+            
+            if (gameState.phase === 'betting') {
+                if (myTeam.choice === null) {
+                    // Show Buttons
+                    contentArea.innerHTML = `
+                        <div class="text-center font-bold text-lg mb-2 text-white/80">행동을 선택하세요</div>
+                        ${Object.entries(ACTIONS).map(([key, action]) => `
+                            <button class="w-full ${action.bgLight} border-2 ${action.border} p-4 rounded-xl flex items-center text-left transition-transform active:scale-95" onclick="window.submitChoice('${key}')">
+                                <div class="text-4xl mr-4">${action.icon}</div>
+                                <div>
+                                    <div class="text-xl font-bold text-white">${action.name}</div>
+                                    <div class="text-sm text-slate-300">${action.desc}</div>
+                                </div>
+                            </button>
+                        `).join('')}
+                    `;
+                } else {
+                    // Waiting
+                    contentArea.innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <div class="text-6xl mb-6 animate-bounce">🔒</div>
+                            <div class="text-2xl font-bold text-indigo-400 mb-2">선택 완료!</div>
+                            <div class="text-slate-400 text-center">다른 모둠을 기다리는 중입니다...<br>교실 앞 화면을 보세요.</div>
+                        </div>
+                    `;
+                }
+            } else if (gameState.phase === 'reveal_animating') {
+                contentArea.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full bg-red-900/40 rounded-2xl border border-red-500/50 p-6 animate-pulse">
+                        <div class="text-5xl mb-4">👀</div>
+                        <div class="text-2xl font-bold text-white text-center">결과 공개 중!<br>교실 화면을 주목하세요!</div>
+                    </div>
+                `;
+            } else if (gameState.phase === 'revealed_all') {
+                const res = myTeam.roundResult;
+                const act = ACTIONS[myTeam.choice];
+                contentArea.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full">
+                        <div class="text-xl text-slate-400 mb-2">이번 라운드 결과</div>
+                        <div class="w-full bg-slate-800 p-6 rounded-2xl border-2 ${act.border} text-center shadow-lg">
+                            <div class="text-5xl mb-4">${act.icon}</div>
+                            <div class="text-2xl font-bold text-white mb-4">${act.name}</div>
+                            <div class="flex justify-center gap-4 text-xl font-bold bg-black/40 py-2 rounded-lg">
+                                <span class="${res.gold === 0 ? 'text-slate-500 line-through' : 'text-yellow-400'}">+${res.gold}💰</span>
+                                <span class="${res.hp < 0 ? 'text-red-400' : 'text-emerald-400'}">${res.hp > 0 ? '+' : ''}${res.hp}🌿</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                contentArea.innerHTML = `<div class="text-center text-slate-400">게임 종료</div>`;
+            }
+        }
+
+        // 6. Player Submit Action (Exposed to window for inline onclick)
+        window.submitChoice = async (choiceKey) => {
+            if(myRole === 'host' || !gameState) return;
+            // Optimistic UI update
+            const teamData = gameState.teams[myRole];
+            teamData.choice = choiceKey;
+            updatePlayerUI();
+
+            // Firebase update
+            const updatePath = `teams.${myRole}.choice`;
+            await setDoc(roomRef, {
+                teams: {
+                    [myRole]: { choice: choiceKey }
+                }
+            }, { merge: true });
+        };
+
+        // 7. Host Compute Logic
+        document.getElementById('btn-reveal').addEventListener('click', async () => {
+            if(myRole !== 'host') return;
+            isHostAnimating = true; // Block incoming snapshots from messing up animation
+
+            // 1) Compute Results
+            let greedCount = 0;
+            [1,2,3,4].forEach(i => { if(gameState.teams[i].choice === 'greed') greedCount++; });
+
+            let totalHpChange = 0;
+            const updatedTeams = {};
+            const currentEvent = EVENTS[gameState.eventIndex];
+
+            [1,2,3,4].forEach(i => {
+                const team = gameState.teams[i];
+                const action = ACTIONS[team.choice];
+                let finalGold = action.baseGold;
+                let finalHp = action.baseHp;
+                let isPenalty = false, isBuff = false;
+
+                if (team.choice === 'greed') {
+                    if (greedCount === 2) { finalGold = 2; isPenalty = true; }
+                    else if (greedCount >= 3) { finalGold = 0; isPenalty = true; }
+                }
+
+                if (currentEvent.id === 'rain' && team.choice === 'moderate') { finalGold += 1; isBuff = true; }
+                if (currentEvent.id === 'drought' && team.choice === 'care') { finalHp = 5; }
+
+                totalHpChange += finalHp;
+                
+                updatedTeams[i] = {
+                    ...team,
+                    gold: team.gold + finalGold,
+                    greedCount: team.greedCount + (team.choice === 'greed' ? 1 : 0),
+                    careCount: team.careCount + (team.choice === 'care' ? 1 : 0),
+                    roundResult: { gold: finalGold, hp: finalHp, isPenalty, isBuff }
+                };
+            });
+
+            const newHp = Math.min(100, Math.max(0, gameState.hp + totalHpChange));
+
+            // 2) Set DB to animating state so players see "Look at screen"
+            await setDoc(roomRef, { 
+                phase: 'reveal_animating',
+                teams: updatedTeams // Push computed results so host UI can use them during animation
+            }, { merge: true });
+
+            // 3) Run Local Animation for Host
+            const cards = document.querySelectorAll('#host-teams .card');
+            let revealIndex = 0;
+
+            const revealInterval = setInterval(async () => {
+                if (revealIndex < 4) {
+                    cards[revealIndex].classList.add('flipped');
+                    // Floating Emoji
+                    const choice = gameState.teams[revealIndex+1].choice;
+                    const emoji = document.createElement('div');
+                    emoji.className = 'absolute top-0 left-1/2 -translate-x-1/2 text-7xl float-up pointer-events-none z-50 drop-shadow-lg';
+                    emoji.innerText = choice === 'greed' ? '😈' : (choice === 'care' ? '💖' : '💧');
+                    cards[revealIndex].appendChild(emoji);
+                    setTimeout(() => emoji.remove(), 1500);
+
+                    revealIndex++;
+                } else {
+                    clearInterval(revealInterval);
+                    
+                    // Finalize to DB
+                    isHostAnimating = false;
+                    await setDoc(roomRef, { 
+                        phase: 'revealed_all',
+                        hp: newHp
+                    }, { merge: true });
+
+                    if (greedCount > 0) {
+                        document.body.classList.add('shake-screen');
+                        setTimeout(() => document.body.classList.remove('shake-screen'), 500);
+                    }
+                }
+            }, 1000);
+        });
+
+        // 8. Next Round Logic (Host)
+        document.getElementById('btn-next').addEventListener('click', async () => {
+            if(myRole !== 'host') return;
+
+            // Check Ends
+            if (gameState.hp <= 0) {
+                await setDoc(roomRef, { phase: 'gameover' }, { merge: true });
+                return;
+            }
+
+            // Abundance Mode (End of Round 4, HP >= 80)
+            if (gameState.round === 4 && gameState.hp >= 80) {
+                // Auto distribute abundance wealth
+                const finalTeams = {};
+                [1,2,3,4].forEach(i => {
+                    finalTeams[i] = { ...gameState.teams[i], gold: gameState.teams[i].gold + 10 };
+                });
+                await setDoc(roomRef, { 
+                    phase: 'end', 
+                    hp: 100, 
+                    teams: finalTeams 
+                }, { merge: true });
+                return;
+            }
+
+            // Normal End (Round 5)
+            if (gameState.round >= 5) {
+                await setDoc(roomRef, { phase: 'end' }, { merge: true });
+                return;
+            }
+
+            // Next Round Setup
+            const resetTeams = {};
+            [1,2,3,4].forEach(i => {
+                resetTeams[i] = { ...gameState.teams[i], choice: null, roundResult: null };
+            });
+
+            await setDoc(roomRef, {
+                round: gameState.round + 1,
+                phase: 'betting',
+                eventIndex: Math.floor(Math.random() * EVENTS.length),
+                teams: resetTeams
+            }, { merge: true });
+        });
+
+        // 9. Modals (Host Local UI)
+        function showMeetingModal() {
+            const modal = document.getElementById('modal-meeting');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => modal.classList.remove('opacity-0'), 50);
+
+            let timeLeft = 180;
+            const timerEl = document.getElementById('meeting-timer');
+            const timerInt = setInterval(() => {
+                timeLeft--;
+                const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                const s = String(timeLeft % 60).padStart(2, '0');
+                timerEl.innerText = `${m}:${s}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInt);
+                    closeMeetingModal(modal);
+                }
+            }, 1000);
+
+            document.getElementById('btn-skip-meeting').onclick = () => {
+                clearInterval(timerInt);
+                closeMeetingModal(modal);
+            };
+        }
+
+        function closeMeetingModal(modal) {
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 500);
+        }
+
+        function getTitlesHtml() {
+            const sorted = [1,2,3,4].map(id => ({ id, ...gameState.teams[id] })).sort((a,b) => b.gold - a.gold);
+            let html = '';
+            sorted.forEach(t => {
+                let title = "👀 눈치보기 달인", titleColor = "text-slate-400";
+                if (t.greedCount >= 3) { title = "👑 파괴적 탐욕왕"; titleColor = "text-red-400 font-bold"; }
+                else if (t.careCount >= 3) { title = "🌿 자연의 수호자"; titleColor = "text-emerald-400 font-bold"; }
+                else if (t.greedCount === 0) { title = "🕊️ 평화주의자"; titleColor = "text-blue-300"; }
+                
+                html += `
+                    <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-600 shadow-lg flex flex-col justify-between">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-2xl text-white">${t.id}모둠</span>
+                            <span class="text-yellow-400 font-extrabold text-3xl">${t.gold} 💰</span>
+                        </div>
+                        <div class="text-sm ${titleColor} text-right">${title}</div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function showGameOver() {
+            document.getElementById('gameover-titles').innerHTML = getTitlesHtml();
+            const m = document.getElementById('modal-gameover');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+            setTimeout(() => m.classList.remove('opacity-0'), 50);
+        }
+
+        function showNormalEnd() {
+            // Abundance Mode Special Text
+            if(gameState.hp >= 80) {
+                document.getElementById('end-title').innerText = "🌟 풍요의 시대 도달!";
+                document.getElementById('end-title').className = "text-6xl font-bold text-yellow-400 mb-6 drop-shadow-[0_0_15px_rgba(250,204,21,0.8)] animate-pulse";
+                document.getElementById('end-desc').innerHTML = `숲이 완전한 자생력을 되찾았습니다.<br>인위적인 채취(노동) 없이도 모두에게 +10골드의 무상 배당이 지급되며, 생태적 풍요를 누립니다!`;
+            }
+            document.getElementById('final-scores').innerHTML = getTitlesHtml();
+            const m = document.getElementById('modal-end');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+            setTimeout(() => m.classList.remove('opacity-0'), 50);
+        }
+
+    </script>
+</body>
+</html>
