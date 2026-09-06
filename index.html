@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>위대한 전환: 공유지의 비극</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 프리텐다드 폰트 전체 굵기 로드 -->
-    <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
-        /* 우아한 세리프 폰트 로드 */
+        @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+        @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+        @font-face { font-family: 'Pretendard'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+        
         @font-face { font-family: 'ElegantSerif'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/GraceSerif-Regular.woff2') format('woff2'); font-weight: 500; font-display: swap; }
         @font-face { font-family: 'ElegantSerif'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/GraceSerif-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 
         body { 
             font-family: 'Pretendard', sans-serif; 
-            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.98)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop') no-repeat center center fixed;
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.9), rgba(2, 6, 23, 1)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
+            background-blend-mode: overlay;
             color: white; 
             overflow-x: hidden;
             touch-action: pan-y;
@@ -26,22 +28,22 @@
         .font-title { font-family: 'ElegantSerif', serif !important; }
         .font-body { font-family: 'Pretendard', sans-serif !important; }
         
+        /* 세련된 글래스모피즘 UI */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 점수 깎일 때: 위험 진동 애니메이션 */
+        /* 점수 애니메이션 */
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
         .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8) !important; }
 
-        /* 점수 오를 때: 평화로운 초록빛 치유 글로우 애니메이션 */
         @keyframes healGlow { 0% { box-shadow: inset 0 0 5px rgba(52, 211, 153, 0.2); } 50% { box-shadow: inset 0 0 80px rgba(52, 211, 153, 0.7); } 100% { box-shadow: inset 0 0 5px rgba(52, 211, 153, 0.2); } }
         .heal-screen { animation: healGlow 1.2s ease-in-out; }
     </style>
@@ -50,16 +52,16 @@
 
     <!-- 1. 초기 홈 화면 -->
     <div id="panel-home" class="w-full max-w-4xl text-center fade-in-up">
-        <h1 class="text-6xl md:text-8xl text-emerald-400 mb-4 drop-shadow-lg font-title font-bold">위대한 전환</h1>
-        <p class="text-2xl md:text-3xl text-emerald-100 mb-12 font-body font-light">공유지의 비극을 넘어 생태 문명으로 (산업화 & 생태 전환 15라운드)</p>
+        <h1 class="text-6xl md:text-8xl text-emerald-400 mb-4 drop-shadow-2xl font-title font-bold">위대한 전환</h1>
+        <p class="text-2xl md:text-3xl text-emerald-100/90 mb-12 font-body font-light">공유지의 비극을 넘어 생태 문명으로 (산업화 & 생태 전환 15라운드)</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-indigo-900/60 p-10 rounded-3xl transition-all hover:scale-[1.02] border-t-2 border-t-indigo-400/30">
+            <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-indigo-900/60 p-10 rounded-3xl transition-all hover:scale-[1.02] border-t-2 border-t-indigo-400/40 shadow-[0_0_30px_rgba(79,70,229,0.15)] hover:shadow-[0_0_40px_rgba(79,70,229,0.3)]">
                 <div class="text-6xl mb-4">🖥️</div>
                 <div class="font-bold font-title text-3xl text-indigo-300 mb-2">교사 (방장)</div>
                 <div class="text-lg text-indigo-200/80 font-body font-bold">학급 일괄 개설 및 현황판</div>
             </button>
-            <button onclick="showPanel('panel-student-login')" class="glass-panel hover:bg-emerald-900/60 p-10 rounded-3xl transition-all hover:scale-[1.02] border-t-2 border-t-emerald-400/30">
+            <button onclick="showPanel('panel-student-login')" class="glass-panel hover:bg-emerald-900/60 p-10 rounded-3xl transition-all hover:scale-[1.02] border-t-2 border-t-emerald-400/40 shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]">
                 <div class="text-6xl mb-4">📱</div>
                 <div class="font-bold font-title text-3xl text-emerald-300 mb-2">학생 (참여자)</div>
                 <div class="text-lg text-emerald-200/80 font-body font-bold">우리 조 방에 접속하기</div>
@@ -70,19 +72,19 @@
     <!-- 2. 교사: 일괄 개설 화면 -->
     <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-8 rounded-3xl">
-            <h2 class="text-4xl text-indigo-400 mb-8 font-title font-bold">학급 일괄 개설</h2>
-            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body font-bold w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
-            <input type="number" id="input-group-count" placeholder="총 조(모둠) 개수 (예: 6)" min="1" max="12" class="font-body font-bold w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:outline-none text-xl text-center">
-            <button id="btn-create-class" class="font-body font-black tracking-wide w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl shadow-lg transition-all hover:scale-105">전체 조 만들기</button>
+            <h2 class="text-4xl text-indigo-400 mb-8 font-title font-bold drop-shadow-md">학급 일괄 개설</h2>
+            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body font-bold w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/50 outline-none text-xl text-center transition-all">
+            <input type="number" id="input-group-count" placeholder="총 조(모둠) 개수 (예: 6)" min="1" max="12" class="font-body font-bold w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/50 outline-none text-xl text-center transition-all">
+            <button id="btn-create-class" class="font-body font-black tracking-wide w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all hover:scale-105">전체 조 만들기</button>
         </div>
     </div>
 
     <!-- 3. 교사: 매크로 현황판 -->
     <div id="panel-teacher-macro" class="w-full max-w-7xl hidden flex-col items-center fade-in-up">
-        <div class="w-full flex justify-between items-center mb-8 bg-slate-900/60 p-4 rounded-2xl border border-slate-700 w-full flex-wrap gap-4">
-            <h2 class="text-4xl text-emerald-400 font-title font-bold"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
+        <div class="w-full flex justify-between items-center mb-8 glass-panel p-5 rounded-2xl w-full flex-wrap gap-4">
+            <h2 class="text-4xl text-emerald-400 font-title font-bold drop-shadow-md"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
             <div class="flex gap-3">
-                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-body font-black text-lg shadow-md">📖 전체 규칙 안내 띄우기</button>
+                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-body font-black text-lg shadow-lg transition">📖 전체 규칙 안내 띄우기</button>
             </div>
         </div>
         <div id="macro-grid" class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
@@ -90,30 +92,31 @@
 
     <!-- 3-5. 교사용 대형 규칙 설명 화면 -->
     <div id="panel-teacher-rules" class="w-full max-w-6xl hidden text-center fade-in-up">
-        <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl">
+        <div class="glass-panel p-8 md:p-14 rounded-3xl text-left shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 to-indigo-500"></div>
             <div class="w-full border-b border-emerald-500/30 mb-8 pb-4">
                 <h2 class="text-3xl md:text-5xl text-emerald-400 font-title font-bold whitespace-nowrap overflow-hidden text-ellipsis">📖 [교실 전용] 상세 규칙 및 생태 문명 가이드</h2>
             </div>
             
             <div class="space-y-6 font-body text-slate-100 text-lg md:text-xl mb-12 leading-relaxed">
-                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600 shadow-inner">
-                    <h3 class="text-2xl text-yellow-300 font-black mb-3">🏭 1. 개인 성장 테크 트리 (산업화의 유혹)</h3>
+                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600/50 shadow-inner">
+                    <h3 class="text-2xl text-yellow-300 font-black mb-3 drop-shadow-sm">🏭 1. 개인 성장 테크 트리 (산업화의 유혹)</h3>
                     <p>부유해지기 위해 <strong>2단계 [산업화]</strong>(비용 15💰)로 업그레이드하면 수익이 폭증(+10💰)하지만 숲 파괴 데미지도 2배(-20🌿)로 커집니다. 이를 극복하려면 <strong>3단계 [생태 전환 기술]</strong>(비용 30💰)로 나아가야 합니다.</p>
                 </div>
 
-                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600 shadow-inner">
-                    <h3 class="text-2xl text-teal-300 font-black mb-3">⚖️ 2. 긴급 법안과 쿨타임 (무분별한 스팸 방지)</h3>
-                    <p>자치 회의를 통해 통과시킨 긴급 법안(강제 돌보기, 욕심 삭감 등)은 <strong>딱 1라운드만 지속</strong>되며, 직전 라운드와 <strong>동일한 법안을 연속으로 통과시킬 수 없는 쿨타임 규칙</strong>이 적용됩니다. 또한 '모두 돌보기' 발동 시 고도화된 산업 시설(2/3단계)은 유지비(2💰)를 지불해야 합니다.</p>
+                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600/50 shadow-inner">
+                    <h3 class="text-2xl text-teal-300 font-black mb-3 drop-shadow-sm">⚖️ 2. 1라운드 1안건 선점제 (스팸 방지)</h3>
+                    <p>자치 회의를 통해 통과시킨 안건(강제 돌보기, 욕심 삭감 등)은 <strong>딱 1라운드만 지속</strong>되며, <strong>한 라운드에 하나의 안건만 투표 및 통과</strong>시킬 수 있습니다. 또한 '모두 돌보기' 발동 시 2/3단계 공장 보유자는 유지비(2💰)를 지불해야 합니다.</p>
                 </div>
 
-                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600 shadow-inner">
-                    <h3 class="text-2xl text-emerald-300 font-black mb-3">🌿 3. 자연재생 및 생태 보조금</h3>
-                    <p>숲은 건강할 때 알아서 회복(+5/+2)되지만 30점 이하에선 회복력이 완전히 상실됩니다. 또한 자치 회의를 통해 생태 보조금 갹출 비중을 2원, 3원으로 높여 보호자들에게 더 큰 보상을 줄 수 있습니다.</p>
+                <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-600/50 shadow-inner">
+                    <h3 class="text-2xl text-emerald-300 font-black mb-3 drop-shadow-sm">🌿 3. 자연재생 및 생태 보조금</h3>
+                    <p>숲은 건강할 때 알아서 회복(+5/+2)되지만 30점 이하에선 회복력이 상실됩니다. 자치 회의를 통해 생태 보조금 갹출 비중을 2원, 3원으로 높여 보호자들에게 더 큰 보상을 줄 수 있습니다.</p>
                 </div>
             </div>
 
             <div class="text-center">
-                <button onclick="showPanel('panel-teacher-macro')" class="font-body font-black bg-slate-700 hover:bg-slate-600 px-12 py-5 rounded-2xl text-2xl transition-all shadow-lg">현황판으로 돌아가기</button>
+                <button onclick="showPanel('panel-teacher-macro')" class="font-body font-black bg-slate-700 hover:bg-slate-600 px-12 py-5 rounded-2xl text-2xl transition-all shadow-lg hover:scale-105">현황판으로 돌아가기</button>
             </div>
         </div>
     </div>
@@ -121,71 +124,72 @@
     <!-- 4. 학생용 방 접속 -->
     <div id="panel-student-login" class="w-full max-w-md hidden text-center fade-in-up">
         <div class="glass-panel p-8 rounded-3xl">
-            <h2 class="text-4xl text-emerald-400 mb-8 font-title font-bold">우리 조 접속</h2>
-            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body font-bold w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
-            <input type="number" id="student-group-num" placeholder="우리 조 번호 (예: 2)" class="font-body font-bold w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
-            <input type="text" id="student-nickname" placeholder="내 이름 또는 번호 (예: 김철수)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body font-bold w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:outline-none text-xl text-center">
-            <button id="btn-join-group" class="font-body font-black tracking-wide w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-lg transition-all hover:scale-105">입장하기</button>
+            <h2 class="text-4xl text-emerald-400 mb-8 font-title font-bold drop-shadow-md">우리 조 접속</h2>
+            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body font-bold w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/50 outline-none text-xl text-center transition-all">
+            <input type="number" id="student-group-num" placeholder="우리 조 번호 (예: 2)" class="font-body font-bold w-full p-4 mb-4 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/50 outline-none text-xl text-center transition-all">
+            <input type="text" id="student-nickname" placeholder="내 이름 또는 번호 (예: 김철수)" lang="ko" inputmode="text" x-inputmode="korean" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="ime-mode:active;" class="font-body font-bold w-full p-4 mb-8 rounded-xl bg-slate-900/80 border border-slate-600 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/50 outline-none text-xl text-center transition-all">
+            <button id="btn-join-group" class="font-body font-black tracking-wide w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all hover:scale-105">입장하기</button>
         </div>
     </div>
 
     <!-- 4-5. 학생용 상세 규칙 안내 화면 -->
     <div id="panel-student-rules" class="w-full max-w-4xl hidden text-center fade-in-up">
-        <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl">
+        <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
             <h2 class="text-4xl md:text-5xl text-emerald-400 mb-6 font-title font-bold border-b border-emerald-500/30 pb-4">📖 생존 규칙 완벽 가이드</h2>
             
             <div class="space-y-6 font-body text-slate-100 text-base md:text-lg mb-8 leading-relaxed">
                 <div class="bg-emerald-950/80 p-6 rounded-2xl border border-emerald-500/50 shadow-inner">
-                    <p class="text-emerald-100 font-black text-xl">🎯 공동 목표: 15라운드 동안 생태 점수가 0점이 되지 않도록 사수하고, 지속 가능한 생태 문명으로 전환하세요!</p>
+                    <p class="text-emerald-100 font-black text-xl">🎯 공동 목표: 15라운드 동안 생태 점수를 0점 위로 사수하고, 기술을 발전시켜 생존하세요!</p>
                 </div>
                 
                 <div>
                     <h3 class="text-2xl text-yellow-300 mb-3 font-black">🕹️ 1. 매 라운드 행동 선택</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                        <div class="bg-red-950/80 p-4 rounded-2xl border border-red-500/40">
+                        <div class="bg-red-950/80 p-4 rounded-2xl border border-red-500/40 shadow-inner">
                             <div class="text-3xl mb-1">😈</div>
                             <div class="font-black text-xl text-red-400 mb-1">욕심내기</div>
-                            <p class="text-sm font-bold">+5💰 / -10🌿<br><span class="text-xs text-slate-400 font-normal">*3명 겹치면 0원 / 30점 이하 시 1원 폭락</span></p>
+                            <p class="text-sm font-bold">+5💰 / -10🌿<br><span class="text-xs text-slate-400 font-normal">*3명 겹치면 0원 / 위험 시 1원 폭락</span></p>
                         </div>
-                        <div class="bg-amber-950/80 p-4 rounded-2xl border border-amber-500/40">
+                        <div class="bg-amber-950/80 p-4 rounded-2xl border border-amber-500/40 shadow-inner">
                             <div class="text-3xl mb-1">⛏️</div>
                             <div class="font-black text-xl text-amber-400 mb-1">적당히</div>
                             <p class="text-sm font-bold">+2💰 / -2🌿<br><span class="text-xs text-slate-400 font-normal">*안전하고 꾸준한 최소 수확</span></p>
                         </div>
-                        <div class="bg-emerald-950/80 p-4 rounded-2xl border border-emerald-500/40">
+                        <div class="bg-emerald-950/80 p-4 rounded-2xl border border-emerald-500/40 shadow-inner">
                             <div class="text-3xl mb-1">💖</div>
                             <div class="font-black text-xl text-emerald-400 mb-1">돌보기</div>
-                            <p class="text-sm font-bold">0💰 / +10🌿<br><span class="text-xs text-yellow-300 font-normal">*조원들의 생태 보조금 획득 가능</span></p>
+                            <p class="text-sm font-bold">0💰 / +10🌿<br><span class="text-xs text-yellow-300 font-normal">*동료의 생태 보조금 지원 받음</span></p>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-2xl text-teal-300 mb-3 font-black">🏭 2. 개인 테크 트리 (산업화와 생태전환)</h3>
+                    <h3 class="text-2xl text-teal-300 mb-3 font-black">🏭 2. 개인 성장 (산업화와 생태전환)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                         <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-700">
-                            <div class="font-black text-lg text-slate-200 mb-1">1단계 [전통 채굴]</div>
-                            <p class="text-xs text-slate-300">기본 상태<br>욕심 +5💰 / 데미지 -10🌿</p>
+                            <div class="font-black text-lg text-slate-200 mb-1">1단계 [전통]</div>
+                            <p class="text-xs text-slate-300">욕심 +5💰 / 파괴 -10🌿</p>
                         </div>
                         <div class="bg-amber-950/80 p-4 rounded-2xl border border-amber-500/40">
                             <div class="font-black text-lg text-amber-300 mb-1">2단계 [산업화]</div>
-                            <p class="text-xs text-slate-200">비용 15💰<br>욕심 <strong>+10💰</strong> / 파괴 <strong>-20🌿</strong> (위험한 성장)</p>
+                            <p class="text-xs text-slate-200">비용 15💰<br>욕심 <strong>+10💰</strong> / 파괴 <strong>-20🌿</strong></p>
                         </div>
                         <div class="bg-teal-950/80 p-4 rounded-2xl border border-teal-500/40">
                             <div class="font-black text-lg text-teal-300 mb-1">3단계 [생태전환]</div>
-                            <p class="text-xs text-slate-200">비용 30💰<br>욕심 <strong>+10💰</strong> / 파괴 <strong>-5🌿</strong> (성장과 보전)</p>
+                            <p class="text-xs text-slate-200">비용 30💰<br>욕심 <strong>+10💰</strong> / 파괴 <strong>-5🌿</strong></p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700 space-y-2 text-base">
-                    <p>🌿 <strong class="font-black">자연재생 탄력성:</strong> 숲은 70점 이상일 때 +5, 40점 이상일 때 +2 스스로 치유되지만, 30점 이하 위험 구간에서는 회복력이 완전히 사라집니다.</p>
-                    <p>⚖️ <strong class="font-black">긴급 법안 쿨타임:</strong> 법안은 딱 1라운드 지속되며, <strong>직전 라운드의 법안을 연속으로 발동할 수 없습니다.</strong> 또한 '모두 돌보기' 발동 시 2/3단계 공장 보유자는 유지비(2💰)가 부과됩니다.</p>
+                <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-700 space-y-2 text-base shadow-inner">
+                    <p>🌿 <strong class="font-black text-emerald-300">자연재생:</strong> 숲은 70점 이상일 때 +5, 40점 이상일 때 +2 스스로 치유됩니다.</p>
+                    <p>⚖️ <strong class="font-black text-indigo-300">1라운드 1안건 원칙:</strong> 마을 자치 회의를 통해 <strong>라당 딱 1개의 안건만 통과</strong>시킬 수 있으며 효과는 1회성입니다. 자신에게 유리한 법안을 먼저 선점하세요!</p>
                 </div>
             </div>
 
             <div class="text-center">
-                <button id="btn-enter-room" class="font-body font-black tracking-wide w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 px-12 py-5 rounded-2xl text-2xl shadow-lg transition-all hover:scale-105">숙지했습니다 (대기실 입장)</button>
+                <button id="btn-enter-room" class="font-body font-black tracking-wide w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 px-14 py-5 rounded-2xl text-2xl shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all hover:scale-105">숙지했습니다 (대기실 입장)</button>
             </div>
         </div>
     </div>
@@ -193,162 +197,181 @@
     <!-- 5. 학생용 게임 화면 -->
     <div id="panel-group-game" class="w-full max-w-5xl hidden flex-col items-center fade-in-up relative pb-24">
         
-        <div class="w-full flex flex-wrap justify-between items-center mb-6 bg-slate-900/70 p-4 rounded-2xl border border-slate-700 backdrop-blur-sm gap-4">
-            <div class="text-2xl font-black text-emerald-200 flex items-center font-body">
-                <span id="display-class-group"></span> <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-sm px-3 py-1 rounded-lg hidden">👑 방장</span>
+        <div class="w-full flex flex-wrap justify-between items-center mb-6 glass-panel p-4 rounded-2xl gap-4">
+            <div class="text-2xl font-black text-emerald-200 flex items-center font-body drop-shadow-sm">
+                <span id="display-class-group"></span> <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-sm px-3 py-1 rounded-lg hidden shadow-sm">👑 방장</span>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="openIngameRuleModal()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2.5 rounded-xl text-base font-black font-body shadow-md transition">📖 규칙 보기</button>
-                <div class="text-3xl md:text-5xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/50 px-6 py-3 rounded-2xl">제 <span id="display-round" class="font-body font-black">1</span> / 15 라운드</div>
+                <button onclick="openIngameRuleModal()" class="bg-indigo-600/90 hover:bg-indigo-500 px-4 py-2.5 rounded-xl text-base font-black font-body shadow-[0_0_10px_rgba(79,70,229,0.3)] transition hover:scale-105 border border-indigo-400/50">📖 규칙 보기</button>
+                <div class="text-3xl md:text-5xl text-emerald-400 font-title font-bold drop-shadow-md bg-slate-950/60 px-6 py-3 rounded-2xl border border-emerald-500/20">제 <span id="display-round" class="font-body font-black">1</span> / 15 라운드</div>
             </div>
             <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden font-body bg-slate-700 hover:bg-slate-600 px-5 py-2.5 rounded-xl text-base font-black transition">◀ 현황판</button>
         </div>
         
         <!-- 생태 점수 바 -->
-        <div class="w-full bg-slate-950/80 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-lg p-4 flex flex-col gap-3">
-            <div class="relative h-14 md:h-16 rounded-xl overflow-hidden border border-slate-700">
+        <div class="w-full bg-slate-950/80 rounded-2xl mb-8 overflow-hidden border border-slate-600 relative shadow-2xl p-4 flex flex-col gap-3">
+            <div class="relative h-14 md:h-16 rounded-xl overflow-hidden border border-slate-700 shadow-inner">
                 <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
-                <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl drop-shadow-md text-white font-title font-bold gap-4">
-                    <span id="forest-icon" class="text-4xl">🌿</span> 
-                    <span>생태 점수: <span id="hp-text" class="font-body font-black text-3xl md:text-4xl">100</span></span>
+                <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl drop-shadow-lg text-white font-title font-bold gap-4">
+                    <span id="forest-icon" class="text-4xl drop-shadow-md">🌿</span> 
+                    <span>생태 점수: <span id="hp-text" class="font-body font-black text-3xl md:text-4xl tracking-wider">100</span></span>
                 </div>
             </div>
-            <div id="forest-story-banner" class="text-center font-body text-base md:text-lg font-black py-2 px-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200">
+            <div id="forest-story-banner" class="text-center font-body text-base md:text-lg font-black py-2.5 px-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200 tracking-wide transition-all duration-500">
                 🌿 푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)
             </div>
         </div>
 
         <!-- 긴급 자치 회의 알림 배너 -->
-        <div id="crisis-banner" class="w-full hidden bg-red-950/90 border-2 border-red-500 p-5 rounded-2xl mb-6 text-center animate-pulse shadow-xl">
-            <h3 class="text-3xl font-black text-red-300 mb-2 font-body">🚨 긴급 마을 자치 회의 발동! (생태 점수 40점 이하)</h3>
-            <p class="font-body text-slate-100 text-lg font-bold">숲이 파괴되고 있습니다! 아래 패널에서 무임승차자 제재나 생태 법안을 통과시켜 위기를 극복하세요.</p>
+        <div id="crisis-banner" class="w-full hidden bg-red-950/90 border-2 border-red-500 p-5 rounded-2xl mb-6 text-center animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.3)]">
+            <h3 class="text-3xl font-black text-red-300 mb-2 font-body tracking-wide">🚨 긴급 마을 자치 회의 발동! (생태 점수 40점 이하)</h3>
+            <p class="font-body text-slate-100 text-lg font-bold">숲이 파괴되고 있습니다! 제재 투표나 생태 법안을 통과시켜 위기를 극복하세요.</p>
         </div>
 
         <!-- 게임 오버 / 승리 배너 -->
-        <div id="gameover-banner" class="w-full hidden bg-black/95 border-4 border-red-600 p-8 rounded-3xl mb-6 text-center shadow-[0_0_50px_rgba(239,68,68,0.8)]">
-            <h3 class="text-6xl font-title text-red-500 font-bold mb-4">💀 파국 발생 (Game Over)</h3>
+        <div id="gameover-banner" class="w-full hidden bg-black/95 border-4 border-red-600 p-8 rounded-3xl mb-6 text-center shadow-[0_0_50px_rgba(239,68,68,0.8)] z-10">
+            <h3 class="text-6xl font-title text-red-500 font-bold mb-4 drop-shadow-lg">💀 파국 발생</h3>
             <p class="text-2xl font-body font-bold text-slate-200 mb-6">생태 점수가 0점이 되어 숲과 공동체가 완전히 붕괴되었습니다.<br>모든 자산이 몰수되었습니다.</p>
         </div>
 
         <!-- 15라운드 도달 시 연장 투표 모달 -->
-        <div id="extension-vote-section" class="w-full hidden bg-indigo-950/90 border-2 border-indigo-400 p-8 rounded-3xl mb-6 text-center shadow-2xl">
-            <h3 class="text-4xl font-black font-body text-yellow-300 mb-4">🏆 기본 15라운드 달성 완료!</h3>
+        <div id="extension-vote-section" class="w-full hidden bg-indigo-950/90 border-2 border-indigo-400 p-8 rounded-3xl mb-6 text-center shadow-[0_0_30px_rgba(79,70,229,0.4)] z-10">
+            <h3 class="text-4xl font-black font-body text-yellow-300 mb-4 drop-shadow-md">🏆 기본 15라운드 달성 완료!</h3>
             <p class="font-body font-bold text-slate-100 text-xl mb-6">여기서 게임을 마무리하고 생존을 축하할까요, 아니면 기록 경신을 위해 계속 도전할까요?<br>조원들의 투표로 결정해주세요!</p>
             <div class="flex justify-center gap-6 mb-4">
-                <button onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-4 rounded-xl font-black text-2xl font-body shadow-md">🌿 계속 도전 (연장)</button>
-                <button onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-8 py-4 rounded-xl font-black text-2xl font-body shadow-md">🏁 여기서 종료</button>
+                <button onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-4 rounded-xl font-black text-2xl font-body shadow-lg transition hover:scale-105">🌿 계속 도전 (연장)</button>
+                <button onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-8 py-4 rounded-xl font-black text-2xl font-body shadow-lg transition hover:scale-105">🏁 여기서 종료</button>
             </div>
             <div class="font-body font-bold text-indigo-200 text-lg mt-3" id="ext-vote-status">찬성: 0명 / 반대: 0명</div>
         </div>
 
         <div id="section-waiting" class="w-full text-center py-12 glass-panel rounded-3xl hidden flex-col items-center">
-            <h2 class="text-4xl font-black font-body text-yellow-300 mb-6">조원들을 기다리는 중...</h2>
-            <div id="waiting-players" class="flex flex-wrap justify-center gap-4 mb-8 font-body font-bold text-xl"></div>
-            <button id="btn-start-group" class="hidden bg-emerald-600 hover:bg-emerald-500 px-12 py-5 rounded-2xl font-body font-black text-3xl shadow-lg transition hover:scale-105 animate-pulse">우리 조 게임 시작!</button>
-            <p id="msg-waiting-host" class="text-slate-300 font-body font-bold text-base mt-4">방장(첫 접속자)이 시작 버튼을 누르면 시작됩니다.</p>
+            <h2 class="text-4xl font-black font-body text-yellow-300 mb-6 drop-shadow-md">조원들을 기다리는 중...</h2>
+            <div id="waiting-players" class="flex flex-wrap justify-center gap-4 mb-8 font-body font-bold text-xl w-full px-4"></div>
+            <button id="btn-start-group" class="hidden bg-emerald-600 hover:bg-emerald-500 px-14 py-5 rounded-2xl font-body font-black text-3xl shadow-[0_0_20px_rgba(16,185,129,0.5)] transition hover:scale-105 animate-pulse mt-4">우리 조 게임 시작!</button>
+            <p id="msg-waiting-host" class="text-slate-300 font-body font-bold text-base mt-6 bg-slate-900/50 py-2 px-4 rounded-lg">방장(첫 접속자)이 시작 버튼을 누르면 게임이 시작됩니다.</p>
         </div>
 
-        <div id="section-betting" class="w-full hidden flex-col items-center">
-            <p class="text-2xl text-emerald-100 mb-6 font-body font-black w-full text-left md:text-center">이번 라운드의 행동을 선택하세요.</p>
+        <div id="section-betting" class="w-full hidden flex-col items-center w-full">
+            <p class="text-2xl text-emerald-100 mb-6 font-body font-black w-full text-center drop-shadow-sm">이번 라운드의 행동을 선택하세요.</p>
             
-            <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <button onclick="submitAction('greed')" class="w-full bg-red-950/80 border border-red-500/50 p-8 rounded-3xl hover:bg-red-800 transition group shadow-lg flex flex-col items-center">
-                    <div class="text-5xl mb-3 group-hover:scale-110 transition">😈</div><div class="text-3xl font-black font-body">욕심내기</div>
+            <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 px-2">
+                <button onclick="submitAction('greed')" class="w-full bg-red-950/80 border border-red-500/50 p-8 rounded-3xl hover:bg-red-800 transition group shadow-[0_4px_20px_rgba(239,68,68,0.2)] hover:shadow-[0_4px_30px_rgba(239,68,68,0.4)] flex flex-col items-center">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition drop-shadow-lg">😈</div><div class="text-3xl font-black font-body tracking-wide">욕심내기</div>
                 </button>
-                <button onclick="submitAction('need')" class="w-full bg-amber-950/80 border border-amber-500/50 p-8 rounded-3xl hover:bg-amber-800 transition group shadow-lg flex flex-col items-center">
-                    <div class="text-5xl mb-3 group-hover:scale-110 transition">⛏️</div><div class="text-3xl font-black font-body">적당히</div>
+                <button onclick="submitAction('need')" class="w-full bg-amber-950/80 border border-amber-500/50 p-8 rounded-3xl hover:bg-amber-800 transition group shadow-[0_4px_20px_rgba(245,158,11,0.2)] hover:shadow-[0_4px_30px_rgba(245,158,11,0.4)] flex flex-col items-center">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition drop-shadow-lg">⛏️</div><div class="text-3xl font-black font-body tracking-wide">적당히</div>
                 </button>
-                <button onclick="submitAction('care')" class="w-full bg-emerald-950/80 border border-emerald-500/50 p-8 rounded-3xl hover:bg-emerald-800 transition group shadow-lg flex flex-col items-center">
-                    <div class="text-5xl mb-3 group-hover:scale-110 transition">💖</div><div class="text-3xl font-black font-body">돌보기</div>
+                <button onclick="submitAction('care')" class="w-full bg-emerald-950/80 border border-emerald-500/50 p-8 rounded-3xl hover:bg-emerald-800 transition group shadow-[0_4px_20px_rgba(16,185,129,0.2)] hover:shadow-[0_4px_30px_rgba(16,185,129,0.4)] flex flex-col items-center">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition drop-shadow-lg">💖</div><div class="text-3xl font-black font-body tracking-wide">돌보기</div>
                 </button>
             </div>
 
             <!-- 개인별 테크 트리 업그레이드 패널 -->
-            <div class="w-full bg-slate-900/90 border border-indigo-500/50 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-4 shadow-xl">
+            <div class="w-full bg-slate-900/90 border border-indigo-500/50 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-[0_4px_25px_rgba(79,70,229,0.2)] px-6">
                 <div>
-                    <h4 class="text-2xl font-black font-body text-indigo-300 mb-2" id="my-tech-title">⚙️ 나의 생산 방식: 1단계 [전통 채굴 방식]</h4>
-                    <p class="font-body font-bold text-base text-slate-300" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
+                    <h4 class="text-2xl font-black font-body text-indigo-300 mb-2 drop-shadow-sm" id="my-tech-title">⚙️ 나의 생산 방식: 1단계 [전통 채굴 방식]</h4>
+                    <p class="font-body font-bold text-base text-slate-300 bg-black/40 px-3 py-1.5 rounded-lg inline-block" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
                 </div>
                 <div class="flex gap-3">
-                    <button id="btn-upgrade-tier2" onclick="upgradeTechTier(2)" class="bg-amber-600 hover:bg-amber-500 px-5 py-3 rounded-2xl font-black font-body text-lg shadow-md transition hover:scale-105">🏭 2단계 산업화 (비용 15💰)</button>
-                    <button id="btn-upgrade-tier3" onclick="upgradeTechTier(3)" class="bg-teal-600 hover:bg-teal-500 px-5 py-3 rounded-2xl font-black font-body text-lg shadow-md transition hover:scale-105 hidden">🔬 3단계 생태전환 (비용 30💰)</button>
+                    <button id="btn-upgrade-tier2" onclick="upgradeTechTier(2)" class="bg-amber-600 hover:bg-amber-500 px-6 py-3.5 rounded-2xl font-black font-body text-lg shadow-lg transition hover:scale-105 flex items-center gap-2">🏭 2단계 산업화 <span class="bg-black/30 px-2 py-1 rounded text-sm text-yellow-300">-15💰</span></button>
+                    <button id="btn-upgrade-tier3" onclick="upgradeTechTier(3)" class="bg-teal-600 hover:bg-teal-500 px-6 py-3.5 rounded-2xl font-black font-body text-lg shadow-lg transition hover:scale-105 hidden flex items-center gap-2">🔬 3단계 생태전환 <span class="bg-black/30 px-2 py-1 rounded text-sm text-yellow-300">-30💰</span></button>
                 </div>
             </div>
             
-            <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-6 mb-10"></div>
+            <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 px-2"></div>
             
-            <button id="btn-reveal" class="hidden font-body bg-red-600 hover:bg-red-500 px-16 py-6 rounded-3xl font-black text-4xl shadow-[0_0_25px_rgba(239,68,68,0.6)] transition hover:scale-105">결과 공개하기</button>
+            <button id="btn-reveal" class="hidden font-body bg-red-600 hover:bg-red-500 px-16 py-6 rounded-3xl font-black text-4xl shadow-[0_0_30px_rgba(239,68,68,0.7)] transition hover:scale-105 tracking-wider mt-4">결과 공개하기</button>
         </div>
 
-        <div id="section-reveal" class="w-full hidden flex-col items-center">
-            <h3 class="text-4xl font-title text-indigo-300 mb-6 font-bold">라운드 결과</h3>
+        <div id="section-reveal" class="w-full hidden flex-col items-center w-full">
+            <h3 class="text-4xl font-title text-indigo-300 mb-6 font-bold drop-shadow-md">라운드 결과</h3>
             
-            <!-- 활성화된 자치 법안 표시 배너 -->
-            <div id="active-law-banner" class="hidden w-full bg-emerald-950/80 border border-emerald-400 p-5 rounded-2xl mb-6 text-center font-body font-bold text-xl text-emerald-200">
-                📜 현재 적용 중인 긴급 법안 (1회성): <span id="active-law-text" class="font-black text-yellow-300">없음</span>
+            <!-- 활성화된 법안 표시 배너 -->
+            <div id="active-law-banner" class="hidden w-full bg-emerald-950/80 border border-emerald-400 p-5 rounded-2xl mb-6 text-center font-body font-bold text-xl text-emerald-200 shadow-lg">
+                📜 현재 적용 중인 긴급 법안 (이번 라운드 종료 시 해제): <span id="active-law-text" class="font-black text-yellow-300">없음</span>
             </div>
 
-            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-6 mb-10"></div>
+            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-6 mb-10 px-2"></div>
             
-            <!-- 자치 회의 제재 및 법안 투표 패널 -->
-            <div id="sanction-panel" class="hidden w-full bg-slate-900/90 border border-indigo-500/50 p-8 rounded-3xl mb-8 text-center shadow-2xl">
-                <h4 class="text-2xl font-black font-body text-yellow-300 mb-3">⚖️ 마을 자치 회의 & 생태 법안 제정</h4>
-                <p class="font-body font-bold text-base text-slate-200 mb-6">무임승차자 제재나 긴급 법안(1회성) 투표를 발동하여 조원들과 함께 토론하고 결정하세요.</p>
+            <!-- 자치 회의 제재 및 법안 투표 패널 (선점제 구현) -->
+            <div id="sanction-panel" class="hidden w-full bg-slate-900/90 border border-indigo-500/50 p-8 rounded-3xl mb-8 text-center shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
                 
-                <div class="flex flex-wrap justify-center gap-4 mb-6">
-                    <button onclick="startLawVote('tax')" class="bg-indigo-700 hover:bg-indigo-600 text-white px-5 py-3 rounded-2xl font-body text-base font-black border border-indigo-400 shadow-md">📜 [긴급법안] 욕심내기 수익 절반 삭감</button>
-                    <button onclick="startLawVote('mandatory_care')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-5 py-3 rounded-2xl font-body text-base font-black border border-emerald-400 shadow-md">📜 [긴급법안] 모두 돌보기 강제 의무</button>
-                    <button onclick="startLawVote('rationing')" class="bg-amber-700 hover:bg-amber-600 text-white px-5 py-3 rounded-2xl font-body text-base font-black border border-amber-400 shadow-md">📦 [긴급법안] 자원 배급제 (욕심 봉쇄)</button>
-                    <button onclick="startLawVote('subsidy_2')" class="bg-teal-700 hover:bg-teal-600 text-white px-5 py-3 rounded-2xl font-body text-base font-black border border-teal-400 shadow-md">💖 [법안] 생태 보조금 갹출 2원</button>
-                    <button onclick="startLawVote('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-white px-5 py-3 rounded-2xl font-body text-base font-black border border-teal-500 shadow-md">💖 [법안] 생태 보조금 갹출 3원</button>
+                <!-- 투표가 성사되어 회의가 닫혔을 때 보여줄 메시지 -->
+                <div id="meeting-closed-msg" class="hidden w-full py-8">
+                    <h4 class="text-3xl font-black font-body text-indigo-300 mb-2">🔒 이번 라운드 자치 회의 종료</h4>
+                    <p class="font-body font-bold text-lg text-slate-300">이미 안건이 상정 및 처리되어 다음 라운드에 다시 회의를 열 수 있습니다.</p>
                 </div>
 
-                <div id="sanction-targets-container" class="flex flex-wrap justify-center gap-4 mb-6 border-t border-slate-700 pt-6"></div>
-                
-                <div id="active-sanction-vote" class="hidden bg-indigo-950/90 p-6 rounded-2xl border border-indigo-400 mt-4 text-left shadow-inner">
-                    <p class="font-body text-indigo-200 mb-3 font-black text-xl text-center" id="sanction-vote-question"></p>
-                    <div id="sanction-vote-desc" class="font-body font-bold text-base text-slate-200 mb-6 bg-slate-900/80 p-4 rounded-xl border border-slate-700 leading-relaxed"></div>
-                    <div class="flex justify-center gap-6">
-                        <button onclick="voteSanction(true)" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-4 rounded-2xl font-black font-body text-xl shadow-lg transition hover:scale-105">찬성</button>
-                        <button onclick="voteSanction(false)" class="bg-red-600 hover:bg-red-500 px-10 py-4 rounded-2xl font-black font-body text-xl shadow-lg transition hover:scale-105">반대</button>
+                <!-- 안건 상정 버튼 영역 (1라운드 1회 제한으로 숨겨짐 제어) -->
+                <div id="proposal-buttons-wrapper" class="w-full">
+                    <h4 class="text-3xl font-black font-body text-yellow-300 mb-3 drop-shadow-sm">⚖️ 마을 자치 회의 & 생태 법안 발의</h4>
+                    <p class="font-body font-bold text-lg text-slate-200 mb-6">라당 딱 1개의 안건만 발의하여 처리할 수 있습니다. 필요한 법안을 먼저 선점하세요!</p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <button onclick="startLawVote('tax')" class="bg-indigo-700 hover:bg-indigo-600 text-white px-5 py-3.5 rounded-2xl font-body text-base font-black border border-indigo-400 shadow-lg transition hover:scale-105">📜 [긴급] 욕심 수익 절반 삭감</button>
+                        <button onclick="startLawVote('mandatory_care')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-2xl font-body text-base font-black border border-emerald-400 shadow-lg transition hover:scale-105">📜 [긴급] 모두 돌보기 강제</button>
+                        <button onclick="startLawVote('rationing')" class="bg-amber-700 hover:bg-amber-600 text-white px-5 py-3.5 rounded-2xl font-body text-base font-black border border-amber-400 shadow-lg transition hover:scale-105">📦 [긴급] 자원 배급제 (욕심 봉쇄)</button>
+                        <button onclick="startLawVote('subsidy_2')" class="bg-teal-700 hover:bg-teal-600 text-white px-5 py-3.5 rounded-2xl font-body text-base font-black border border-teal-400 shadow-lg transition hover:scale-105">💖 [법안] 생태 보조금 2원 상향</button>
+                        <button onclick="startLawVote('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-white px-5 py-3.5 rounded-2xl font-body text-base font-black border border-teal-500 shadow-lg transition hover:scale-105">💖 [법안] 생태 보조금 3원 폭등</button>
                     </div>
-                    <div class="font-body text-lg text-slate-200 mt-4 text-center font-bold" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
+
+                    <div class="w-full border-t border-slate-700/80 pt-6">
+                        <p class="font-body font-bold text-sm text-slate-400 mb-4">특정 조원 제재 (수익 몰수) 안건 올리기</p>
+                        <div id="sanction-targets-container" class="flex flex-wrap justify-center gap-4"></div>
+                    </div>
+                </div>
+                
+                <!-- 실제 투표 진행중일 때 표시되는 영역 -->
+                <div id="active-sanction-vote" class="hidden bg-indigo-950/90 p-8 rounded-2xl border-2 border-indigo-400 mt-6 text-left shadow-[0_0_25px_rgba(79,70,229,0.3)]">
+                    <p class="font-body text-indigo-200 mb-4 font-black text-2xl text-center" id="sanction-vote-question"></p>
+                    <div id="sanction-vote-desc" class="font-body font-bold text-lg text-slate-200 mb-8 bg-slate-900/80 p-5 rounded-xl border border-slate-700 leading-relaxed text-center"></div>
+                    <div class="flex justify-center gap-8">
+                        <button onclick="voteSanction(true)" class="bg-emerald-600 hover:bg-emerald-500 px-12 py-5 rounded-2xl font-black font-body text-2xl shadow-lg transition hover:scale-110">👍 찬성</button>
+                        <button onclick="voteSanction(false)" class="bg-red-600 hover:bg-red-500 px-12 py-5 rounded-2xl font-black font-body text-2xl shadow-lg transition hover:scale-110">👎 반대</button>
+                    </div>
+                    <div class="font-body text-xl text-slate-200 mt-6 text-center font-black bg-black/40 py-2 rounded-lg" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
                 </div>
             </div>
 
-            <button id="btn-next-round" class="hidden font-body bg-indigo-600 hover:bg-indigo-500 px-16 py-6 rounded-3xl font-black text-4xl shadow-[0_0_25px_rgba(79,70,229,0.6)] transition hover:scale-105">다음 라운드 준비</button>
+            <button id="btn-next-round" class="hidden font-body bg-indigo-600 hover:bg-indigo-500 px-16 py-6 rounded-3xl font-black text-4xl shadow-[0_0_30px_rgba(79,70,229,0.6)] transition hover:scale-105 tracking-wider mt-4">다음 라운드 준비</button>
         </div>
         
     </div>
 
     <!-- 6. 인게임 상시 규칙 확인 모달 -->
     <div id="modal-ingame-rules" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
-        <div class="glass-panel max-w-3xl w-full p-8 rounded-3xl max-h-[90vh] overflow-y-auto text-left relative shadow-2xl border border-emerald-500/30">
-            <button onclick="closeIngameRuleModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white text-4xl font-bold">&times;</button>
-            <h3 class="text-3xl font-body font-black text-emerald-400 mb-6 border-b border-emerald-500/30 pb-4">📖 게임 규칙 다시보기</h3>
+        <div class="glass-panel max-w-4xl w-full p-8 md:p-12 rounded-3xl max-h-[90vh] overflow-y-auto text-left relative shadow-2xl border border-emerald-500/30">
+            <button onclick="closeIngameRuleModal()" class="absolute top-6 right-8 text-slate-400 hover:text-white text-5xl font-bold transition hover:scale-110">&times;</button>
+            <h3 class="text-4xl font-body font-black text-emerald-400 mb-8 border-b border-emerald-500/30 pb-4 tracking-tight">📖 생존 규칙 및 성장 가이드북</h3>
             
-            <div class="space-y-6 font-body text-slate-100 text-base md:text-lg leading-relaxed font-bold">
-                <div class="bg-slate-900/60 p-5 rounded-2xl">
-                    <h4 class="text-2xl font-black text-yellow-300 mb-3">🕹️ 1. 행동 선택 페널티</h4>
-                    <p>• <strong>욕심내기(😈):</strong> 조원 중 3명 이상 겹치면 <span class="text-red-400 font-black">수익 0원</span>, 숲이 위험(30점이하)할 땐 <span class="text-red-400 font-black">수익 1원</span>으로 폭락합니다.</p>
-                    <p>• <strong>돌보기(💖):</strong> 수익은 없지만 생태 보조금을 지원받을 수 있습니다.</p>
+            <div class="space-y-8 font-body text-slate-100 text-lg md:text-xl leading-relaxed font-bold">
+                <div class="bg-slate-900/80 p-6 rounded-2xl shadow-inner border border-slate-700/50">
+                    <h4 class="text-2xl font-black text-yellow-300 mb-3 drop-shadow-sm">🕹️ 1. 행동 선택 페널티 (기본 1단계 기준)</h4>
+                    <ul class="space-y-2 text-slate-200">
+                        <li>• <strong class="text-red-400">욕심내기(😈):</strong> +5💰 / -10🌿 <span class="text-sm bg-red-900/50 px-2 rounded">(3명 겹치면 0원, 숲 위험 시 1원 폭락)</span></li>
+                        <li>• <strong class="text-amber-400">적당히(⛏️):</strong> +2💰 / -2🌿</li>
+                        <li>• <strong class="text-emerald-400">돌보기(💖):</strong> 0💰 / +10🌿 <span class="text-sm bg-emerald-900/50 px-2 rounded">(동료들의 생태 보조금 지원 받음)</span></li>
+                    </ul>
                 </div>
-                <div class="bg-slate-900/60 p-5 rounded-2xl">
-                    <h4 class="text-2xl font-black text-teal-300 mb-3">🏭 2. 개인 테크 트리</h4>
-                    <p>• <strong>1단계 [전통 채굴]:</strong> 욕심 +5💰 / 파괴 -10🌿</p>
-                    <p>• <strong>2단계 [산업화] (비용 15💰):</strong> 욕심 <strong>+10💰</strong> / 파괴 <strong>-20🌿</strong> (숲 파괴 2배 증가)</p>
-                    <p>• <strong>3단계 [생태전환] (비용 30💰):</strong> 욕심 <strong>+10💰</strong> / 파괴 <strong>-5🌿</strong> (파괴 최소화, 돌보기 효율 극대화)</p>
+                <div class="bg-slate-900/80 p-6 rounded-2xl shadow-inner border border-slate-700/50">
+                    <h4 class="text-2xl font-black text-teal-300 mb-3 drop-shadow-sm">🏭 2. 개인 테크 트리 (산업화 vs 생태전환)</h4>
+                    <p class="mb-2 text-slate-300 text-base">자산을 모아 나의 생산 방식을 업그레이드 할 수 있습니다.</p>
+                    <ul class="space-y-3">
+                        <li class="bg-amber-950/60 p-3 rounded-xl border border-amber-500/30">🏭 <strong class="text-amber-300">2단계 [산업화] (비용 15💰)</strong><br>욕심 수익 <strong>+10💰</strong> / 파괴 데미지 <strong>-20🌿</strong> <span class="text-red-300 text-sm">(위험한 고속 성장)</span></li>
+                        <li class="bg-teal-950/60 p-3 rounded-xl border border-teal-500/30">🔬 <strong class="text-teal-300">3단계 [생태전환] (비용 30💰)</strong><br>욕심 수익 <strong>+10💰</strong> / 파괴 데미지 <strong>-5🌿</strong> <span class="text-emerald-300 text-sm">(파괴 최소화, 돌보기 효율 극대화)</span></li>
+                    </ul>
                 </div>
-                <div class="bg-slate-900/60 p-5 rounded-2xl">
-                    <h4 class="text-2xl font-black text-indigo-300 mb-3">🌿 3. 자연재생 & 긴급 법안 쿨타임</h4>
-                    <p>• <strong>자연재생:</strong> 숲은 70점 이상일 때 +5, 40점 이상일 때 +2 회복되지만 30점 이하에선 회복력이 사라집니다.</p>
-                    <p>• <strong>법안 쿨타임:</strong> 긴급 법안은 딱 1라운드만 지속되며, 직전 라운드에 발동한 법안을 연속으로 통과시킬 수 없습니다.</p>
-                    <p>• <strong>유지비:</strong> '모두 돌보기 강제' 법안 발동 시 2단계 이상 공장 보유자는 유지비 2💰를 납부해야 합니다.</p>
+                <div class="bg-slate-900/80 p-6 rounded-2xl shadow-inner border border-slate-700/50">
+                    <h4 class="text-2xl font-black text-indigo-300 mb-3 drop-shadow-sm">🌿 3. 자연재생 & 1라운드 1안건 원칙</h4>
+                    <p class="mb-2">• <strong class="text-emerald-300">자연재생:</strong> 숲은 70점 이상일 때 +5, 40점 이상일 때 +2 회복되지만 30점 이하에선 회복력이 사라집니다.</p>
+                    <p class="mb-2">• <strong class="text-indigo-300">선점제:</strong> 마을 자치 회의에선 <strong>라운드당 오직 1개의 안건만 상정 및 통과</strong>시킬 수 있습니다.</p>
+                    <p>• <strong class="text-red-300">유지비 부과:</strong> '모두 돌보기 강제' 법안 발동 시 2단계 이상 공장 보유자는 공장 유지비(2💰)를 납부해야 합니다.</p>
                 </div>
             </div>
 
-            <div class="text-center mt-8">
-                <button onclick="closeIngameRuleModal()" class="bg-indigo-600 hover:bg-indigo-500 px-12 py-4 rounded-2xl font-black text-2xl font-body shadow-lg transition hover:scale-105">닫기</button>
+            <div class="text-center mt-10">
+                <button onclick="closeIngameRuleModal()" class="bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-black text-2xl font-body shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105">확인했습니다 닫기</button>
             </div>
         </div>
     </div>
@@ -412,8 +435,9 @@
             try {
                 const classData = { config: { groupCount: groupCount }, groups: {} };
                 for(let i=1; i<=groupCount; i++) {
+                    // voteUsed 상태 변수 추가 (1라운드 1안건 제어용)
                     classData.groups[i] = { 
-                        state: { round: 1, hp: 100, phase: 'waiting', leader: null, sanctionVote: null, extVote: null, activeLaw: null, lastLaw: null, subsidyAmount: 1 }, 
+                        state: { round: 1, hp: 100, phase: 'waiting', leader: null, sanctionVote: null, extVote: null, activeLaw: null, lastLaw: null, subsidyAmount: 1, voteUsed: false }, 
                         players: {} 
                     };
                 }
@@ -452,15 +476,15 @@
                     const hpColor = g.state.hp > 40 ? 'text-emerald-400' : (g.state.hp > 0 ? 'text-red-400 animate-pulse' : 'text-slate-500 line-through');
 
                     grid.innerHTML += `
-                        <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer glass-panel p-6 rounded-3xl hover:bg-slate-800 transition-all border border-slate-700 hover:border-indigo-500 w-full">
-                            <h3 class="text-3xl font-title font-bold text-white mb-2">${gId}조</h3>
-                            <div class="font-body text-base text-slate-300 mb-3 flex justify-between font-bold">
+                        <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer glass-panel p-6 rounded-3xl hover:bg-slate-800 transition-all border border-slate-700 hover:border-indigo-500 w-full shadow-lg hover:scale-[1.02]">
+                            <h3 class="text-3xl font-title font-bold text-white mb-3">${gId}조</h3>
+                            <div class="font-body text-lg text-slate-300 mb-4 flex justify-between font-bold">
                                 <span>참여: ${pCount}명</span>
                                 <span class="text-indigo-300 font-black">${phaseText}</span>
                             </div>
-                            <div class="bg-black/50 p-4 rounded-2xl text-center">
-                                <div class="text-sm text-slate-400 font-body mb-1 font-bold">R${g.state.round}/15 생태 점수</div>
-                                <div class="text-4xl font-bold font-title ${hpColor}">${g.state.hp}🌿</div>
+                            <div class="bg-black/60 p-4 rounded-2xl text-center border border-slate-700">
+                                <div class="text-base text-slate-400 font-body mb-2 font-bold">R${g.state.round}/15 생태 점수</div>
+                                <div class="text-5xl font-bold font-title ${hpColor} tracking-wide drop-shadow-md">${g.state.hp}🌿</div>
                             </div>
                         </div>
                     `;
@@ -477,6 +501,7 @@
             listenGroupMicro();
         };
 
+        // 학생 접속 로직 (재접속 예외 처리 포함)
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value.trim();
@@ -561,7 +586,15 @@
             }
         };
 
+        // 제재 투표 발동 (1라운드 1안건 체크)
         window.startSanctionVote = async (targetName) => {
+            const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
+            const snapshot = await get(groupRef);
+            const gData = snapshot.val();
+
+            if (gData.state.voteUsed) return alert("🔒 이번 라운드의 자치 회의는 이미 종료되었습니다. 1라운드에는 1개의 안건만 처리 가능합니다.");
+            if (gData.state.sanctionVote) return alert("⏳ 이미 진행 중인 투표가 있습니다!");
+
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
                 sanctionVote: {
                     type: 'sanction',
@@ -573,33 +606,34 @@
             });
         };
 
+        // 법안 투표 발동 (연속 쿨타임 및 1라운드 1안건 체크)
         window.startLawVote = async (lawType) => {
             const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
             const snapshot = await get(groupRef);
             const gData = snapshot.val();
 
-            if (gData.state.lastLaw === lawType) {
-                return alert("⚠️ 쿨타임 적용 중! 직전 라운드에 발동했던 동일한 법안은 연속해서 통과시킬 수 없습니다.");
-            }
+            if (gData.state.voteUsed) return alert("🔒 이번 라운드의 자치 회의는 이미 종료되었습니다. 1라운드에는 1개의 안건만 처리 가능합니다.");
+            if (gData.state.sanctionVote) return alert("⏳ 이미 진행 중인 투표가 있습니다!");
+            if (gData.state.lastLaw === lawType) return alert("⚠️ 쿨타임 적용 중! 직전 라운드에 발동했던 동일한 법안은 연속해서 통과시킬 수 없습니다.");
 
             let qText = "";
             let descText = "";
 
             if (lawType === 'tax') {
-                qText = "📜 [긴급 법안] 욕심내기 수익 절반 삭감 (1회성)";
+                qText = "📜 [긴급 법안] 욕심내기 수익 절반 삭감 (이번 라운드 한정)";
                 descText = "통과 시: 이번 라운드 동안 '욕심내기' 수익이 50% 절반으로 깎입니다.";
             } else if (lawType === 'mandatory_care') {
-                qText = "📜 [긴급 법안] 모두 돌보기 강제 의무 (1회성)";
+                qText = "📜 [긴급 법안] 모두 돌보기 강제 의무 (이번 라운드 한정)";
                 descText = "통과 시: 이번 라운드 투표에서 모든 조원의 선택이 강제로 '돌보기(💖)'로 고정되어 숲을 살립니다! (단, 2/3단계 공장 보유자는 유지비 2💰 부과)";
             } else if (lawType === 'rationing') {
-                qText = "📦 [긴급 법안] 자원 배급제 - 욕심내기 봉쇄 (1회성)";
+                qText = "📦 [긴급 법안] 자원 배급제 - 욕심내기 봉쇄 (이번 라운드 한정)";
                 descText = "통과 시: 이번 라운드 동안 모든 조원의 '욕심내기' 버튼이 봉쇄됩니다.";
             } else if (lawType === 'subsidy_2') {
                 qText = "💖 [법안] 생태 보조금 갹출 비중 2원 상향";
-                descText = "통과 시: '돌보기' 기여자에게 다른 조원들이 나누어 주는 생태 보조금이 2원으로 늘어납니다.";
+                descText = "통과 시: '돌보기' 기여자에게 다른 조원들이 나누어 주는 생태 보조금이 2원으로 상향 조정됩니다.";
             } else if (lawType === 'subsidy_3') {
                 qText = "💖 [법안] 생태 보조금 갹출 비중 3원 최대 상향";
-                descText = "통과 시: '돌보기' 기여자에게 지급되는 생태 보조금이 최대 3원으로 폭등합니다.";
+                descText = "통과 시: '돌보기' 기여자에게 지급되는 생태 보조금이 3원으로 폭등하여 돌보기 장려가 극대화됩니다.";
             }
 
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
@@ -656,29 +690,29 @@
                     fIcon.innerText = "🌿";
                     hpBarEl.className = "h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000 ease-out";
                     storyBanner.innerText = "🌿 푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)";
-                    storyBanner.className = "text-center font-body text-base md:text-lg font-black py-2 px-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-200";
+                    storyBanner.className = "text-center font-body text-lg md:text-xl font-black py-3 px-5 rounded-2xl bg-emerald-950/70 border-2 border-emerald-500/40 text-emerald-200 shadow-md";
                 } else if (currentHp >= 40) {
                     fIcon.innerText = "🍂";
                     hpBarEl.className = "h-full bg-gradient-to-r from-amber-600 to-amber-400 transition-all duration-1000 ease-out";
                     storyBanner.innerText = "🍂 조금씩 신음하는 숲 (나무들이 베여나가고 공동체에 갈등이 싹틉니다)";
-                    storyBanner.className = "text-center font-body text-base md:text-lg font-black py-2 px-4 rounded-xl bg-amber-950/70 border border-amber-500/40 text-amber-200";
+                    storyBanner.className = "text-center font-body text-lg md:text-xl font-black py-3 px-5 rounded-2xl bg-amber-950/70 border-2 border-amber-500/40 text-amber-200 shadow-md";
                 } else if (currentHp > 0) {
                     fIcon.innerText = "⚠️";
                     hpBarEl.className = "h-full bg-gradient-to-r from-red-600 to-red-400 animate-pulse transition-all duration-1000 ease-out";
                     storyBanner.innerText = "⚠️ 황폐해진 공유지 (매연이 자욱하고 주민들의 불신이 극에 달했습니다)";
-                    storyBanner.className = "text-center font-body text-base md:text-lg font-black py-2 px-4 rounded-xl bg-red-950/70 border border-red-500/40 text-red-200";
+                    storyBanner.className = "text-center font-body text-lg md:text-xl font-black py-3 px-5 rounded-2xl bg-red-950/70 border-2 border-red-500/40 text-red-200 shadow-[0_0_15px_rgba(239,68,68,0.4)]";
                 } else {
                     fIcon.innerText = "💀";
                     hpBarEl.className = "h-full bg-slate-600";
                     storyBanner.innerText = "💀 완전한 파국 (모든 생명이 사라지고 공동체는 파멸했습니다)";
-                    storyBanner.className = "text-center font-body text-base md:text-lg font-black py-2 px-4 rounded-xl bg-slate-950 border border-slate-700 text-slate-400";
+                    storyBanner.className = "text-center font-body text-lg md:text-xl font-black py-3 px-5 rounded-2xl bg-slate-950 border-2 border-slate-700 text-slate-400 shadow-lg";
                 }
 
-                // 애니메이션 복구 로직 (비동기 처리)
+                // 애니메이션 복구 로직 (비동기 처리 최적화)
                 if (currentHp !== lastHp && !isTeacher) {
                     if (currentHp < lastHp) {
                         document.body.classList.remove('shake-screen', 'heal-screen');
-                        void document.body.offsetWidth; // reflow 강제 리셋
+                        void document.body.offsetWidth;
                         document.body.classList.add('shake-screen');
                         setTimeout(() => document.body.classList.remove('shake-screen'), 500);
                     } else if (currentHp > lastHp) {
@@ -777,7 +811,7 @@
                 const players = data.players || {};
                 const pKeys = Object.keys(players);
 
-                // 리더 갱신 로직
+                // 리더 갱신
                 if ((!data.state.leader || !pKeys.includes(data.state.leader)) && pKeys.length > 0) {
                     if (pKeys[0] === myName) { 
                         update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { leader: myName }); 
@@ -851,9 +885,9 @@
                         const hostTag = isL ? '<span class="text-yellow-400 text-2xl ml-1 drop-shadow-md">👑</span>' : '';
                         
                         if (pChoice && pChoice !== "") {
-                            grid.innerHTML += `<div class="w-full bg-indigo-950/70 p-5 rounded-2xl border border-indigo-500/50 flex flex-col items-center justify-center h-36"><div class="text-4xl mb-1">🔒</div><div class="font-body text-indigo-200 font-black text-xl flex items-center">${pName}${hostTag}</div><div class="font-body text-base mt-1 text-indigo-300 font-bold">선택 완료</div></div>`;
+                            grid.innerHTML += `<div class="w-full bg-indigo-950/70 p-5 rounded-2xl border border-indigo-500/50 flex flex-col items-center justify-center h-40 shadow-inner"><div class="text-4xl mb-1">🔒</div><div class="font-body text-indigo-200 font-black text-xl flex items-center">${pName}${hostTag}</div><div class="font-body text-base mt-2 bg-indigo-900/50 px-3 py-1 rounded-lg text-indigo-200 font-bold">선택 완료</div></div>`;
                         } else {
-                            grid.innerHTML += `<div class="w-full bg-slate-800/50 p-5 rounded-2xl border border-slate-600 border-dashed flex flex-col items-center justify-center h-36"><div class="font-body text-slate-200 font-black text-xl flex items-center">${pName}${hostTag}</div><div class="font-body text-base mt-1 text-slate-400 font-bold">고민 중...</div></div>`;
+                            grid.innerHTML += `<div class="w-full bg-slate-800/50 p-5 rounded-2xl border border-slate-600 border-dashed flex flex-col items-center justify-center h-40"><div class="font-body text-slate-200 font-black text-xl flex items-center">${pName}${hostTag}</div><div class="font-body text-base mt-2 text-slate-400 font-bold animate-pulse">고민 중...</div></div>`;
                         }
                     });
 
@@ -869,9 +903,9 @@
                     if (data.state.activeLaw) {
                         lawBanner.classList.remove('hidden');
                         let lDesc = "";
-                        if (data.state.activeLaw === 'tax') lDesc = "욕심내기 수익 절반 삭감 (1회성)";
-                        else if (data.state.activeLaw === 'mandatory_care') lDesc = "모든 조원 돌보기 강제 의무 (1회성)";
-                        else if (data.state.activeLaw === 'rationing') lDesc = "자원 배급제 - 욕심내기 봉쇄 (1회성)";
+                        if (data.state.activeLaw === 'tax') lDesc = "욕심내기 수익 절반 삭감 (이번 라운드 한정)";
+                        else if (data.state.activeLaw === 'mandatory_care') lDesc = "모든 조원 돌보기 강제 의무 (이번 라운드 한정)";
+                        else if (data.state.activeLaw === 'rationing') lDesc = "자원 배급제 - 욕심내기 봉쇄 (이번 라운드 한정)";
                         lawText.innerText = lDesc;
                     } else {
                         lawBanner.classList.add('hidden');
@@ -883,7 +917,7 @@
                     pKeys.forEach(pName => {
                         const pData = players[pName];
                         const icons = { greed: '😈', need: '⛏️', care: '💖' };
-                        const bgColors = { greed: 'bg-red-950/85 border-red-500/50', need: 'bg-amber-950/85 border-amber-500/50', care: 'bg-emerald-950/85 border-emerald-500/50' };
+                        const bgColors = { greed: 'bg-red-950/85 border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.3)]', need: 'bg-amber-950/85 border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.3)]', care: 'bg-emerald-950/85 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.3)]' };
                         const isL = (data.state.leader === pName);
                         const hostTag = isL ? '<span class="text-yellow-400 text-2xl ml-1 drop-shadow-md">👑</span>' : '';
                         const tTier = pData.techTier || 1;
@@ -892,26 +926,34 @@
                         if (tTier === 3) tierBadge = `<span class="ml-2 text-xs bg-teal-600 text-white px-2 py-0.5 rounded font-bold">3단:생태전환</span>`;
                         
                         grid.innerHTML += `
-                            <div class="w-full ${bgColors[pData.choice]} p-6 rounded-3xl border-2 shadow-xl flex flex-col items-center justify-center fade-in-up h-48">
+                            <div class="w-full ${bgColors[pData.choice]} p-6 rounded-3xl border-2 flex flex-col items-center justify-center fade-in-up h-52 transition-transform hover:scale-105">
                                 <div class="text-6xl mb-2">${icons[pData.choice]}</div>
                                 <div class="font-body font-black text-white text-2xl mb-1 flex items-center">${pName}${hostTag}</div>
-                                <div class="mb-2">${tierBadge}</div>
-                                <div class="bg-black/60 px-4 py-1.5 rounded-xl text-yellow-400 font-body font-black text-lg border border-yellow-500/30">${pData.gold} 💰</div>
+                                <div class="mb-3">${tierBadge}</div>
+                                <div class="bg-black/60 px-5 py-2 rounded-xl text-yellow-400 font-body font-black text-xl border border-yellow-500/30">${pData.gold} 💰</div>
                             </div>
                         `;
                     });
 
+                    // 1라운드 1안건 적용: 투표 완료 후 패널 숨기기 및 메시지 출력 로직
                     document.getElementById('sanction-panel').classList.remove('hidden');
-                    const targetsContainer = document.getElementById('sanction-targets-container');
-                    targetsContainer.innerHTML = '';
-                    pKeys.forEach(pName => {
-                        targetsContainer.innerHTML += `<button onclick="startSanctionVote('${pName}')" class="bg-red-900/80 hover:bg-red-600 text-white px-4 py-2.5 rounded-2xl font-body text-base font-black border border-red-400 shadow-md">⚖️ [${pName}] 제재 투표</button>`;
-                    });
-
-                    const sVoteData = data.state.sanctionVote;
+                    
+                    const pWrapper = document.getElementById('proposal-buttons-wrapper');
+                    const closedMsg = document.getElementById('meeting-closed-msg');
                     const activeVoteBox = document.getElementById('active-sanction-vote');
-                    if (sVoteData && sVoteData.question) {
+
+                    // 만약 투표가 1번 이루어졌다면 안건 상정 버튼을 숨긴다.
+                    if (data.state.voteUsed) {
+                        pWrapper.classList.add('hidden');
+                        activeVoteBox.classList.add('hidden');
+                        closedMsg.classList.remove('hidden');
+                    } else if (data.state.sanctionVote) {
+                        // 투표 진행 중일 때
+                        pWrapper.classList.add('hidden');
+                        closedMsg.classList.add('hidden');
                         activeVoteBox.classList.remove('hidden');
+
+                        const sVoteData = data.state.sanctionVote;
                         document.getElementById('sanction-vote-question').innerText = sVoteData.question;
                         document.getElementById('sanction-vote-desc').innerText = sVoteData.description || "이 법안이나 제재에 대해 조원들과 상의 후 찬성 또는 반대를 투표해주세요.";
                         
@@ -943,10 +985,20 @@
                             } else {
                                 alert(`⚖️ 다수결 부결! 기각되었습니다.`);
                             }
-                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { sanctionVote: null });
+                            // 투표 종료 후 voteUsed 상태 true로 변환하여 1라운드 1회 제어 작동
+                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { sanctionVote: null, voteUsed: true });
                         }
                     } else {
+                        // 아직 투표가 안 열렸고 voteUsed도 아님
+                        pWrapper.classList.remove('hidden');
+                        closedMsg.classList.add('hidden');
                         activeVoteBox.classList.add('hidden');
+
+                        const targetsContainer = document.getElementById('sanction-targets-container');
+                        targetsContainer.innerHTML = '';
+                        pKeys.forEach(pName => {
+                            targetsContainer.innerHTML += `<button onclick="startSanctionVote('${pName}')" class="bg-red-900/80 hover:bg-red-600 text-white px-4 py-2.5 rounded-2xl font-body text-base font-black border border-red-400 shadow-md transition hover:scale-105">⚖️ [${pName}] 제재 투표</button>`;
+                        });
                     }
 
                     if (isGroupLeader) {
@@ -964,7 +1016,7 @@
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { phase: 'betting' });
         });
 
-        // 밸런스 패치 완료 (3인 중복 0원, 3단계 돌보기 폭증, 보조금 정확한 징수)
+        // 라운드 정산
         document.getElementById('btn-reveal').addEventListener('click', async () => {
             const snapshotGroup = await get(ref(db, `classes/${myClass}/groups/${myGroup}`));
             const data = snapshotGroup.val();
@@ -990,14 +1042,14 @@
                 const tier = data.players[k].techTier || 1;
 
                 if(choice === 'greed') { 
-                    let damage = 10; // 1단계 숲파괴 완화
-                    if (tier === 2) damage = 20; // 2단계 숲파괴 완화
+                    let damage = 10; 
+                    if (tier === 2) damage = 20; 
                     else if (tier === 3) damage = 5;
                     totalHpChange -= damage; 
 
                     let earned = 5;
                     if (tier >= 2) earned = 10;
-                    if (greedCount >= 3) earned = 0; // 핵심 밸런스: 3명 겹치면 0원
+                    if (greedCount >= 3) earned = 0; 
 
                     if (isCrisis && earned > 0) earned = 1; 
                     if (activeLaw === 'tax') earned = Math.floor(earned / 2);
@@ -1011,7 +1063,7 @@
                     data.players[k].gold += earned; 
                 }
                 else if(choice === 'care') { 
-                    let carePower = (tier === 3) ? 15 : 10; // 3단계 돌보기 파워 상향
+                    let carePower = (tier === 3) ? 15 : 10; 
                     totalHpChange += carePower; 
                 }
 
@@ -1020,7 +1072,6 @@
                 }
             });
 
-            // 생태 보조금 갹출 룰 안정화 (비참여자에게서만 징수)
             if (careCount > 0) {
                 let nonCarePlayers = pKeys.filter(k => data.players[k].choice !== 'care');
                 pKeys.forEach(k => {
@@ -1082,6 +1133,7 @@
             data.state.phase = 'betting';
             data.state.activeLaw = null;
             data.state.sanctionVote = null;
+            data.state.voteUsed = false; // 새로운 라운드 시작 시 안건 상정 권한 1회 복구
             Object.keys(data.players).forEach(k => data.players[k].choice = "");
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
