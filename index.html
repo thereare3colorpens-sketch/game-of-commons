@@ -92,6 +92,15 @@
         .action-locked { opacity:.48 !important; cursor:not-allowed !important; filter: grayscale(.45); }
         .action-locked:hover { transform:none !important; }
 
+        /* JS가 라운드마다 className을 교체하므로 Tailwind 기본 클래스가 사라져도
+           생태 점수 게이지의 높이·색상·전환 효과가 유지되도록 독립 스타일을 둡니다. */
+        .hp-bar { height:100%; min-width:0; transition:width 0.8s ease, background 0.8s ease, box-shadow 0.8s ease; }
+        .hp-bar-healthy { background:linear-gradient(90deg, #15803d 0%, #22c55e 55%, #86efac 100%); }
+        .hp-bar-warning { background:linear-gradient(90deg, #a16207 0%, #eab308 55%, #fde68a 100%); }
+        .hp-bar-critical { background:linear-gradient(90deg, #991b1b 0%, #ef4444 55%, #fca5a5 100%); }
+        .hp-bar-collapse { background:linear-gradient(90deg, #334155 0%, #64748b 100%); }
+        .hp-bar-glow { box-shadow:0 0 18px rgba(255,255,255,.24); }
+
         #event-splash-screen { pointer-events:none !important; visibility:hidden; }
         #event-splash-screen.opacity-0 { visibility:hidden !important; display:none !important; }
         #modal-ingame-rules.hidden { display:none !important; }
@@ -213,8 +222,8 @@
         <div class="w-full flex justify-between items-center mb-8 glass-panel px-8 py-5 rounded-2xl flex-wrap gap-4 shadow-xl border border-slate-700">
             <h2 class="text-3xl text-emerald-400 font-title font-bold drop-shadow-md"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
             <div class="flex gap-4">
-                <button onclick="resetEntireClass()" class="bg-rose-700 hover:bg-rose-600 px-6 py-3 rounded-xl font-bold text-base transition text-white shadow-lg border border-rose-500/50">학급 전체 초기화 🔄</button>
-                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold text-base transition text-white shadow-lg border border-indigo-500/50">게임 목표 가이드 📖</button>
+                <button onclick="resetEntireClass()" class="bg-rose-700 hover:bg-rose-600 px-6 py-3 rounded-xl font-bold text-base transition text-white shadow-lg border border-rose-500/50">학급 전체 초기화</button>
+                <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold text-base transition text-white shadow-lg border border-indigo-500/50">게임 목표 가이드</button>
             </div>
         </div>
         <div id="macro-grid" class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full"></div>
@@ -307,18 +316,18 @@
         <div class="w-full flex flex-wrap justify-between items-center mb-6 glass-panel p-4 md:p-5 rounded-2xl gap-4 border border-slate-700">
             <div class="text-xl font-bold text-slate-200 flex items-center">
                 <span id="display-class-group"></span> 
-                <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded hidden font-bold shadow-md">👑 방장</span>
+                <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded hidden font-bold shadow-md">방장</span>
             </div>
             
             <div class="flex items-center gap-3">
                 <button id="btn-force-reset" onclick="forceResetGroup(myGroup)" class="hidden bg-rose-700 hover:bg-rose-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white border border-rose-500/50">
-                    조 초기화 🔄
+                    조 초기화
                 </button>
                 <button id="btn-back-macro" onclick="backToTeacherMacro()" class="hidden bg-indigo-700 hover:bg-indigo-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white border border-indigo-500/50">
                     현황판 ↩
                 </button>
                 <button onclick="openIngameRuleModal()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 px-4 py-2.5 rounded-xl text-sm font-bold transition shadow-sm text-slate-200">
-                    상세 룰북 📖
+                    상세 룰북
                 </button>
                 <div class="text-2xl md:text-3xl text-emerald-400 font-title font-bold bg-slate-900 px-6 py-2.5 rounded-xl border border-slate-700 shadow-inner">
                     제 <span id="display-round" class="font-black font-body text-white">1</span> 라운드 
@@ -332,6 +341,7 @@
             <div class="relative flex items-center justify-between mb-2 px-2">
                 <h3 class="text-lg md:text-xl font-black text-slate-200 tracking-widest uppercase">Commons Ecosystem</h3>
                 <span id="hp-effect-badge" class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs md:text-sm text-slate-300 font-bold shadow-md">자정작용 대기</span>
+                <span id="hp-state-chip" class="absolute right-4 md:right-8 top-10 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-emerald-400/15 text-emerald-200 border border-emerald-300/20">안정</span>
             </div>
 
             <div class="h-12 md:h-16 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner relative">
@@ -466,6 +476,9 @@
         <!-- C. 결과 확인 및 마을 회의 -->
         <div id="section-reveal" class="w-full hidden flex-col items-center">
             <h3 class="text-3xl md:text-4xl font-title font-bold text-slate-200 mb-6 drop-shadow-md">라운드 결과 · 자치 회의</h3>
+            <div id="active-law-banner" class="hidden w-full mb-6 rounded-2xl border border-indigo-500/30 bg-indigo-950/40 px-5 py-4 text-center shadow-lg">
+                <p id="active-law-text" class="font-bold text-indigo-200"></p>
+            </div>
             
             <!-- 블라인드 결과창 -->
             <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-5 mb-10 px-2 w-full"></div>
@@ -600,7 +613,12 @@
         const getDatabase = () => firebase.database();
         const ref = (db, path = null) => (path === null || path === undefined || path === '' ? db.ref() : db.ref(path));
         const set = (r, value) => r.set(value);
-        const onValue = (r, callback) => r.on('value', callback);
+        // Firebase compat의 on()은 unsubscribe 함수를 반환하지 않습니다. 화면을 다시 열 때
+        // 기존 콜백을 해제하지 않으면 렌더러가 중복 실행되어 화면 상태가 꼬일 수 있습니다.
+        const onValue = (r, callback) => {
+            r.on('value', callback);
+            return () => r.off('value', callback);
+        };
         const update = (r, values) => r.update(values);
         const get = (r) => r.get();
         const remove = (r) => r.remove();
@@ -656,6 +674,23 @@
         
         const makeGroupPath = (className, groupNum) =>
             `classes/${dbPathSegment(className, '학급 이름')}/groups/${dbPathSegment(groupNum, '조 번호')}`;
+
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        })[char]);
+
+        function getGroupLeaderId(group) {
+            const players = group?.players || {};
+            const ids = Object.keys(players);
+            if (!ids.length) return null;
+            const savedLeader = group?.state?.leader;
+            if (savedLeader && Object.prototype.hasOwnProperty.call(players, savedLeader)) return savedLeader;
+            return ids.slice().sort((a, b) => {
+                const joinedA = players[a]?.joinedAt || Number.MAX_SAFE_INTEGER;
+                const joinedB = players[b]?.joinedAt || Number.MAX_SAFE_INTEGER;
+                return joinedA - joinedB || a.localeCompare(b);
+            })[0];
+        }
 
         function generateUUID() {
             return 'p_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
@@ -980,6 +1015,7 @@
 
                 Object.keys(groups).forEach(gId => {
                     const g = groups[gId];
+                    if (!g?.state) return;
                     const pCount = g.players ? Object.keys(g.players).length : 0;
                     let phaseText = '대기 중';
                     if (g.state.phase === 'betting') phaseText = '행동 선택';
@@ -995,8 +1031,8 @@
 
                     grid.innerHTML += `
                         <div class="glass-panel p-6 rounded-3xl hover:bg-slate-800/80 transition-all border border-slate-600 shadow-lg relative cursor-pointer" onclick="teacherViewGroup('${gId}')">
-                            <h3 class="text-2xl font-bold text-slate-100 mb-3 hover:text-emerald-300 transition">${gId}조 🔍</h3>
-                            <button onclick="event.stopPropagation(); forceResetGroup('${gId}')" class="absolute top-5 right-5 bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded shadow cursor-pointer font-bold relative z-50">초기화 🔄</button>
+                            <h3 class="text-2xl font-bold text-slate-100 mb-3 hover:text-emerald-300 transition">${escapeHtml(gId)}조</h3>
+                            <button type="button" onclick="event.stopPropagation(); forceResetGroup('${gId}')" class="absolute top-4 right-4 bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded shadow cursor-pointer font-bold z-50">초기화</button>
                             <div>
                                 <div class="text-sm text-slate-400 mb-4 flex justify-between font-bold">
                                     <span>참여: ${pCount}명</span>
@@ -1004,7 +1040,7 @@
                                 </div>
                                 <div class="bg-slate-900/80 p-4 rounded-xl text-center border border-slate-700 shadow-inner">
                                     <div class="text-xs text-slate-500 font-bold mb-1">R${g.state.round}/15 생태 점수</div>
-                                    <div class="text-4xl font-black ${hpColor} mt-1">${g.state.hp}🌿</div>
+                                    <div class="text-4xl font-black ${hpColor} mt-1">${g.state.hp}</div>
                                 </div>
                             </div>
                         </div>
@@ -1486,7 +1522,7 @@
             unsubscribeGroup = onValue(ref(db, safeGroupPath), async (snapshot) => {
                 try {
                     currentGroupData = snapshot.val();
-                    if(!currentGroupData) return;
+                    if (!currentGroupData?.state) return;
 
                     const data = currentGroupData;
                     const currentHp = data.state.hp;
@@ -1690,21 +1726,12 @@
                     const pKeys = Object.keys(players);
 
                     // ★ 방장(Leader) 자동 배정 & 유실 데이터 셀프 힐링 완벽 제어 ★
-                    let currentLeader = data.state.leader;
-                    if (!currentLeader || !pKeys.includes(currentLeader)) {
-                        if (pKeys.length > 0) {
-                            currentLeader = pKeys.slice().sort((a,b) => {
-                                const ta = data.players[a]?.joinedAt || Number.MAX_SAFE_INTEGER;
-                                const tb = data.players[b]?.joinedAt || Number.MAX_SAFE_INTEGER;
-                                return ta - tb || a.localeCompare(b);
-                            })[0];
-                            if (myPlayerId === currentLeader && !isTeacher) {
-                                runTransaction(ref(db, `classes/${myClass}/groups/${myGroup}/state/leader`), current => {
-                                    if (current && pKeys.includes(current)) return current;
-                                    return currentLeader;
-                                });
-                            }
-                        }
+                    const currentLeader = getGroupLeaderId(data);
+                    if (currentLeader && data.state.leader !== currentLeader && myPlayerId === currentLeader && !isTeacher) {
+                        runTransaction(ref(db, `classes/${myClass}/groups/${myGroup}/state/leader`), current => {
+                            if (current && pKeys.includes(current)) return current;
+                            return currentLeader;
+                        });
                     }
                     
                     // 만약 현재 학생이 DB에 없다면 (유령 상태) 강제로 다시 밀어넣기
@@ -1748,9 +1775,12 @@
 
                     // 🌟 화면 페이즈별 렌더링 (try-catch 적용) 🌟
                     const resultBtn = document.getElementById('btn-reveal');
+                    const nextRoundBtn = document.getElementById('btn-next-round');
                     if (currentPhase !== 'betting') {
                         if (resultBtn) { resultBtn.classList.add('hidden'); resultBtn.style.display = 'none'; }
                     }
+                    // 이전 페이즈의 inline display가 남아 다음 렌더를 가리지 않도록 매번 초기화합니다.
+                    if (nextRoundBtn) { nextRoundBtn.classList.add('hidden'); nextRoundBtn.style.display = 'none'; }
 
                     if (currentPhase === 'waiting') {
                         sWait.classList.remove('hidden'); sWait.style.display = 'flex';
@@ -1857,10 +1887,10 @@
 
                         const lawBanner = document.getElementById('active-law-banner');
                         const lawText = document.getElementById('active-law-text');
-                        if (data.state.activeLaw) {
+                        if (data.state.activeLaw && lawBanner && lawText) {
                             lawBanner.classList.remove('hidden'); lawBanner.style.display = 'block';
                             lawText.innerText = `이번 라운드 적용 · ${LAW_INFO[data.state.activeLaw]?.name || data.state.activeLaw}`;
-                        } else {
+                        } else if (lawBanner) {
                             lawBanner.classList.add('hidden'); lawBanner.style.display = 'none';
                         }
 
@@ -1983,7 +2013,7 @@
 
                         // 🌟 방장용 다음 라운드 버튼 강제 렌더링 🌟
                         const btnNext = document.getElementById('btn-next-round');
-                        if (isGroupLeader && (!data.state.sanctionVote || data.state.voteUsed)) {
+                        if ((isGroupLeader || isTeacher) && (!data.state.sanctionVote || data.state.voteUsed)) {
                             btnNext.classList.remove('hidden'); btnNext.style.display = 'block';
                         } else {
                             btnNext.classList.add('hidden'); btnNext.style.display = 'none';
@@ -1996,10 +2026,10 @@
         }
 
         document.getElementById('btn-start-group').addEventListener('click', async () => {
-            const snapshot = await get(ref(db, `classes/${myClass}/groups/${myGroup}/state`));
-            const state = snapshot.val();
-            if (state.phase !== 'waiting') return;
-            if (state.leader !== myPlayerId && !isTeacher) return alert("방장만 게임을 시작할 수 있습니다.");
+            const groupSnapshot = await get(ref(db, `classes/${myClass}/groups/${myGroup}`));
+            const group = groupSnapshot.val();
+            if (!group?.state || group.state.phase !== 'waiting') return;
+            if (getGroupLeaderId(group) !== myPlayerId && !isTeacher) return alert("방장만 게임을 시작할 수 있습니다.");
             const groupSnap = await get(ref(db, `classes/${myClass}/groups/${myGroup}/players`));
             if (!groupSnap.exists() || Object.keys(groupSnap.val() || {}).length === 0) return alert("아직 참가자가 없습니다.");
             
@@ -2016,7 +2046,7 @@
             if (!initial?.state || initial.state.phase !== 'betting') return;
             if (initial.state.resolvingRound && (Date.now() - initial.state.resolvingRound) < 10000) return;
             
-            const isGroupLeader = (initial.state.leader === myPlayerId);
+            const isGroupLeader = (getGroupLeaderId(initial) === myPlayerId);
             if (!isGroupLeader && !isTeacher) return;
 
             const claim = await runTransaction(ref(db, `classes/${myClass}/groups/${myGroup}/state`), current => {
@@ -2197,7 +2227,8 @@
         document.getElementById('btn-next-round').addEventListener('click', async () => {
             const snapshotGroup = await get(ref(db, `classes/${myClass}/groups/${myGroup}`));
             const data = snapshotGroup.val();
-            const isGroupLeader = (data.state.leader === myPlayerId);
+            if (!data?.state) return;
+            const isGroupLeader = (getGroupLeaderId(data) === myPlayerId);
             if (!isGroupLeader && !isTeacher) return;
             if (data.state.phase !== 'reveal' && data.state.phase !== 'extension_vote') return;
             if (data.state.sanctionVote && !data.state.voteUsed) return alert('진행 중인 회의 투표를 먼저 마쳐주세요.');
@@ -2218,29 +2249,32 @@
             const nextEvent = chooseNextEvent(nRound, data.state.hp, data.state.lastEvent || 'none');
             const nextLaw = data.state.pendingLaw || null;
             
-            data.state.round = nRound;
-            data.state.phase = 'betting';
-            data.state.activeLaw = nextLaw;
-            data.state.activeLawRound = nextLaw ? nRound : null;
-            data.state.lastLaw = nextLaw;
-            data.state.pendingLaw = null;
-            data.state.sanctionVote = null;
-            data.state.voteUsed = false; 
-            data.state.voteResult = null;
-            if (nextLaw !== 'subsidy_2' && nextLaw !== 'subsidy_3') data.state.subsidyAmount = 1;
-            else data.state.subsidyAmount = nextLaw === 'subsidy_3' ? 3 : 2;
-            data.state.activeEvent = nextEvent;
-            if (nextEvent !== 'none') data.state.lastEvent = nextEvent;
-            data.state.lastResolution = null;
-            data.state.bettingEndTime = Date.now() + 30000; 
-
+            // 오래된 전체 스냅샷을 다시 쓰면 직전에 반영된 투표·플레이어 상태를 덮어쓸 수 있습니다.
+            // 전환에 필요한 경로만 한 번에 갱신합니다.
+            const updates = {
+                'state/round': nRound,
+                'state/phase': 'betting',
+                'state/activeLaw': nextLaw,
+                'state/activeLawRound': nextLaw ? nRound : null,
+                'state/lastLaw': nextLaw,
+                'state/pendingLaw': null,
+                'state/sanctionVote': null,
+                'state/resolvingVote': null,
+                'state/resolvingRound': null,
+                'state/voteUsed': false,
+                'state/voteResult': null,
+                'state/subsidyAmount': nextLaw === 'subsidy_3' ? 3 : nextLaw === 'subsidy_2' ? 2 : 1,
+                'state/activeEvent': nextEvent,
+                'state/lastEvent': nextEvent === 'none' ? (data.state.lastEvent || null) : nextEvent,
+                'state/lastResolution': null,
+                'state/bettingEndTime': Date.now() + 30000
+            };
             Object.keys(data.players || {}).forEach(k => {
-                data.players[k].choice = "";
-                data.players[k].roundEarnings = 0;
-                data.players[k].sanctioned = false;
+                updates[`players/${k}/choice`] = '';
+                updates[`players/${k}/roundEarnings`] = 0;
+                updates[`players/${k}/sanctioned`] = false;
             });
-            
-            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
+            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), updates);
         });
     </script>
 </body>
