@@ -36,25 +36,31 @@
         }
 
         .eco-thriving {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.92) 50%, rgba(2,6,23,0.98) 100%),
-                              url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop');
+            background-image: linear-gradient(180deg, rgba(2,6,23,0.80) 0%, rgba(2,6,23,0.88) 50%, rgba(2,6,23,0.95) 100%),
+                              url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=82&w=2200&auto=format&fit=crop');
         }
         .eco-healthy {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.92) 50%, rgba(2,6,23,0.98) 100%),
-                              url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2000&auto=format&fit=crop');
+            background-image: linear-gradient(180deg, rgba(2,6,23,0.80) 0%, rgba(2,6,23,0.88) 50%, rgba(2,6,23,0.95) 100%),
+                              url('https://images.unsplash.com/photo-1511497584788-876760111969?q=82&w=2200&auto=format&fit=crop');
         }
+        /* 중간 점수대는 산악 대신 숲 가장자리/성긴 수풀 풍경으로 전환 */
         .eco-warning {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.92) 50%, rgba(2,6,23,0.98) 100%),
-                              url('https://images.unsplash.com/photo-1610878180933-123728745d22?q=80&w=2000&auto=format&fit=crop');
+            background-image: linear-gradient(180deg, rgba(8,16,18,0.76) 0%, rgba(8,18,18,0.84) 50%, rgba(2,6,23,0.94) 100%),
+                              url('https://images.unsplash.com/photo-1688123968768-cb608a7afb41?q=82&w=2200&auto=format&fit=crop');
         }
         .eco-danger {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.88) 0%, rgba(2,6,23,0.93) 50%, rgba(2,6,23,0.98) 100%),
-                              url('https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=2000&auto=format&fit=crop');
+            background-image: linear-gradient(180deg, rgba(30,18,13,0.68) 0%, rgba(30,16,12,0.78) 52%, rgba(10,7,8,0.91) 100%),
+                              url('https://images.unsplash.com/photo-1611167285815-22b6b60fa844?q=82&w=2200&auto=format&fit=crop');
         }
+        /* 0점에서도 검은 화면이 아니라 황무지가 남도록 오버레이를 과도하게 어둡히지 않음 */
         .eco-collapse {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.92) 0%, rgba(2,6,23,0.96) 50%, rgba(2,6,23,0.99) 100%),
-                              url('https://images.unsplash.com/photo-1603050875585-6447881cd095?q=80&w=2000&auto=format&fit=crop');
+            background-image: linear-gradient(180deg, rgba(48,18,12,0.55) 0%, rgba(46,21,12,0.70) 48%, rgba(15,8,8,0.87) 100%),
+                              url('https://images.unsplash.com/photo-1761925531821-52e638fc849c?q=82&w=2200&auto=format&fit=crop');
         }
+        .eco-danger::after,
+        .eco-collapse::after { content:''; position:fixed; inset:0; pointer-events:none; box-shadow:inset 0 0 12vw rgba(239,68,68,.22); animation:threatPulse 2.7s ease-in-out infinite; }
+        .eco-collapse::after { box-shadow:inset 0 0 18vw rgba(220,38,38,.38), inset 0 -12vh 20vh rgba(69,10,10,.24); }
+        @keyframes threatPulse { 50% { box-shadow:inset 0 0 18vw rgba(239,68,68,.42); } }
         
         .font-title { font-family: 'ElegantSerif', serif !important; }
         
@@ -94,15 +100,41 @@
 
         /* JS가 라운드마다 className을 교체하므로 Tailwind 기본 클래스가 사라져도
            생태 점수 게이지의 높이·색상·전환 효과가 유지되도록 독립 스타일을 둡니다. */
-        .hp-bar { height:100%; min-width:0; transition:width 0.8s ease, background 0.8s ease, box-shadow 0.8s ease; }
-        .hp-bar-healthy { background:linear-gradient(90deg, #15803d 0%, #22c55e 55%, #86efac 100%); }
-        .hp-bar-warning { background:linear-gradient(90deg, #a16207 0%, #eab308 55%, #fde68a 100%); }
-        .hp-bar-critical { background:linear-gradient(90deg, #991b1b 0%, #ef4444 55%, #fca5a5 100%); }
-        .hp-bar-collapse { background:linear-gradient(90deg, #334155 0%, #64748b 100%); }
-        .hp-bar-glow { box-shadow:0 0 18px rgba(255,255,255,.24); }
+        .hp-bar { position:relative; height:100%; min-width:0; overflow:hidden; background-size:220% 100%; transition:width .8s ease, background .8s ease, box-shadow .8s ease; }
+        .hp-bar::after { content:''; position:absolute; inset:-30% -15%; background:linear-gradient(105deg, transparent 32%, rgba(255,255,255,.26) 49%, transparent 66%); transform:translateX(-70%); animation:barSheen 3.6s ease-in-out infinite; }
+        .hp-bar-healthy { background:linear-gradient(90deg, #15803d 0%, #22c55e 38%, #14b8a6 72%, #86efac 100%); }
+        .hp-bar-warning { background:linear-gradient(90deg, #92400e 0%, #eab308 45%, #f59e0b 72%, #fde68a 100%); }
+        .hp-bar-critical { background:linear-gradient(90deg, #7f1d1d 0%, #ef4444 45%, #f97316 74%, #fca5a5 100%); }
+        .hp-bar-collapse { background:linear-gradient(90deg, #451a03 0%, #7f1d1d 52%, #475569 100%); }
+        .hp-bar-glow { box-shadow:0 0 18px rgba(255,255,255,.20); animation:ecosystemPulse 2.6s ease-in-out infinite, barFlow 6s linear infinite; }
+        @keyframes ecosystemPulse { 50% { filter:brightness(1.16) saturate(1.10); box-shadow:0 0 28px rgba(255,255,255,.34); } }
+        @keyframes barFlow { to { background-position:220% 0; } }
+        @keyframes barSheen { 0%,30% { transform:translateX(-80%); opacity:0; } 48% { opacity:.72; } 70%,100% { transform:translateX(80%); opacity:0; } }
+
+        .player-card { position:relative; overflow:hidden; isolation:isolate; }
+        .player-card > * { position:relative; z-index:2; }
+        .player-card::before { content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.65; }
+        .player-card-tier-2 { border-color:rgba(245,158,11,.82)!important; background:linear-gradient(145deg, rgba(120,53,15,.60), rgba(15,23,42,.95))!important; box-shadow:0 0 24px rgba(245,158,11,.22), inset 0 1px 0 rgba(251,191,36,.16)!important; }
+        .player-card-tier-2::before { background:radial-gradient(circle at 82% 18%, rgba(251,191,36,.24), transparent 32%), repeating-linear-gradient(90deg, transparent 0 13px, rgba(245,158,11,.035) 13px 14px); }
+        .player-card-tier-3 { border-color:rgba(45,212,191,.90)!important; background:linear-gradient(145deg, rgba(13,92,87,.58), rgba(15,23,42,.95))!important; box-shadow:0 0 30px rgba(45,212,191,.27), inset 0 1px 0 rgba(153,246,228,.18)!important; animation:tierThreeBreath 3.4s ease-in-out infinite; }
+        .player-card-tier-3::before { background:radial-gradient(circle at 82% 18%, rgba(94,234,212,.28), transparent 34%), linear-gradient(120deg, transparent 35%, rgba(45,212,191,.08) 50%, transparent 65%); }
+        @keyframes tierThreeBreath { 50% { box-shadow:0 0 38px rgba(45,212,191,.36), inset 0 1px 0 rgba(153,246,228,.24); } }
+        .tier-emblem { position:absolute!important; right:10px; top:9px; z-index:3!important; font-size:10px; font-weight:900; letter-spacing:.12em; opacity:.72; }
+        .tech-panel-tier-2 { border-color:rgba(245,158,11,.55)!important; box-shadow:0 0 28px rgba(245,158,11,.14)!important; }
+        .tech-panel-tier-3 { border-color:rgba(45,212,191,.62)!important; box-shadow:0 0 34px rgba(45,212,191,.18)!important; }
+
+        .notice-card { min-height:96px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .upgrade-toast { position:fixed; top:84px; left:50%; transform:translateX(-50%); width:min(92vw,720px); z-index:48; backdrop-filter:blur(16px); }
+        .upgrade-toast-pop { animation:upgradeToastPop .55s cubic-bezier(.2,.9,.2,1.15) both; }
+        @keyframes upgradeToastPop { from { opacity:0; transform:translate(-50%,-18px) scale(.94); } to { opacity:1; transform:translate(-50%,0) scale(1); } }
+
+        .event-impact { animation:eventImpact .7s ease-out both; }
+        .impact-focus { position:relative; z-index:6; animation:impactFocus 1.05s cubic-bezier(.2,.8,.2,1) both!important; }
+        @keyframes eventImpact { 0% { transform:scale(.96); opacity:.2; } 60% { transform:scale(1.015); } 100% { transform:scale(1); opacity:1; } }
+        @keyframes impactFocus { 0% { transform:scale(.98); filter:brightness(.9); } 38% { transform:scale(1.055); filter:brightness(1.45) saturate(1.25); box-shadow:0 0 0 2px rgba(255,255,255,.25), 0 0 42px rgba(255,255,255,.34); } 100% { transform:scale(1); filter:none; } }
 
         #event-splash-screen { pointer-events:none !important; visibility:hidden; }
-        #event-splash-screen.opacity-0 { visibility:hidden !important; display:none !important; }
+        #event-splash-screen.opacity-0 { opacity:0 !important; }
         #modal-ingame-rules.hidden { display:none !important; }
 
         .input-center { 
@@ -338,10 +370,12 @@
         
         <!-- 🌿 생태 점수 바 (심플하고 아름다운 Tailwind + 심장박동 애니메이션 롤백 복구) -->
         <div class="w-full glass-panel rounded-3xl mb-8 overflow-hidden shadow-xl p-5 flex flex-col gap-4 border border-slate-700">
-            <div class="relative flex items-center justify-between mb-2 px-2">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2 px-2">
                 <h3 class="text-lg md:text-xl font-black text-slate-200 tracking-widest uppercase">Commons Ecosystem</h3>
-                <span id="hp-effect-badge" class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs md:text-sm text-slate-300 font-bold shadow-md">자정작용 대기</span>
-                <span id="hp-state-chip" class="absolute right-4 md:right-8 top-10 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-emerald-400/15 text-emerald-200 border border-emerald-300/20">안정</span>
+                <div class="flex items-center gap-2">
+                    <span id="hp-state-chip" class="px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-emerald-400/15 text-emerald-200 border border-emerald-300/20">안정</span>
+                    <span id="hp-effect-badge" class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs md:text-sm text-slate-300 font-bold shadow-md">자정작용 대기</span>
+                </div>
             </div>
 
             <div class="h-12 md:h-16 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner relative">
@@ -358,19 +392,23 @@
             </div>
         </div>
 
-        <!-- 돌발 변수 이벤트 배너 -->
-        <div id="random-event-banner" class="w-full mb-6 text-center shadow-lg p-5 rounded-2xl border transition-all duration-500 hidden">
-            <h3 id="event-title" class="text-2xl md:text-3xl font-black mb-2"></h3>
-            <p id="event-desc" class="text-base md:text-lg font-bold"></p>
-        </div>
-
-        <!-- 적용 법안 안내 배너 -->
-        <div id="active-law-notice" class="w-full mb-6 hidden rounded-2xl border border-indigo-500/30 bg-indigo-950/40 px-5 py-4 shadow-lg">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-center gap-3">
-                <div class="text-indigo-300 font-bold text-sm uppercase tracking-[0.16em]">이번 라운드 적용 규범</div>
-                <div id="active-law-notice-text" class="text-base md:text-xl text-slate-100 font-black"></div>
+        <!-- 이벤트/규범은 좌우 2열로 압축해 세로 길이를 줄입니다. 둘 중 하나만 있으면 자동 1열 확장 -->
+        <div id="round-notice-row" class="w-full mb-5 hidden grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div id="random-event-banner" class="notice-card text-center shadow-lg px-5 py-4 rounded-2xl border transition-all duration-500 hidden">
+                <div class="text-[11px] font-black tracking-[0.18em] text-sky-200/80 mb-1">EVENT · 이번 라운드</div>
+                <h3 id="event-title" class="text-lg md:text-xl font-black mb-1"></h3>
+                <p id="event-desc" class="text-xs md:text-sm font-bold leading-relaxed"></p>
             </div>
-            <p id="active-law-notice-desc" class="mt-2 text-sm md:text-base text-slate-400 font-medium text-center"></p>
+            <div id="active-law-notice" class="notice-card hidden rounded-2xl border border-indigo-500/30 bg-indigo-950/40 px-5 py-4 shadow-lg text-center">
+                <div class="text-indigo-300 font-bold text-[11px] uppercase tracking-[0.18em] mb-1">NORM · 이번 라운드</div>
+                <div id="active-law-notice-text" class="text-lg md:text-xl text-slate-100 font-black"></div>
+                <p id="active-law-notice-desc" class="mt-1 text-xs md:text-sm text-slate-400 font-medium leading-relaxed"></p>
+            </div>
+        </div>
+        <!-- 업그레이드는 레이아웃을 밀지 않는 전체 공지 토스트 -->
+        <div id="upgrade-notice" class="upgrade-toast hidden rounded-2xl border border-amber-300/45 bg-amber-950/90 px-6 py-4 text-center shadow-[0_18px_55px_rgba(0,0,0,.48)]">
+            <div class="text-[10px] tracking-[0.22em] text-amber-300/80 font-black mb-1">INDUSTRY UPGRADE</div>
+            <span id="upgrade-notice-text" class="font-black text-amber-100 text-base md:text-lg"></span>
         </div>
 
         <!-- 정산 텍스트 배너 -->
@@ -391,8 +429,8 @@
             <h3 class="text-3xl font-bold text-yellow-400 mb-4">기본 15라운드 완료!</h3>
             <p class="font-medium text-slate-300 text-xl mb-8">여기서 순위를 확정할까요, 아니면 계속 도전할까요?</p>
             <div class="flex justify-center gap-6 mb-4 w-full">
-                <button type="button" onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-4 rounded-xl font-bold text-xl text-white transition shadow-lg hover:scale-105">계속 도전</button>
-                <button type="button" onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-10 py-4 rounded-xl font-bold text-xl text-white transition border border-slate-500 shadow hover:scale-105">종료하기</button>
+                <button type="button" id="btn-ext-extend" onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-4 rounded-xl font-bold text-xl text-white transition shadow-lg hover:scale-105">계속 도전</button>
+                <button type="button" id="btn-ext-end" onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-10 py-4 rounded-xl font-bold text-xl text-white transition border border-slate-500 shadow hover:scale-105">종료하기</button>
             </div>
             <div class="font-bold text-indigo-300 text-base mt-4" id="ext-vote-status">찬성: 0명 / 반대: 0명</div>
         </div>
@@ -448,7 +486,7 @@
             </button>
 
             <!-- 개인 테크 패널 -->
-            <div class="w-full glass-panel border border-slate-600 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-lg">
+            <div id="my-tech-panel" class="w-full glass-panel border border-slate-600 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-lg transition-all duration-500">
                 <div>
                     <h4 class="text-xl font-bold text-slate-200 mb-2" id="my-tech-title">나의 생산 방식: 1단계 [전통]</h4>
                     <p class="font-bold text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg inline-block shadow-inner" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
@@ -569,9 +607,10 @@
                 <div class="bg-slate-800/50 p-6 rounded-2xl shadow-inner border border-slate-700/50">
                     <h4 class="text-xl font-bold text-emerald-400 mb-3">3. 자치 회의 & 내부 고발 시스템</h4>
                     <p class="text-slate-300 mb-2">• <strong class="text-indigo-300 font-bold">1안건 선점:</strong> 회의 안건은 라운드당 딱 1개만 상정됩니다. 안건이 발의되면 15초 의무토론 후 15초 실제 투표를 진행합니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-violet-300 font-bold">규범 선택지:</strong> 수익 삭감·보상금뿐 아니라 공동 복원기금, 환경정보 공개, 저충격 생산 기준, 배급제, 환경 부담금, 공장 중단 등 서로 다른 방식으로 공동체를 조정할 수 있습니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-rose-400 font-bold">내부고발 룰:</strong> '돌보기 결의안' 발동 시 이를 어기고 욕심/적당히를 선택하면 <strong>시스템이 당신의 정체와 전 재산을 강제로 폭로(주홍글씨)</strong>합니다. 이 폭로 상태는 돌보기를 선택해 신뢰를 회복하기 전까지 계속 유지됩니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-yellow-400 font-bold">무응답 페널티:</strong> 선택 제한 시간(30초) 초과 시 '적당히' 파괴력(-2)은 주면서 수익은 0💰이 되는 '태만' 처리를 받습니다.</p>
-                    <p class="text-slate-300 mb-2">• <strong class="text-sky-300 font-bold">돌발 사건:</strong> 2라운드부터 사건 확률이 점진적으로 증가합니다. 자원 풍년, 생태 회복 운동, 가뭄, 산불, 홍수, 폭염이 등장하며 숲의 상태가 나쁠수록 재난 쪽으로 확률이 기웁니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-sky-300 font-bold">돌발 사건:</strong> 2라운드부터 사건 확률이 점진적으로 증가합니다. 풍년·봄비·복원 지원 같은 호재와 가뭄·산불·홍수·폭염·병충해·자원 가격 급등이 섞여 등장하며, 숲이 약할수록 재난 쪽으로 확률이 기웁니다.</p>
                     <p class="text-slate-300 mb-0">• <strong class="text-emerald-300 font-bold">숲의 자정작용:</strong> 특별한 재난이 없다면 매 라운드 생태 점수가 스스로 회복됩니다. 생태 점수 70 이상은 +6, 40~69는 +4, 1~39는 +2이며 가뭄에는 회복이 멈춥니다. 시작 생태 점수 100은 조원 수에 따른 유불리를 막기 위해 동일하게 유지하며, 행동 효과는 참여 인원에 맞춰 정규화됩니다.</p>
                 </div>
             </div>
@@ -589,19 +628,26 @@
     <script>
         // 🌟 모든 전역 변수 및 상수 안전 배치 🌟
         const EVENT_INFO = {
-            none: { name: '평온한 계절', desc: '특별한 사건 없이 숲의 자정작용이 이어집니다.', tone: 'emerald' },
-            boom: { name: '자원 풍년', desc: "이번 라운드 '적당히' 선택의 수익이 2 증가합니다.", tone: 'amber' },
-            activist: { name: '생태 회복 운동', desc: "이번 라운드 '돌보기'의 회복량이 5 증가합니다.", tone: 'emerald' },
-            drought: { name: '극심한 가뭄', desc: '이번 라운드 숲의 자정작용이 멈춥니다.', tone: 'rose' },
-            wildfire: { name: '산불 건조주의보', desc: "이번 라운드 '욕심내기'마다 추가 파괴 5가 발생합니다.", tone: 'rose' },
-            flood: { name: '집중호우와 홍수', desc: '폭우로 공유지의 일부가 직접 훼손됩니다. 생태 점수가 8 감소합니다.', tone: 'sky' },
-            heatwave: { name: '장기 폭염', desc: '폭염으로 숲의 자정작용이 2 감소합니다.', tone: 'orange' }
+            none: { name: '평온한 계절', desc: '특별한 사건 없이 숲의 자정작용이 이어집니다.', tone: 'emerald', target: 'forest' },
+            boom: { name: '자원 풍년', desc: "이번 라운드 '적당히' 수익이 +2 증가합니다.", tone: 'amber', target: 'need' },
+            activist: { name: '생태 회복 운동', desc: "이번 라운드 '돌보기' 회복량이 +5 증가합니다.", tone: 'emerald', target: 'care' },
+            rain: { name: '회복의 봄비', desc: '메마른 땅에 비가 내려 정산 시 숲이 추가로 6 회복합니다.', tone: 'sky', target: 'hp' },
+            eco_grant: { name: '생태복원 지원금', desc: "이번 라운드 '돌보기'를 선택하면 개인 자산 +1을 받습니다.", tone: 'emerald', target: 'care' },
+            drought: { name: '극심한 가뭄', desc: '이번 라운드 숲의 자정작용이 완전히 멈춥니다.', tone: 'rose', target: 'hp' },
+            wildfire: { name: '산불 건조주의보', desc: "이번 라운드 '욕심내기'마다 추가 파괴 5가 발생합니다.", tone: 'rose', target: 'greed' },
+            flood: { name: '집중호우와 홍수', desc: '정산 시 공유지가 직접 훼손되어 생태 점수가 추가로 감소합니다.', tone: 'sky', target: 'hp' },
+            heatwave: { name: '장기 폭염', desc: '이번 라운드 숲의 자정작용이 2 감소합니다.', tone: 'orange', target: 'hp' },
+            pest: { name: '병충해 확산', desc: "이번 라운드 '적당히'의 숲 피해가 2 더 커집니다.", tone: 'orange', target: 'need' },
+            market_rush: { name: '자원 가격 급등', desc: "'욕심내기' 수익 +2, 대신 파괴도 +3. 유혹이 커집니다.", tone: 'amber', target: 'greed' }
         };
 
         const LAW_INFO = {
             tax: { name: '욕심 수익 삭감', desc: "이번 라운드 '욕심내기' 수익이 절반으로 줄어듭니다." },
             eco_tax: { name: '환경 부담금', desc: "'욕심내기' 수익에서 2를 부담금으로 내고, 숲 회복에 기여합니다." },
-            mandatory_care: { name: '돌보기 결의안', desc: "돌보지 않은 플레이어는 행동과 자산이 공개되며, 지속적으로 신뢰를 잃습니다." },
+            mandatory_care: { name: '돌보기 결의안', desc: "돌보지 않은 플레이어는 행동과 자산이 공개되어 신뢰를 잃습니다." },
+            transparency: { name: '환경정보 공개제', desc: "'욕심내기'를 선택한 플레이어의 행동과 자산이 공개됩니다." },
+            restoration_fund: { name: '공동 복원기금', desc: '이번 라운드 모든 조원이 최대 1💰씩 분담하고 숲 복원에 투자합니다.' },
+            low_impact: { name: '저충격 생산 기준', desc: "'욕심내기'의 생태 파괴량을 5 줄입니다(최소 파괴 4)." },
             rationing: { name: '자원 배급제', desc: "이번 라운드 '욕심내기'가 봉쇄됩니다." },
             tech_ban: { name: '공장 임시 중단', desc: '이번 라운드 생산 기술 효과가 1단계 수준으로 제한됩니다.' },
             subsidy_2: { name: '돌보기 보상금 2원', desc: '돌보기 기여자에게 조원들이 지급하는 보조금이 2원으로 적용됩니다.' },
@@ -664,6 +710,8 @@
         let unsubscribeClassMacro = null;
         let lastHp = null;
         let currentPhase = 'waiting';
+        let lastUpgradeSeenAt = 0;
+        let lastEventImpactKey = '';
 
         const dbPathSegment = (value, label) => {
             const v = String(value ?? '').trim();
@@ -702,10 +750,14 @@
             if (!bgDiv) return;
             
             let bgClass = '';
-            if (hp >= 70) {
+            if (hp >= 85) {
                 bgClass = 'eco-thriving';
+            } else if (hp >= 65) {
+                bgClass = 'eco-healthy';
             } else if (hp >= 40) {
                 bgClass = 'eco-warning';
+            } else if (hp > 0) {
+                bgClass = 'eco-danger';
             } else {
                 bgClass = 'eco-collapse';
             }
@@ -739,7 +791,7 @@
                 if(timerEl) timerEl.innerText = remain;
 
                 const myPlayerInfo = currentGroupData.players?.[myPlayerId];
-                const hasSubmitted = myPlayerInfo && myPlayerInfo.choice && myPlayerInfo.choice !== "";
+                const hasSubmitted = hasSubmittedForRound(myPlayerInfo, state);
                 
                 if (remain === 0 && !hasSubmitted && !isTeacher && myPlayerId) {
                     localChoice = 'timeout';
@@ -750,9 +802,7 @@
                     let allChosen = true;
                     if(pKeys.length === 0) allChosen = false;
                     pKeys.forEach(k => {
-                        if (!currentGroupData.players[k].choice || currentGroupData.players[k].choice === "") {
-                            allChosen = false;
-                        }
+                        if (!hasSubmittedForRound(currentGroupData.players[k], state)) allChosen = false;
                     });
                     
                     const btnRev = document.getElementById('btn-reveal');
@@ -1201,18 +1251,103 @@
             return regen;
         }
 
+        // 선택값이 이전 라운드에서 남아 있어도 새 라운드 제출로 오인하지 않도록 라운드/시각을 함께 검증합니다.
+        function hasSubmittedForRound(player, state) {
+            if (!player || !player.choice) return false;
+            const roundNum = Number(state?.round || 0);
+            if (Number(player.choiceRound || 0) === roundNum) return true;
+            const roundStartedAt = Number(state?.roundStartedAt || 0);
+            const submittedAt = Number(player.choiceSubmittedAt || 0);
+            // 구버전 세션과의 호환: 라운드 시작 시각 자체가 없는 기존 게임만 choice 문자열을 인정
+            if (!roundStartedAt && player.choiceRound == null && !submittedAt) return true;
+            return !!(roundStartedAt && submittedAt >= roundStartedAt);
+        }
+
+        function syncRoundNoticeLayout(phase='betting') {
+            const row = document.getElementById('round-notice-row');
+            if (!row) return;
+            const eventVisible = !document.getElementById('random-event-banner')?.classList.contains('hidden');
+            const lawVisible = !document.getElementById('active-law-notice')?.classList.contains('hidden');
+            const visibleCount = (eventVisible ? 1 : 0) + (lawVisible ? 1 : 0);
+            if (phase !== 'betting' || visibleCount === 0) {
+                row.classList.add('hidden'); row.style.display = 'none';
+                return;
+            }
+            row.classList.remove('hidden'); row.style.display = 'grid';
+            row.classList.toggle('md:grid-cols-2', visibleCount === 2);
+            row.classList.toggle('md:grid-cols-1', visibleCount !== 2);
+        }
+
+        function getEventImpactElement(eventType) {
+            const target = EVENT_INFO[eventType]?.target;
+            if (target === 'greed') return document.getElementById('action-btn-greed');
+            if (target === 'need') return document.getElementById('action-btn-need');
+            if (target === 'care') return document.getElementById('action-btn-care');
+            if (target === 'hp') return document.getElementById('hp-bar')?.parentElement || document.getElementById('hp-bar');
+            return document.getElementById('forest-story-banner');
+        }
+
+        function emphasizeEventTarget(eventType, roundNum) {
+            const key = `${roundNum}:${eventType}`;
+            if (!eventType || eventType === 'none' || lastEventImpactKey === key) return;
+            lastEventImpactKey = key;
+            const target = getEventImpactElement(eventType);
+            if (!target) return;
+            target.classList.remove('impact-focus');
+            void target.offsetWidth;
+            target.classList.add('impact-focus');
+            setTimeout(() => target.classList.remove('impact-focus'), 1150);
+        }
+
+        async function startNextRoundAtomic(data, nextRound) {
+            const nextLaw = data.state.pendingLaw || null;
+            const nextEvent = chooseNextEvent(nextRound, data.state.hp, data.state.lastEvent || 'none');
+            const startedAt = Date.now();
+            const updates = {
+                'state/round': nextRound,
+                'state/phase': 'betting',
+                'state/extVote': null,
+                'state/activeLaw': nextLaw,
+                'state/activeLawRound': nextLaw ? nextRound : null,
+                'state/lastLaw': nextLaw,
+                'state/pendingLaw': null,
+                'state/sanctionVote': null,
+                'state/resolvingVote': null,
+                'state/resolvingRound': null,
+                'state/voteUsed': false,
+                'state/voteResult': null,
+                'state/subsidyAmount': nextLaw === 'subsidy_3' ? 3 : nextLaw === 'subsidy_2' ? 2 : 1,
+                'state/activeEvent': nextEvent,
+                'state/lastEvent': nextEvent === 'none' ? (data.state.lastEvent || null) : nextEvent,
+                'state/lastResolution': null,
+                'state/roundStartedAt': startedAt,
+                'state/bettingEndTime': startedAt + 30000,
+                'state/transitionId': `${nextRound}-${startedAt}`
+            };
+            Object.keys(data.players || {}).forEach(k => {
+                updates[`players/${k}/choice`] = '';
+                updates[`players/${k}/choiceRound`] = null;
+                updates[`players/${k}/choiceSubmittedAt`] = null;
+                updates[`players/${k}/roundEarnings`] = 0;
+                updates[`players/${k}/sanctioned`] = false;
+            });
+            // 상태 전환과 모든 플레이어 선택 초기화를 한 번의 multi-location update로 동기화
+            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), updates);
+        }
+
         function chooseNextEvent(roundNum, hp, lastEvent='none') {
             if (roundNum <= 1) return 'none';
-            const baseChance = Math.min(0.75, 0.50 + Math.max(0, roundNum - 2) * 0.02);
+            // 사건은 긴장감을 주되 매 라운드 재난처럼 느껴지지 않게 조정합니다.
+            const baseChance = Math.min(0.58, 0.24 + Math.max(0, roundNum - 2) * 0.018);
             const crisisBonus = hp < 40 ? 0.10 : hp < 70 ? 0.04 : 0;
-            const eventChance = Math.min(0.85, baseChance + crisisBonus);
+            const eventChance = Math.min(0.68, baseChance + crisisBonus);
             if (Math.random() >= eventChance) return 'none';
 
             let pool = hp >= 70
-                ? [['boom', 3], ['activist', 3], ['drought', 1], ['wildfire', 1], ['flood', 1], ['heatwave', 1]]
+                ? [['boom', 2.4], ['activist', 2.2], ['rain', 1.8], ['eco_grant', 1.5], ['market_rush', 1.2], ['drought', .8], ['wildfire', .8], ['flood', .7], ['heatwave', .8], ['pest', .8]]
                 : hp >= 40
-                ? [['boom', 2], ['activist', 2], ['drought', 2], ['wildfire', 2], ['flood', 2], ['heatwave', 2]]
-                : [['drought', 3], ['wildfire', 3], ['flood', 2], ['heatwave', 2], ['activist', 1]];
+                ? [['boom', 1.5], ['activist', 1.5], ['rain', 1.4], ['eco_grant', 1.0], ['market_rush', 1.1], ['drought', 1.4], ['wildfire', 1.4], ['flood', 1.2], ['heatwave', 1.3], ['pest', 1.2]]
+                : [['rain', 1.4], ['activist', 1.1], ['eco_grant', .7], ['market_rush', .6], ['drought', 2.1], ['wildfire', 2.0], ['flood', 1.5], ['heatwave', 1.7], ['pest', 1.4]];
 
             if (lastEvent && lastEvent !== 'none') pool = pool.map(([name, weight]) => [name, name === lastEvent ? weight * 0.35 : weight]);
             const totalWeight = pool.reduce((sum, item) => sum + item[1], 0);
@@ -1232,7 +1367,7 @@
             return 0.45;
         }
 
-        function showEventSplash(evType) {
+        function showEventSplash(evType, roundNum=currentLocalRound) {
             const splash = document.getElementById('event-splash-screen');
             const content = document.getElementById('event-splash-content');
             const sIcon = document.getElementById('event-splash-icon');
@@ -1240,33 +1375,36 @@
             const sDesc = document.getElementById('event-splash-desc');
 
             const info = EVENT_INFO[evType] || EVENT_INFO.none;
-            sIcon.innerText = info.tone === 'rose' ? 'CRISIS' : info.tone === 'amber' ? 'HARVEST' : info.tone === 'sky' ? 'FLOOD' : info.tone === 'orange' ? 'HEAT' : 'CHANGE';
+            const iconMap = { rose:'CRISIS', amber:'SHIFT', emerald:'RECOVER', sky:'WEATHER', orange:'ALERT' };
+            sIcon.innerText = iconMap[info.tone] || 'CHANGE';
             const toneClass = { rose: 'text-rose-400', amber: 'text-amber-300', emerald: 'text-emerald-300', sky: 'text-sky-300', orange: 'text-orange-300' }[info.tone] || 'text-emerald-300';
-            
             sTitle.innerText = info.name;
-            sTitle.className = `text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl ${toneClass} whitespace-nowrap font-title text-white`;
+            sTitle.className = `text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl ${toneClass} whitespace-nowrap font-title`;
             sDesc.innerText = info.desc;
 
-            splash.classList.remove('opacity-0', 'pointer-events-none'); 
-            splash.style.display='flex'; 
-            splash.style.visibility='visible';
-            
-            setTimeout(() => {
+            splash.style.display = 'flex';
+            splash.style.visibility = 'visible';
+            splash.classList.remove('opacity-0');
+            content.classList.remove('scale-125', 'opacity-0');
+            content.classList.add('scale-75', 'opacity-0');
+            requestAnimationFrame(() => requestAnimationFrame(() => {
                 content.classList.remove('scale-75', 'opacity-0');
                 content.classList.add('scale-100', 'opacity-100');
-            }, 50);
+            }));
 
             setTimeout(() => {
                 content.classList.remove('scale-100', 'opacity-100');
                 content.classList.add('scale-125', 'opacity-0');
-                splash.classList.add('opacity-0', 'pointer-events-none'); 
-                splash.style.display='none'; 
-                splash.style.visibility='hidden';
-                setTimeout(() => {
-                    content.classList.remove('scale-125');
-                    content.classList.add('scale-75');
-                }, 500);
-            }, 2500);
+                splash.classList.add('opacity-0');
+            }, 1750);
+
+            setTimeout(() => {
+                splash.style.visibility = 'hidden';
+                splash.style.display = 'none';
+                content.classList.remove('scale-125');
+                content.classList.add('scale-75');
+                emphasizeEventTarget(evType, roundNum);
+            }, 2250);
         }
 
         window.selectActionLocal = (choice) => {
@@ -1308,8 +1446,13 @@
         window.confirmActionSubmit = async (auto = false) => {
             if(auto) localChoice = 'timeout';
             if(!localChoice) return;
-            try { 
-                await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myPlayerId}`), { choice: localChoice }); 
+            try {
+                const roundNum = Number(currentGroupData?.state?.round || currentLocalRound || 0);
+                await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myPlayerId}`), {
+                    choice: localChoice,
+                    choiceRound: roundNum,
+                    choiceSubmittedAt: Date.now()
+                });
                 const subBtn = document.getElementById('btn-submit-action');
                 if(subBtn) {
                     subBtn.disabled = true; subBtn.innerText = "제출 완료";
@@ -1334,7 +1477,16 @@
                     return { ...playerData, gold: (playerData.gold || 0) - cost, techTier: targetTier };
                 });
                 if (!result.committed) return;
-                alert(targetTier === 2 ? "🏭 2단계 산업화 완료! 수익이 폭증하지만 숲 파괴 데미지도 커집니다!" : "🔬 3단계 생태전환 완료! 파괴를 최소화하며 안정적인 수익을 유지합니다.");
+                const upgraded = result.snapshot.val();
+                await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
+                    lastUpgrade: {
+                        playerId: myPlayerId,
+                        playerName: upgraded?.nickname || myName,
+                        tier: targetTier,
+                        cost: targetTier === 2 ? 15 : 30,
+                        announcedAt: Date.now()
+                    }
+                });
             } catch (e) { alert("업그레이드 실패"); }
         };
 
@@ -1468,7 +1620,10 @@
         }
 
         window.submitExtensionVote = async (choice) => {
-            try { await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/extVote/votes`), { [myPlayerId]: choice }); } catch (err) {}
+            if (!myPlayerId) return;
+            try {
+                await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/extVote/votes`), { [myPlayerId]: choice });
+            } catch (err) { console.error('연장 투표 전송 실패', err); }
         };
 
         window.resetGame = async () => {
@@ -1492,11 +1647,13 @@
                     'state/hp': 100, 'state/round': 1, 'state/phase': 'waiting',
                     'state/activeLaw': null, 'state/lastLaw': null, 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/voteUsed': false,
                     'state/sanctionVote': null, 'state/resolvingVote': null, 'state/resolvingRound': null, 'state/voteResult': null, 'state/extVote': null,
-                    'state/subsidyAmount': 1, 'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/lastEvent': null, 'state/lastResolution': null, 'state/leader': leader
+                    'state/subsidyAmount': 1, 'state/bettingEndTime': null, 'state/roundStartedAt': null, 'state/transitionId': null,
+                    'state/activeEvent': 'none', 'state/lastEvent': null, 'state/lastResolution': null, 'state/lastUpgrade': null, 'state/leader': leader
                 };
                 
                 pKeys.forEach(name => {
-                    updates[`players/${name}/choice`] = ''; updates[`players/${name}/gold`] = 0; updates[`players/${name}/techTier`] = 1;
+                    updates[`players/${name}/choice`] = ''; updates[`players/${name}/choiceRound`] = null; updates[`players/${name}/choiceSubmittedAt`] = null;
+                    updates[`players/${name}/gold`] = 0; updates[`players/${name}/techTier`] = 1;
                     updates[`players/${name}/exposed`] = false; updates[`players/${name}/sanctioned`] = false; updates[`players/${name}/roundEarnings`] = 0;
                     updates[`players/${name}/stats`] = { greed: 0, need: 0, care: 0 };
                 });
@@ -1554,22 +1711,22 @@
 
                     if (currentHp >= 70) {
                         hpBarEl.className = 'hp-bar hp-bar-healthy hp-bar-glow';
-                        if (hpStateChip) { hpStateChip.innerText = '안정'; hpStateChip.className = 'absolute right-4 md:right-8 top-3 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-emerald-400/15 text-emerald-200 border border-emerald-300/20'; }
+                        if (hpStateChip) { hpStateChip.innerText = '안정'; hpStateChip.className = 'inline-flex items-center px-3 py-1.5 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-emerald-400/15 text-emerald-200 border border-emerald-300/20'; }
                         storyBanner.innerText = `울창한 공유지 · 자정작용 +${naturalRegenPreview} (숲이 스스로 회복합니다)`;
                         storyBanner.className = 'text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-emerald-900/30 text-emerald-300 transition-all duration-500 border border-emerald-500/20 shadow-inner';
                     } else if (currentHp >= 40) {
                         hpBarEl.className = 'hp-bar hp-bar-warning hp-bar-glow';
-                        if (hpStateChip) { hpStateChip.innerText = '주의'; hpStateChip.className = 'absolute right-4 md:right-8 top-3 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-amber-400/15 text-amber-200 border border-amber-300/20'; }
+                        if (hpStateChip) { hpStateChip.innerText = '주의'; hpStateChip.className = 'inline-flex items-center px-3 py-1.5 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-amber-400/15 text-amber-200 border border-amber-300/20'; }
                         storyBanner.innerText = `흔들리는 공유지 · 자정작용 +${naturalRegenPreview} (회복 속도가 느려졌습니다)`;
                         storyBanner.className = 'text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-amber-900/30 text-amber-300 transition-all duration-500 border border-amber-500/20 shadow-inner';
                     } else if (currentHp > 0) {
                         hpBarEl.className = 'hp-bar hp-bar-critical hp-bar-glow';
-                        if (hpStateChip) { hpStateChip.innerText = '위기'; hpStateChip.className = 'absolute right-4 md:right-8 top-3 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-rose-400/15 text-rose-200 border border-rose-300/20'; }
+                        if (hpStateChip) { hpStateChip.innerText = '위기'; hpStateChip.className = 'inline-flex items-center px-3 py-1.5 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-rose-400/15 text-rose-200 border border-rose-300/20'; }
                         storyBanner.innerText = `황폐해진 공유지 · 자정작용 +${naturalRegenPreview} (파국이 임박했습니다)`;
                         storyBanner.className = 'text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-rose-900/30 text-rose-300 transition-all duration-500 border border-rose-500/30 shadow-[0_0_15px_rgba(225,29,72,0.3)]';
                     } else {
                         hpBarEl.className = 'hp-bar hp-bar-collapse';
-                        if (hpStateChip) { hpStateChip.innerText = '붕괴'; hpStateChip.className = 'absolute right-4 md:right-8 top-3 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-slate-400/15 text-slate-200 border border-slate-300/20'; }
+                        if (hpStateChip) { hpStateChip.innerText = '붕괴'; hpStateChip.className = 'inline-flex items-center px-3 py-1.5 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-slate-400/15 text-slate-200 border border-slate-300/20'; }
                         storyBanner.innerText = '완전한 파국 · 숲의 자정작용이 더 이상 작동하지 않습니다';
                         storyBanner.className = 'text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-slate-900 text-slate-500 transition-all duration-500 border border-slate-700 shadow-inner';
                     }
@@ -1592,6 +1749,11 @@
                         const tDesc = document.getElementById('my-tech-desc');
                         const btnT2 = document.getElementById('btn-upgrade-tier2');
                         const btnT3 = document.getElementById('btn-upgrade-tier3');
+                        const techPanel = document.getElementById('my-tech-panel');
+                        if (techPanel) {
+                            techPanel.classList.toggle('tech-panel-tier-2', tTier === 2);
+                            techPanel.classList.toggle('tech-panel-tier-3', tTier === 3);
+                        }
                         
                         document.getElementById('my-current-gold').innerText = myPlayerInfo.gold || 0;
 
@@ -1631,41 +1793,57 @@
                             rBtn.classList.remove('hidden'); rBtn.style.display = 'block';
                         }
                     } else if (data.state.phase === 'extension_vote') {
-                        extSection.classList.remove('hidden'); extSection.style.display = 'block';
+                        extSection.classList.remove('hidden'); extSection.style.display = 'flex';
                         const extTitle = extSection.querySelector('h3');
                         if (extTitle) extTitle.innerText = data.state.round === 15 ? '기본 15라운드 달성' : `연장 ${data.state.round - 15}라운드 종료`;
                         
                         const votes = data.state.extVote?.votes || {};
                         const pKeys = Object.keys(data.players || {});
-                        let agree = 0, end = 0, totalVoted = 0;
-                        
+                        let agree = 0, endVotes = 0, totalVoted = 0;
                         Object.values(votes).forEach(v => {
                             if (v === 'extend') agree++;
-                            if (v === 'end') end++;
-                            if (v !== null && v !== undefined) totalVoted++;
+                            if (v === 'end') endVotes++;
+                            if (v === 'extend' || v === 'end') totalVoted++;
                         });
 
-                        document.getElementById('ext-vote-status').innerText = `찬성: ${agree}명 / 반대: ${end}명 (참여: ${totalVoted}/${pKeys.length}명)`;
+                        const myExtVote = votes[myPlayerId];
+                        const extStatus = document.getElementById('ext-vote-status');
+                        if (extStatus) extStatus.innerText = data.state.extVote?.resolving
+                            ? '모든 선택을 확인했습니다 · 전원 화면을 동시에 전환하는 중...'
+                            : `계속 ${agree}명 / 종료 ${endVotes}명 · 참여 ${totalVoted}/${pKeys.length}명${myExtVote ? ` · 내 선택: ${myExtVote === 'extend' ? '계속' : '종료'}` : ''}`;
+                        const extYesBtn = document.getElementById('btn-ext-extend');
+                        const extNoBtn = document.getElementById('btn-ext-end');
+                        [extYesBtn, extNoBtn].forEach(btn => {
+                            if (!btn) return;
+                            btn.disabled = !!myExtVote || !!data.state.extVote?.resolving;
+                            btn.classList.toggle('opacity-45', btn.disabled);
+                            btn.classList.toggle('cursor-not-allowed', btn.disabled);
+                        });
 
-                        const isGroupLeader = (data.state.leader === myPlayerId);
-                        if ((isGroupLeader || isTeacher) && totalVoted >= pKeys.length) {
-                            if (agree > end) {
-                                const nextRound = data.state.round + 1;
-                                const nextLaw = data.state.pendingLaw || null;
-                                const nextEvent = chooseNextEvent(nextRound, data.state.hp, data.state.lastEvent || 'none');
-                                await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
-                                    round: nextRound, phase: 'betting', extVote: null, sanctionVote: null, resolvingVote: null, voteResult: null, voteUsed: false,
-                                    pendingLaw: null, activeLaw: nextLaw, activeLawRound: nextLaw ? nextRound : null, lastLaw: nextLaw,
-                                    subsidyAmount: nextLaw === 'subsidy_3' ? 3 : nextLaw === 'subsidy_2' ? 2 : 1,
-                                    bettingEndTime: Date.now() + 30000, activeEvent: nextEvent, lastEvent: nextEvent === 'none' ? (data.state.lastEvent || null) : nextEvent, lastResolution: null
-                                });
-                                const playerUpdates = {};
-                                pKeys.forEach(k => {
-                                    playerUpdates[`players/${k}/choice`] = ''; playerUpdates[`players/${k}/roundEarnings`] = 0; playerUpdates[`players/${k}/sanctioned`] = false;
-                                });
-                                await update(ref(db, `classes/${myClass}/groups/${myGroup}`), playerUpdates);
-                            } else {
-                                update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { phase: 'victory', extVote: null });
+                        const isGroupLeader = (getGroupLeaderId(data) === myPlayerId);
+                        if ((isGroupLeader || isTeacher) && totalVoted >= pKeys.length && !data.state.extVote?.resolving) {
+                            const claim = await runTransaction(ref(db, `classes/${myClass}/groups/${myGroup}/state/extVote`), current => {
+                                if (!current || current.resolving) return;
+                                const liveVotes = current.votes || {};
+                                const count = Object.values(liveVotes).filter(v => v === 'extend' || v === 'end').length;
+                                if (count < pKeys.length) return;
+                                return { ...current, resolving: true, resolvingAt: Date.now() };
+                            });
+                            if (claim.committed) {
+                                const finalVotes = claim.snapshot.val()?.votes || votes;
+                                const finalAgree = Object.values(finalVotes).filter(v => v === 'extend').length;
+                                const finalEnd = Object.values(finalVotes).filter(v => v === 'end').length;
+                                if (finalAgree > finalEnd) {
+                                    // 전환 직전에 최신 조 상태를 다시 읽어 오래된 players 스냅샷으로
+                                    // 재접속/퇴장 직후의 상태를 덮어쓰지 않도록 합니다.
+                                    const freshSnap = await get(ref(db, `classes/${myClass}/groups/${myGroup}`));
+                                    const freshData = freshSnap.val();
+                                    if (freshData?.state?.phase === 'extension_vote') {
+                                        await startNextRoundAtomic(freshData, freshData.state.round + 1);
+                                    }
+                                } else {
+                                    await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { phase: 'victory', extVote: null });
+                                }
                             }
                         }
                     }
@@ -1679,6 +1857,22 @@
                         document.getElementById('round-resolution-text').innerHTML = rr.text || '';
                     } else if (resolutionBanner) {
                         resolutionBanner.classList.add('hidden'); resolutionBanner.style.display = 'none';
+                    }
+
+                    const upgradeNotice = document.getElementById('upgrade-notice');
+                    const upgrade = data.state.lastUpgrade;
+                    if (upgradeNotice && upgrade && Date.now() - (upgrade.announcedAt || 0) < 7000) {
+                        const tierName = upgrade.tier === 3 ? '3단계 생태전환' : '2단계 산업화';
+                        const icon = upgrade.tier === 3 ? '♻️' : '🏭';
+                        const cost = upgrade.cost || (upgrade.tier === 3 ? 30 : 15);
+                        document.getElementById('upgrade-notice-text').innerText = `${icon} ${upgrade.playerName || '플레이어'}님이 ${cost}💰을 투자해 ${tierName}에 진입했습니다!`;
+                        upgradeNotice.classList.remove('hidden'); upgradeNotice.style.display = 'block';
+                        if ((upgrade.announcedAt || 0) > lastUpgradeSeenAt) {
+                            lastUpgradeSeenAt = upgrade.announcedAt || 0;
+                            upgradeNotice.classList.remove('upgrade-toast-pop'); void upgradeNotice.offsetWidth; upgradeNotice.classList.add('upgrade-toast-pop');
+                        }
+                    } else if (upgradeNotice) {
+                        upgradeNotice.classList.add('hidden'); upgradeNotice.style.display = 'none';
                     }
 
                     // 🌟 랭킹 리더보드 출력 🌟
@@ -1769,7 +1963,7 @@
                         }
 
                         if (data.state.phase === 'betting' && data.state.activeEvent && data.state.activeEvent !== 'none') {
-                            showEventSplash(data.state.activeEvent);
+                            showEventSplash(data.state.activeEvent, data.state.round);
                         }
                     }
 
@@ -1781,6 +1975,7 @@
                     }
                     // 이전 페이즈의 inline display가 남아 다음 렌더를 가리지 않도록 매번 초기화합니다.
                     if (nextRoundBtn) { nextRoundBtn.classList.add('hidden'); nextRoundBtn.style.display = 'none'; }
+                    syncRoundNoticeLayout(currentPhase);
 
                     if (currentPhase === 'waiting') {
                         sWait.classList.remove('hidden'); sWait.style.display = 'flex';
@@ -1806,7 +2001,7 @@
                     else if (currentPhase === 'betting') {
                         sBet.classList.remove('hidden'); sBet.style.display = 'flex';
                         if (resultBtn) resultBtn.disabled = false;
-                        const myChoice = players[myPlayerId]?.choice;
+                        const myChoice = hasSubmittedForRound(players[myPlayerId], data.state) ? players[myPlayerId]?.choice : '';
                         
                         const eventBanner = document.getElementById('random-event-banner');
                         const evTitle = document.getElementById('event-title');
@@ -1820,11 +2015,11 @@
                             evTitle.innerText = evInfo.name;
                             evDesc.innerText = evInfo.desc;
                             const eventTheme = {
-                                rose: 'w-full bg-rose-900/35 mb-6 text-center shadow-lg p-5 rounded-2xl border border-rose-500/40 text-rose-100',
-                                amber: 'w-full bg-amber-900/35 mb-6 text-center shadow-lg p-5 rounded-2xl border border-amber-500/40 text-amber-100',
-                                emerald: 'w-full bg-emerald-900/35 mb-6 text-center shadow-lg p-5 rounded-2xl border border-emerald-500/40 text-emerald-100',
-                                sky: 'w-full bg-sky-900/35 mb-6 text-center shadow-lg p-5 rounded-2xl border border-sky-500/40 text-sky-100',
-                                orange: 'w-full bg-orange-900/35 mb-6 text-center shadow-lg p-5 rounded-2xl border border-orange-500/40 text-orange-100'
+                                rose: 'notice-card bg-rose-900/35 text-center shadow-lg px-5 py-4 rounded-2xl border border-rose-500/40 text-rose-100',
+                                amber: 'notice-card bg-amber-900/35 text-center shadow-lg px-5 py-4 rounded-2xl border border-amber-500/40 text-amber-100',
+                                emerald: 'notice-card bg-emerald-900/35 text-center shadow-lg px-5 py-4 rounded-2xl border border-emerald-500/40 text-emerald-100',
+                                sky: 'notice-card bg-sky-900/35 text-center shadow-lg px-5 py-4 rounded-2xl border border-sky-500/40 text-sky-100',
+                                orange: 'notice-card bg-orange-900/35 text-center shadow-lg px-5 py-4 rounded-2xl border border-orange-500/40 text-orange-100'
                             };
                             eventBanner.className = eventTheme[evInfo.tone] || eventTheme.emerald;
                         }
@@ -1839,6 +2034,7 @@
                         } else {
                             lawNotice.classList.add('hidden'); lawNotice.style.display = 'none';
                         }
+                        syncRoundNoticeLayout('betting');
 
                         const bTimerDisplay = document.getElementById('betting-timer-display');
                         
@@ -1872,13 +2068,18 @@
                             const pData = players[pid] || {};
                             const pName = pData.nickname || pid;
                             const pChoice = pData.choice;
+                            const submitted = hasSubmittedForRound(pData, data.state);
                             const isL = (currentLeader === pid);
                             const hostTag = isL ? '<span class="ml-2 text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400/20">방장</span>' : '';
+                            const tier = pData.techTier || 1;
+                            const tierClass = tier === 3 ? 'player-card-tier-3' : tier === 2 ? 'player-card-tier-2' : '';
+                            const tierLabel = tier === 3 ? '<span class="tier-emblem text-teal-200">ECO TECH</span>' : tier === 2 ? '<span class="tier-emblem text-amber-200">INDUSTRIAL</span>' : '';
+                            const tierBadge = tier === 3 ? '<span class="mt-2 text-[10px] bg-teal-500/15 text-teal-200 border border-teal-400/25 px-2 py-1 rounded-full font-black">3단계 · 생태전환</span>' : tier === 2 ? '<span class="mt-2 text-[10px] bg-amber-500/15 text-amber-200 border border-amber-400/25 px-2 py-1 rounded-full font-black">2단계 · 산업화</span>' : '<span class="mt-2 text-[10px] text-slate-500 font-bold">1단계 · 전통</span>';
                             
-                            if (pChoice && pChoice !== "") {
-                                grid.innerHTML += `<div class="w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center h-36 shadow-inner"><div class="text-xs mb-1 text-slate-500 uppercase tracking-wider">LOCKED</div><div class="font-bold text-base text-slate-300 flex items-center">${pName}${hostTag}</div><div class="font-body text-xs mt-2 bg-slate-700 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600">제출 완료</div></div>`;
+                            if (submitted) {
+                                grid.innerHTML += `<div class="player-card ${tierClass} w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center h-40 shadow-inner">${tierLabel}<div class="text-xs mb-1 text-slate-500 uppercase tracking-wider">LOCKED</div><div class="font-bold text-base text-slate-300 flex items-center">${pName}${hostTag}</div>${tierBadge}<div class="font-body text-xs mt-2 bg-slate-950/55 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600/70">제출 완료</div></div>`;
                             } else {
-                                grid.innerHTML += `<div class="w-full bg-slate-900 p-5 rounded-2xl border border-slate-700 flex flex-col items-center justify-center h-36"><div class="font-bold text-base text-slate-400 flex items-center">${pName}${hostTag}</div><div class="font-body text-sm mt-2 text-slate-500 font-bold animate-pulse">고민 중...</div></div>`;
+                                grid.innerHTML += `<div class="player-card ${tierClass} w-full bg-slate-900 p-5 rounded-2xl border border-slate-700 flex flex-col items-center justify-center h-40">${tierLabel}<div class="font-bold text-base text-slate-400 flex items-center">${pName}${hostTag}</div>${tierBadge}<div class="font-body text-sm mt-2 text-slate-500 font-bold animate-pulse">고민 중...</div></div>`;
                             }
                         });
                     }
@@ -1911,6 +2112,7 @@
                                 let tierBadge = `<span class="ml-2 text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded font-bold border border-slate-600">1단계</span>`;
                                 if (tTier === 2) tierBadge = `<span class="ml-2 text-[10px] bg-amber-600 text-amber-100 px-1.5 py-0.5 rounded font-bold shadow-[0_0_10px_rgba(245,158,11,0.4)]">2단:산업화</span>`;
                                 if (tTier === 3) tierBadge = `<span class="ml-2 text-[10px] bg-teal-600 text-teal-100 px-1.5 py-0.5 rounded font-bold shadow-[0_0_10px_rgba(20,184,166,0.4)]">3단:생태전환</span>`;
+                                const tierCardClass = tTier === 3 ? 'player-card-tier-3' : tTier === 2 ? 'player-card-tier-2' : '';
                                 
                                 const isExposed = pData.exposed;
                                 const canSee = isMe || isTeacher || isEnd || isExposed;
@@ -1936,7 +2138,8 @@
                                 }
                                 
                                 grid.innerHTML += `
-                                    <div class="relative w-full ${bgColor} p-5 rounded-3xl border flex flex-col items-center justify-center h-48 transition-transform hover:scale-[1.02]">
+                                    <div class="player-card relative w-full ${bgColor} ${tierCardClass} p-5 rounded-3xl border flex flex-col items-center justify-center h-48 transition-transform hover:scale-[1.02]">
+                                        ${tTier === 3 ? '<span class="tier-emblem text-teal-200">ECO TECH</span>' : tTier === 2 ? '<span class="tier-emblem text-amber-200">INDUSTRIAL</span>' : ''}
                                         ${exposeBadge}
                                         <div class="text-5xl mb-3">${icon}</div>
                                         <div class="font-bold text-base text-slate-200 mb-2 flex items-center">${pName}${hostTag}</div>
@@ -1989,16 +2192,19 @@
                             
                             lawsHTML += `<button onclick="selectLaw('tax')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-3 rounded-xl text-sm font-bold border border-slate-500 shadow transition">욕심 수익 삭감</button>`;
                             lawsHTML += `<button onclick="selectLaw('subsidy_2')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-3 rounded-xl text-sm font-bold border border-slate-500 shadow transition">돌보기 보상금 2원</button>`;
+                            lawsHTML += `<button onclick="selectLaw('restoration_fund')" class="bg-cyan-900 hover:bg-cyan-800 text-cyan-100 px-4 py-3 rounded-xl text-sm font-bold border border-cyan-700 shadow transition">공동 복원기금</button>`;
                             
                             if (cRound >= 4) {
-                                lawsHTML += `<button onclick="selectLaw('mandatory_care')" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-2 rounded-xl text-sm font-bold border border-emerald-600 shadow transition">돌보기 결의안 (위반 폭로)</button>`;
+                                lawsHTML += `<button onclick="selectLaw('mandatory_care')" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-2 rounded-xl text-sm font-bold border border-emerald-600 shadow transition">돌보기 결의안</button>`;
+                                lawsHTML += `<button onclick="selectLaw('transparency')" class="bg-violet-900 hover:bg-violet-800 text-violet-100 px-4 py-3 rounded-xl text-sm font-bold border border-violet-700 shadow transition">환경정보 공개제</button>`;
                                 lawsHTML += `<button onclick="selectLaw('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-teal-100 px-4 py-3 rounded-xl text-sm font-bold border border-teal-600 shadow transition">돌보기 보상금 3원</button>`;
                             }
                             if (cRound >= 7) {
-                                lawsHTML += `<button onclick="selectLaw('rationing')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 px-4 py-3 rounded-xl text-sm font-bold border border-amber-600 shadow transition">자원 배급제 (봉쇄)</button>`;
+                                lawsHTML += `<button onclick="selectLaw('low_impact')" class="bg-emerald-900 hover:bg-emerald-800 text-emerald-100 px-4 py-3 rounded-xl text-sm font-bold border border-emerald-700 shadow transition">저충격 생산 기준</button>`;
+                                lawsHTML += `<button onclick="selectLaw('rationing')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 px-4 py-3 rounded-xl text-sm font-bold border border-amber-600 shadow transition">자원 배급제</button>`;
                             }
                             if (cRound >= 10) {
-                                lawsHTML += `<button onclick="selectLaw('eco_tax')" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 px-4 py-3 rounded-xl text-sm font-bold border border-indigo-600 shadow transition">환경 부담금 (벌금)</button>`;
+                                lawsHTML += `<button onclick="selectLaw('eco_tax')" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 px-4 py-3 rounded-xl text-sm font-bold border border-indigo-600 shadow transition">환경 부담금</button>`;
                                 lawsHTML += `<button onclick="selectLaw('tech_ban')" class="bg-rose-800 hover:bg-rose-700 text-rose-100 px-4 py-3 rounded-xl text-sm font-bold border border-rose-600 shadow transition">공장 임시 중단</button>`;
                             }
                             document.getElementById('law-buttons-container').innerHTML = lawsHTML;
@@ -2033,10 +2239,18 @@
             const groupSnap = await get(ref(db, `classes/${myClass}/groups/${myGroup}/players`));
             if (!groupSnap.exists() || Object.keys(groupSnap.val() || {}).length === 0) return alert("아직 참가자가 없습니다.");
             
-            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { 
-                phase: 'betting',
-                bettingEndTime: Date.now() + 30000 
+            const startedAt = Date.now();
+            const startUpdates = {
+                'state/phase': 'betting',
+                'state/roundStartedAt': startedAt,
+                'state/bettingEndTime': startedAt + 30000
+            };
+            Object.keys(group.players || {}).forEach(pid => {
+                startUpdates[`players/${pid}/choice`] = '';
+                startUpdates[`players/${pid}/choiceRound`] = null;
+                startUpdates[`players/${pid}/choiceSubmittedAt`] = null;
             });
+            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), startUpdates);
         });
 
         document.getElementById('btn-reveal').addEventListener('click', async () => {
@@ -2080,8 +2294,10 @@
             const subAmount = data.state.subsidyAmount || 1;
 
             pKeys.forEach(k => {
-                if (!data.players[k].choice || data.players[k].choice === "") {
-                    data.players[k].choice = 'timeout'; 
+                if (!hasSubmittedForRound(data.players[k], data.state)) {
+                    data.players[k].choice = 'timeout';
+                    data.players[k].choiceRound = data.state.round;
+                    data.players[k].choiceSubmittedAt = Date.now();
                 }
                 if (activeLaw === 'rationing' && data.players[k].choice === 'greed') {
                     data.players[k].choice = 'need';
@@ -2113,11 +2329,14 @@
                     if (effectiveTier === 2) damage = 20; 
                     else if (effectiveTier === 3) damage = 5;
                     
-                    if (activeEvent === 'wildfire') damage += 5; 
+                    if (activeEvent === 'wildfire') damage += 5;
+                    if (activeEvent === 'market_rush') damage += 3;
+                    if (activeLaw === 'low_impact') damage = Math.max(4, damage - 5);
                     totalRawHpChange -= damage; 
 
                     let earned = 5;
                     if (effectiveTier >= 2) earned = 10;
+                    if (activeEvent === 'market_rush') earned += 2;
                     earned = Math.max(1, Math.floor(earned * greedMultiplier));
                     if (isCrisis) earned = Math.max(1, Math.floor(earned * 0.75));
                     if (activeLaw === 'tax') earned = Math.max(1, Math.floor(earned / 2));
@@ -2130,8 +2349,8 @@
                     data.players[k].gold += earned;
                     data.players[k].roundEarnings += earned;
                 }
-                else if(choice === 'need') { 
-                    totalRawHpChange -= 2; 
+                else if(choice === 'need') {
+                    totalRawHpChange -= (activeEvent === 'pest' ? 4 : 2);
                     let earned = 2;
                     if (effectiveTier === 2) earned = 4;
                     if (effectiveTier === 3) earned = 5;
@@ -2144,16 +2363,19 @@
                 }
                 else if(choice === 'care') { 
                     let carePower = (effectiveTier === 3) ? 15 : 10; 
-                    if (activeEvent === 'activist') carePower += 5; 
+                    if (activeEvent === 'activist') carePower += 5;
+                    if (activeEvent === 'eco_grant') {
+                        data.players[k].gold += 1;
+                        data.players[k].roundEarnings += 1;
+                    }
                     totalRawHpChange += carePower; 
                 }
 
-                if (activeLaw === 'mandatory_care') {
-                    if (choice !== 'care') {
-                        data.players[k].exposed = true; 
-                    } else if (tier >= 2) {
-                        data.players[k].gold = Math.max(0, data.players[k].gold - 2); 
-                    }
+                if (activeLaw === 'mandatory_care' && choice !== 'care') {
+                    data.players[k].exposed = true;
+                }
+                if (activeLaw === 'transparency' && choice === 'greed') {
+                    data.players[k].exposed = true;
                 }
 
                 if (data.players[k].exposed === true && choice === 'care') {
@@ -2161,8 +2383,19 @@
                 }
             });
 
-            if (activeEvent === 'flood') {
-                totalRawHpChange -= (2 * pCount);
+            if (activeEvent === 'flood') totalRawHpChange -= (2 * pCount);   // 정규화 후 약 -4
+            if (activeEvent === 'rain') totalRawHpChange += (3.5 * pCount);   // 1.7배 정규화 후 약 +6
+
+            if (activeLaw === 'restoration_fund') {
+                let contributors = 0;
+                pKeys.forEach(k => {
+                    if ((data.players[k].gold || 0) >= 1) {
+                        data.players[k].gold -= 1;
+                        data.players[k].roundEarnings = Math.max(0, (data.players[k].roundEarnings || 0) - 1);
+                        contributors++;
+                    }
+                });
+                totalRawHpChange += (contributors * 3);
             }
 
             if (careCount > 0) {
@@ -2191,7 +2424,10 @@
                 });
             }
 
-            let normalizedHpChange = Math.round((totalRawHpChange / pCount) * 4);
+            // 기존 4배 보정은 2인 조에서 욕심 1회만으로도 한 라운드에 20점 이상을 잃게 했습니다.
+            // 1.7배로 조정해 절반이 계속 욕심을 내면 매우 위험하지만, 규범·돌보기로 회복할 여지를 남깁니다.
+            // 인원수로 먼저 평균낸 뒤 같은 계수를 적용하므로 2~6인 조에서도 난이도 스케일이 크게 흔들리지 않습니다.
+            let normalizedHpChange = Math.round((totalRawHpChange / pCount) * 1.7);
             const naturalRegen = getNaturalRegen(data.state.hp, activeEvent);
             normalizedHpChange += naturalRegen;
 
@@ -2204,11 +2440,18 @@
             const eventText = EVENT_INFO[activeEvent]?.name || '평온한 계절';
             const greedBand = greedCount === 0 ? '이번 라운드에는 욕심내기가 없었습니다.' : `욕심내기 ${greedCount}/${pCount}명 (${greedRatioPct}%) → 욕심 수익 ${Math.round(greedMultiplier * 100)}% 적용`;
             const regenText = activeEvent === 'drought' ? '가뭄으로 자정작용이 멈췄습니다.' : activeEvent === 'heatwave' ? `폭염으로 자정작용이 약화되었습니다.` : `숲의 자정작용 +${naturalRegen}`;
-            const eventExtra = activeEvent === 'flood' ? '홍수 피해로 생태 점수 8이 추가로 감소했습니다.' : activeEvent === 'wildfire' ? '산불로 욕심내기 1회당 추가 파괴가 발생했습니다.' : activeEvent === 'boom' ? '풍년으로 적당히 선택의 수익이 증가했습니다.' : activeEvent === 'activist' ? '생태 회복 운동으로 돌보기의 회복량이 증가했습니다.' : '';
+            const eventExtraMap = {
+                flood: '홍수로 공유지가 직접 훼손됐습니다.', wildfire: '산불로 욕심내기의 파괴가 커졌습니다.',
+                boom: '풍년으로 적당히 수익이 증가했습니다.', activist: '생태 회복 운동으로 돌보기 효과가 커졌습니다.',
+                rain: '봄비가 숲의 회복을 도왔습니다.', eco_grant: '돌보기 참여자에게 생태복원 지원금이 지급됐습니다.',
+                pest: '병충해로 적당히 생산의 생태 부담이 커졌습니다.', market_rush: '자원 가격 급등으로 욕심의 수익과 파괴가 함께 커졌습니다.'
+            };
+            const lawExtra = activeLaw === 'restoration_fund' ? '공동 복원기금이 숲 복원에 투입됐습니다. ' : activeLaw === 'low_impact' ? '저충격 생산 기준이 파괴량을 완화했습니다. ' : '';
+            const eventExtra = eventExtraMap[activeEvent] || '';
             
             data.state.lastResolution = {
                 title: `라운드 ${data.state.round} 정산 · ${eventText}`,
-                text: `${greedBand}. ${regenText}. ${eventExtra ? eventExtra + ' ' : ''}생태 점수는 <strong>${hpDelta >= 0 ? '+' : ''}${hpDelta}</strong> 변동하여 현재 <strong>${data.state.hp}</strong>점입니다.`
+                text: `${greedBand}. ${regenText}. ${eventExtra ? eventExtra + ' ' : ''}${lawExtra}생태 점수는 <strong>${hpDelta >= 0 ? '+' : ''}${hpDelta}</strong> 변동하여 현재 <strong>${data.state.hp}</strong>점입니다.`
             };
             
             if (activeEvent !== 'none') data.state.lastEvent = activeEvent;
@@ -2246,35 +2489,7 @@
             }
 
             const nRound = data.state.round + 1;
-            const nextEvent = chooseNextEvent(nRound, data.state.hp, data.state.lastEvent || 'none');
-            const nextLaw = data.state.pendingLaw || null;
-            
-            // 오래된 전체 스냅샷을 다시 쓰면 직전에 반영된 투표·플레이어 상태를 덮어쓸 수 있습니다.
-            // 전환에 필요한 경로만 한 번에 갱신합니다.
-            const updates = {
-                'state/round': nRound,
-                'state/phase': 'betting',
-                'state/activeLaw': nextLaw,
-                'state/activeLawRound': nextLaw ? nRound : null,
-                'state/lastLaw': nextLaw,
-                'state/pendingLaw': null,
-                'state/sanctionVote': null,
-                'state/resolvingVote': null,
-                'state/resolvingRound': null,
-                'state/voteUsed': false,
-                'state/voteResult': null,
-                'state/subsidyAmount': nextLaw === 'subsidy_3' ? 3 : nextLaw === 'subsidy_2' ? 2 : 1,
-                'state/activeEvent': nextEvent,
-                'state/lastEvent': nextEvent === 'none' ? (data.state.lastEvent || null) : nextEvent,
-                'state/lastResolution': null,
-                'state/bettingEndTime': Date.now() + 30000
-            };
-            Object.keys(data.players || {}).forEach(k => {
-                updates[`players/${k}/choice`] = '';
-                updates[`players/${k}/roundEarnings`] = 0;
-                updates[`players/${k}/sanctioned`] = false;
-            });
-            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), updates);
+            await startNextRoundAtomic(data, nRound);
         });
     </script>
 </body>
