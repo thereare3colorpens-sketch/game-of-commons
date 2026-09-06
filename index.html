@@ -11,7 +11,7 @@
 
         body { 
             font-family: 'Pretendard', sans-serif; 
-            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.92), rgba(3, 7, 18, 1)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop') no-repeat center center fixed;
+            background: linear-gradient(to bottom, rgba(5, 10, 20, 0.95), rgba(2, 6, 15, 1)), url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop') no-repeat center center fixed;
             background-size: cover;
             background-blend-mode: overlay;
             color: white; 
@@ -23,150 +23,145 @@
         
         .font-title { font-family: 'ElegantSerif', serif !important; }
         
+        /* 세련된 다크 그라데이션 글래스 패널 */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
         }
 
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         @keyframes shake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-10px, 5px) rotate(-1deg); } 75% { transform: translate(10px, -5px) rotate(1deg); } }
-        .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(225, 29, 72, 0.4) !important; }
+        .shake-screen { animation: shake 0.4s ease-in-out; box-shadow: inset 0 0 150px rgba(225, 29, 72, 0.6) !important; }
 
-        @keyframes healGlow { 0% { box-shadow: inset 0 0 5px rgba(16, 185, 129, 0.1); } 50% { box-shadow: inset 0 0 80px rgba(16, 185, 129, 0.3); } 100% { box-shadow: inset 0 0 5px rgba(16, 185, 129, 0.1); } }
+        @keyframes healGlow { 0% { box-shadow: inset 0 0 5px rgba(16, 185, 129, 0.2); } 50% { box-shadow: inset 0 0 90px rgba(16, 185, 129, 0.5); } 100% { box-shadow: inset 0 0 5px rgba(16, 185, 129, 0.2); } }
         .heal-screen { animation: healGlow 1.2s ease-in-out; }
+
+        /* 결과창 랭킹 하이라이트 */
+        .rank-1 { background: linear-gradient(90deg, rgba(251,191,36,0.15) 0%, rgba(217,119,6,0.1) 100%); border-left: 4px solid #fbbf24; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 text-slate-200">
 
-    <!-- 0. 이벤트 스플래시 애니메이션 전용 모달 (투명하게 숨겨둠) -->
-    <div id="event-splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-500">
+    <!-- 이벤트 스플래시 (거대 알림창) -->
+    <div id="event-splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-500">
         <div id="event-splash-content" class="text-center transform scale-75 opacity-0 transition-all duration-700 ease-out flex flex-col items-center">
             <div id="event-splash-icon" class="text-7xl md:text-8xl mb-4 animate-bounce"></div>
             <h2 id="event-splash-title" class="text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl"></h2>
-            <p id="event-splash-desc" class="text-xl md:text-2xl text-slate-200 font-bold bg-black/60 px-8 py-3 rounded-full shadow-lg border border-slate-700"></p>
+            <p id="event-splash-desc" class="text-xl md:text-2xl text-slate-200 font-bold bg-black/60 px-8 py-4 rounded-full shadow-lg border border-slate-700"></p>
         </div>
     </div>
 
     <!-- 1. 초기 홈 화면 -->
     <div id="panel-home" class="w-full max-w-4xl text-center fade-in-up">
-        <h1 class="text-6xl md:text-8xl text-emerald-400 mb-6 font-title font-bold tracking-tight drop-shadow-xl">위대한 전환</h1>
-        <p class="text-xl md:text-2xl text-emerald-100/90 mb-12 font-medium tracking-wide bg-black/40 px-6 py-2 rounded-full backdrop-blur-sm inline-block shadow-inner border border-white/5">블라인드 심리전: 공유지의 비극을 넘어 생태 문명으로</p>
+        <h1 class="text-6xl md:text-8xl text-emerald-400 mb-6 font-title font-bold tracking-tight drop-shadow-[0_5px_20px_rgba(16,185,129,0.3)]">위대한 전환</h1>
+        <div class="bg-black/40 px-6 py-3 rounded-full backdrop-blur-sm inline-block shadow-inner border border-white/5 mb-12">
+            <p class="text-xl md:text-2xl text-emerald-100 font-medium tracking-wide">이기심을 통제하고 숲을 지켜내세요. 가장 부유한 생존자가 승리합니다.</p>
+        </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-slate-800 p-10 rounded-3xl transition-all border-t-2 border-t-indigo-500/30 group shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02]">
-                <div class="font-bold text-3xl text-indigo-400 font-title mb-3 group-hover:text-indigo-300 transition">교사 (방장)</div>
-                <div class="text-lg text-slate-400 font-bold">학급 일괄 개설 및 현황판</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <button onclick="showPanel('panel-teacher-setup')" class="glass-panel hover:bg-slate-800 p-12 rounded-[2rem] transition-all border-t-4 border-t-indigo-500/50 group shadow-lg hover:shadow-indigo-500/20 hover:scale-[1.02]">
+                <div class="font-bold text-4xl text-indigo-400 font-title mb-3 group-hover:text-indigo-300 transition">교사 (방장)</div>
+                <div class="text-lg text-slate-300 font-medium">학급 일괄 개설 및 게임 통제</div>
             </button>
-            <button onclick="showPanel('panel-student-login')" class="glass-panel hover:bg-slate-800 p-10 rounded-3xl transition-all border-t-2 border-t-emerald-500/30 group shadow-lg hover:shadow-emerald-500/20 hover:scale-[1.02]">
-                <div class="font-bold text-3xl text-emerald-400 font-title mb-3 group-hover:text-emerald-300 transition">학생 (참여자)</div>
-                <div class="text-lg text-slate-400 font-bold">우리 조 방에 접속하기</div>
+            <button onclick="showPanel('panel-student-login')" class="glass-panel hover:bg-slate-800 p-12 rounded-[2rem] transition-all border-t-4 border-t-emerald-500/50 group shadow-lg hover:shadow-emerald-500/20 hover:scale-[1.02]">
+                <div class="font-bold text-4xl text-emerald-400 font-title mb-3 group-hover:text-emerald-300 transition">학생 (참여자)</div>
+                <div class="text-lg text-slate-300 font-medium">우리 조 방에 접속하기</div>
             </button>
         </div>
     </div>
 
     <!-- 2. 교사: 일괄 개설 화면 -->
     <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
-        <div class="glass-panel p-8 rounded-3xl border border-slate-700">
+        <div class="glass-panel p-10 rounded-3xl">
             <h2 class="text-3xl text-indigo-400 mb-8 font-title font-bold">학급 일괄 개설</h2>
-            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
-            <input type="number" id="input-group-count" placeholder="총 조(모둠) 개수 (예: 6)" min="1" max="12" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
+            <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-5 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition shadow-inner">
+            <input type="number" id="input-group-count" placeholder="총 조 개수 (예: 6)" min="1" max="12" class="font-bold w-full p-4 mb-5 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition shadow-inner">
+            <!-- 비밀번호 은닉화 -->
+            <input type="password" id="input-teacher-pwd" placeholder="교사 비밀번호" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition shadow-inner">
             
-            <input type="password" id="input-teacher-pwd" placeholder="교사 접속 비밀번호" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-700 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
-            
-            <button id="btn-create-class" class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-xl font-bold transition-all shadow-[0_0_15px_rgba(79,70,229,0.3)] mb-4 text-white">전체 조 만들기</button>
+            <button id="btn-create-class" class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl font-bold transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] mb-5 text-white">전체 조 만들기</button>
             <button onclick="changeTeacherPassword()" class="text-sm text-slate-400 hover:text-white underline transition">비밀번호 변경하기</button>
         </div>
     </div>
 
     <!-- 3. 교사: 매크로 현황판 -->
     <div id="panel-teacher-macro" class="w-full max-w-7xl hidden flex-col items-center fade-in-up">
-        <div class="w-full flex justify-between items-center mb-8 bg-slate-900/80 p-5 rounded-2xl border border-slate-700 flex-wrap gap-4 shadow-lg">
-            <h2 class="text-3xl text-emerald-400 font-title font-bold"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
-            <button onclick="showPanel('panel-teacher-rules')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 px-6 py-3 rounded-xl font-bold text-lg transition text-white shadow">전체 규칙 안내 띄우기</button>
+        <div class="w-full flex justify-between items-center mb-8 glass-panel px-8 py-5 rounded-2xl flex-wrap gap-4 shadow-xl">
+            <h2 class="text-3xl text-emerald-400 font-title font-bold drop-shadow-md"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
+            <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 px-6 py-3 rounded-xl font-bold text-lg transition text-white shadow">게임 목표 및 가이드</button>
         </div>
-        <div id="macro-grid" class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full"></div>
+        <div id="macro-grid" class="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full"></div>
     </div>
 
-    <!-- 3-5. 교사용 대형 규칙 설명 화면 (깔끔 롤백) -->
+    <!-- 3-5. 교사용 대형 규칙 설명 화면 (큰 그림 위주) -->
     <div id="panel-teacher-rules" class="w-full max-w-6xl hidden text-center fade-in-up w-full px-2">
-        <div class="glass-panel p-10 md:p-14 rounded-3xl text-left shadow-2xl w-full border border-emerald-500/20">
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-emerald-400 mb-8 font-title font-bold border-b border-slate-700 pb-6 whitespace-nowrap overflow-hidden text-ellipsis w-full">📖 [교실 전용] 심리전 & 생태 가이드</h2>
+        <div class="glass-panel p-10 md:p-14 rounded-3xl text-left shadow-2xl w-full">
+            <h2 class="text-3xl md:text-5xl text-emerald-400 mb-8 font-title font-bold border-b border-slate-700 pb-6 whitespace-nowrap overflow-hidden text-ellipsis w-full">📖 위대한 전환: 생존과 경쟁의 딜레마</h2>
             
-            <div class="space-y-6 text-slate-300 text-xl md:text-2xl mb-12 leading-relaxed font-medium">
-                <div class="bg-slate-900/90 p-6 rounded-2xl border border-slate-700/50 shadow-inner">
-                    <h3 class="text-2xl text-yellow-400 font-black mb-3">1. 블라인드 시스템 (범인 찾기)</h3>
-                    <p>게임 중 타인의 자산과 선택은 <strong>물음표(?)로 감춰집니다.</strong> 하지만 각 플레이어의 <strong>생산 발전도(테크 단계)는 투명하게 공개</strong>됩니다. 피해량을 보고 누가 산업화를 올리고 욕심을 부렸는지 추론해야 합니다.</p>
+            <div class="space-y-6 text-slate-200 text-xl md:text-2xl mb-12 leading-relaxed">
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700/50">
+                    <h3 class="text-2xl text-yellow-400 font-black mb-3">1. 게임의 목표 (협력 속의 경쟁)</h3>
+                    <p>15라운드 동안 숲의 생태 점수가 0점이 되지 않도록 파국을 막아내야 합니다. 하지만 협력만 해서는 승리할 수 없습니다. <strong>무사히 생존했을 때, 가장 많은 자산(💰)을 모은 플레이어가 최종 승리자</strong>가 됩니다.</p>
                 </div>
 
-                <div class="bg-slate-900/90 p-6 rounded-2xl border border-slate-700/50 shadow-inner">
-                    <h3 class="text-2xl text-teal-400 font-black mb-3">2. 돌보기 결의안과 강제 폭로</h3>
-                    <p>회의를 통해 <strong>[돌보기 결의안]</strong>이 통과되어도 배신할 자유는 있습니다. 하지만 이를 어기고 이익을 취한 플레이어는 <strong>시스템에 의해 붉은 경고와 함께 정체와 숨겨진 전 재산이 강제로 폭로</strong>됩니다.</p>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700/50">
+                    <h3 class="text-2xl text-teal-400 font-black mb-3">2. 턴 진행과 성장 (테크 업그레이드)</h3>
+                    <p>매 라운드 3가지 행동(욕심내기/적당히/돌보기) 중 하나를 선택합니다. 자산을 모아 <strong>생산 기술을 업그레이드</strong>하면 더 큰 이익을 얻을 수 있지만, 숲의 파괴 속도도 급격히 빨라집니다.</p>
                 </div>
 
-                <div class="bg-slate-900/90 p-6 rounded-2xl border border-slate-700/50 shadow-inner">
-                    <h3 class="text-2xl text-emerald-400 font-black mb-3">3. 1안건 선점제 및 엔딩 통계</h3>
-                    <p>마을 회의는 라운드당 딱 1개의 안건만 통과되며, 15초의 필수 토론이 진행됩니다. 게임 종료 시 <strong>모든 플레이어의 누적 행동(욕심/적당히/돌보기 횟수)이 성적표처럼 모두 공개</strong>되어 성찰의 시간을 가집니다.</p>
+                <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-700/50">
+                    <h3 class="text-2xl text-emerald-400 font-black mb-3">3. 돌발 변수와 자치 회의 (규범 확립)</h3>
+                    <p>생태 점수가 낮아질수록 가뭄, 산불 등 가혹한 기후 재난이 발생해 생존이 어려워집니다. 이를 막기 위해 매 라운드 <strong>마을 회의를 열어 다음 라운드를 통제할 법안에 투표</strong>해야 합니다. 제도를 통해 인간의 이기심을 어떻게 통제할지 토론하세요.</p>
                 </div>
             </div>
 
             <div class="text-center">
-                <button onclick="showPanel('panel-teacher-macro')" class="font-bold bg-slate-700 hover:bg-slate-600 px-12 py-5 rounded-2xl text-2xl transition-all shadow-lg hover:scale-105 border border-slate-500">현황판으로 돌아가기</button>
+                <button onclick="showPanel('panel-teacher-macro')" class="font-bold bg-indigo-600 hover:bg-indigo-500 px-12 py-5 rounded-2xl text-2xl transition-all shadow-lg hover:scale-105 border border-indigo-400">현황판으로 돌아가기</button>
             </div>
         </div>
     </div>
 
     <!-- 4. 학생용 방 접속 -->
     <div id="panel-student-login" class="w-full max-w-md hidden text-center fade-in-up">
-        <div class="glass-panel p-8 rounded-3xl border border-slate-700">
-            <h2 class="text-3xl text-emerald-400 mb-8 font-title font-bold">우리 조 접속</h2>
-            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-700 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
-            <input type="number" id="student-group-num" placeholder="우리 조 번호 (예: 2)" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-700 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
-            <input type="text" id="student-nickname" placeholder="내 이름 (예: 김철수)" lang="ko" inputmode="text" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-700 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
-            <button id="btn-join-group" class="font-black w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all hover:scale-105 text-white">입장하기</button>
+        <div class="glass-panel p-10 rounded-3xl border border-slate-700">
+            <h2 class="text-4xl text-emerald-400 mb-8 font-title font-bold">우리 조 접속</h2>
+            <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" lang="ko" inputmode="text" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
+            <input type="number" id="student-group-num" placeholder="우리 조 번호 (예: 2)" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
+            <input type="text" id="student-nickname" placeholder="내 이름 (예: 김철수)" lang="ko" inputmode="text" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
+            <button id="btn-join-group" class="font-bold w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-[0_0_20px_rgba(16,185,129,0.3)] transition text-white hover:scale-105">입장하기</button>
         </div>
     </div>
 
-    <!-- 4-5. 학생용 상세 규칙 안내 화면 (깔끔 롤백) -->
+    <!-- 4-5. 학생용 상세 규칙 안내 화면 (큰 그림 중심) -->
     <div id="panel-student-rules" class="w-full max-w-4xl hidden text-center fade-in-up px-2">
-        <div class="glass-panel p-8 md:p-10 rounded-3xl text-left shadow-2xl w-full border border-emerald-500/20">
-            <h2 class="text-3xl md:text-4xl text-emerald-400 mb-6 font-title font-bold border-b border-slate-700 pb-4">게임 기본 가이드</h2>
+        <div class="glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl w-full border border-emerald-500/20">
+            <h2 class="text-4xl md:text-5xl text-emerald-400 mb-8 font-title font-bold border-b border-slate-700 pb-4 tracking-tight">게임 기본 가이드</h2>
             
-            <div class="space-y-6 text-slate-300 text-base md:text-lg mb-8 leading-relaxed font-medium">
-                <div class="bg-slate-900/90 p-5 rounded-xl border border-slate-700 shadow-inner">
-                    <p class="text-emerald-300 font-bold">목표: 15라운드 동안 생태 점수를 지켜내고 파국을 피하세요. 우리가 합의한 규범(법안)이 없으면 숲은 이기심에 파괴됩니다.</p>
+            <div class="space-y-6 text-slate-200 text-lg md:text-xl mb-10 leading-relaxed font-medium">
+                <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700 shadow-inner">
+                    <h3 class="text-2xl text-yellow-400 mb-2 font-black">🎯 최종 목표: 부유한 생존자</h3>
+                    <p>15라운드 동안 숲의 생태 점수를 지켜내어 파국을 피하세요. 무사히 살아남았을 때, <strong>가장 많은 자산(💰)을 모은 플레이어가 최종 승리</strong>합니다.</p>
                 </div>
                 
-                <div>
-                    <h3 class="text-xl text-slate-200 mb-2 font-bold">1. 행동 선택 (기본 1단계 기준)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                            <div class="font-black text-xl text-rose-400 mb-1">욕심내기</div>
-                            <p class="text-base font-bold text-slate-300">+5💰 / -10🌿<br><span class="text-sm text-slate-500 font-normal">*과반수 겹치면 전원 0원</span></p>
-                        </div>
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                            <div class="font-black text-xl text-amber-400 mb-1">적당히</div>
-                            <p class="text-base font-bold text-slate-300">+2💰 / -2🌿<br><span class="text-sm text-slate-500 font-normal">*안전하고 꾸준한 수확</span></p>
-                        </div>
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                            <div class="font-black text-xl text-emerald-400 mb-1">돌보기</div>
-                            <p class="text-base font-bold text-slate-300">0💰 / +10🌿<br><span class="text-sm text-slate-500 font-normal">*조원 생태 보조금 획득</span></p>
-                        </div>
-                    </div>
+                <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700 shadow-inner">
+                    <h3 class="text-2xl text-teal-400 mb-2 font-black">🕹️ 행동 선택과 성장</h3>
+                    <p>매 라운드 <strong>욕심내기, 적당히, 돌보기</strong> 중 하나를 선택합니다. 수익을 모아 기술(테크)을 업그레이드하면 막대한 부를 쌓을 수 있지만, 숲의 파괴 속도도 걷잡을 수 없이 빨라집니다.</p>
                 </div>
 
-                <div class="bg-slate-900 p-5 rounded-xl border border-slate-700 space-y-2 text-base shadow-inner">
-                    <p><strong class="text-slate-200">블라인드 시스템:</strong> 타인의 행동과 자산은 감춰집니다 (단, 테크 발전도는 공개). 누가 숲을 파괴했는지 추론하세요.</p>
-                    <p><strong class="text-slate-200">돌발 기후와 자치 회의:</strong> 매 라운드 무작위 기후 이벤트가 발생합니다. 15초 토론 후 라운드당 1개의 법안을 선점하여 숲을 보호하세요.</p>
+                <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700 shadow-inner">
+                    <h3 class="text-2xl text-emerald-400 mb-2 font-black">⚖️ 돌발 기후와 자치 회의</h3>
+                    <p>숲이 파괴될수록 혹독한 기상 재난이 발생합니다. 파국을 피하려면 <strong>마을 자치 회의</strong>를 열어 법안을 통과시켜야 합니다. 규범과 제도를 통해 조원들의 이기심을 통제하세요.</p>
                 </div>
+                <p class="text-base text-slate-400 text-center mt-4">※ 상세한 행동 수치와 블라인드 룰은 게임 시작 후 상단의 <strong>[상세 룰북]</strong>에서 확인할 수 있습니다.</p>
             </div>
 
             <div class="text-center">
-                <button id="btn-enter-room" class="font-bold w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 px-12 py-4 rounded-xl text-2xl text-white transition shadow-lg hover:scale-105">숙지했습니다 (대기실 입장)</button>
+                <button id="btn-enter-room" class="font-bold w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 px-14 py-5 rounded-2xl text-2xl text-white transition shadow-lg hover:scale-105">숙지했습니다 (대기실 입장)</button>
             </div>
         </div>
     </div>
@@ -174,190 +169,199 @@
     <!-- 5. 학생용 게임 화면 -->
     <div id="panel-group-game" class="w-full max-w-5xl hidden flex-col items-center fade-in-up relative pb-24 px-2 text-slate-200">
         
-        <div class="w-full flex flex-wrap justify-between items-center mb-6 glass-panel p-4 rounded-2xl gap-4 border border-slate-700">
-            <div class="text-xl font-bold text-slate-300 flex items-center">
+        <div class="w-full flex flex-wrap justify-between items-center mb-6 glass-panel p-4 md:p-5 rounded-2xl gap-4 border border-slate-700">
+            <div class="text-xl font-bold text-slate-200 flex items-center">
                 <span id="display-class-group"></span> <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-xs px-2 py-1 rounded hidden font-bold shadow">방장</span>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="openIngameRuleModal()" class="bg-slate-800 hover:bg-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold border border-slate-600 transition shadow-sm">상세 룰북 📖</button>
-                <div class="text-2xl md:text-3xl text-emerald-400 font-title font-bold bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-700 shadow-inner">제 <span id="display-round" class="font-black font-body">1</span> / 15 라운드</div>
+                <button onclick="openIngameRuleModal()" class="bg-slate-800 hover:bg-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold border border-slate-600 transition shadow-sm text-slate-200">상세 룰북 📖</button>
+                <div class="text-2xl md:text-3xl text-emerald-400 font-title font-bold bg-slate-900/80 px-6 py-2.5 rounded-xl border border-slate-700 shadow-inner">제 <span id="display-round" class="font-black font-body">1</span> / 15 라운드</div>
             </div>
             <button id="btn-back-macro" onclick="showPanel('panel-teacher-macro')" class="hidden bg-slate-700 hover:bg-slate-600 px-4 py-2.5 rounded-xl text-sm font-bold transition">◀ 현황판</button>
         </div>
         
-        <!-- 생태 점수 바 -->
-        <div class="w-full bg-slate-900/95 rounded-2xl mb-8 overflow-hidden border border-slate-700 shadow-xl p-5 flex flex-col gap-3">
-            <div class="relative h-14 md:h-16 rounded-xl overflow-hidden bg-slate-800 border border-slate-600">
-                <div id="hp-bar" class="h-full bg-emerald-500 transition-all duration-1000 ease-out" style="width: 100%;"></div>
-                <div class="absolute inset-0 flex items-center justify-center text-xl md:text-2xl text-white font-bold tracking-wide drop-shadow-md">
-                    <span id="forest-icon-bar" class="mr-2 text-2xl md:text-3xl">🌿</span> 생태 점수: <span id="hp-text" class="font-black text-2xl md:text-3xl ml-1">100</span>
+        <!-- 생태 점수 바 (이모지 큼직하게 복구) -->
+        <div class="w-full glass-panel rounded-2xl mb-8 overflow-hidden shadow-xl p-5 flex flex-col gap-4">
+            <div class="relative h-16 md:h-20 rounded-xl overflow-hidden bg-slate-900 border border-slate-700">
+                <div id="hp-bar" class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-1000 ease-out" style="width: 100%;"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl text-white font-bold tracking-wide drop-shadow-md">
+                    <span id="forest-icon-bar" class="mr-3 text-3xl md:text-4xl drop-shadow-lg">🌿</span> 생태 점수: <span id="hp-text" class="font-black text-3xl md:text-4xl ml-2">100</span>
                 </div>
             </div>
-            <div id="forest-story-banner" class="text-center text-sm md:text-base font-bold py-2.5 rounded-lg bg-emerald-900/30 text-emerald-300 transition-all duration-500 border border-emerald-500/20">
+            <div id="forest-story-banner" class="text-center text-base md:text-lg font-bold py-3 rounded-xl bg-slate-800/50 text-emerald-300 transition-all duration-500 border border-slate-700/50">
                 푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)
             </div>
         </div>
 
-        <!-- 게임 오버 / 승리 배너 및 통계창 -->
-        <div id="gameover-banner" class="w-full hidden bg-slate-900 border border-slate-700 p-8 rounded-3xl mb-6 text-center shadow-2xl z-10 flex flex-col items-center">
-            <div id="gameover-title-area" class="w-full mb-6"></div>
-            <div id="endgame-stats-container" class="w-full mb-8"></div>
-            <button id="btn-restart-game" onclick="resetGame()" class="hidden bg-indigo-600 hover:bg-indigo-500 px-10 py-4 rounded-xl font-bold text-xl text-white shadow-md transition">방장: 처음부터 다시하기</button>
+        <div id="random-event-banner" class="w-full hidden mb-6 text-center shadow-lg p-5 rounded-2xl border transition-all duration-500">
+            <h3 id="event-title" class="text-2xl md:text-3xl font-black mb-2"></h3>
+            <p id="event-desc" class="text-base md:text-lg font-bold"></p>
         </div>
 
-        <div id="extension-vote-section" class="w-full hidden bg-slate-900 border border-slate-700 p-8 rounded-3xl mb-6 text-center shadow-xl z-10">
+        <!-- 게임 오버 / 승리 배너 및 통계창 (리더보드) -->
+        <div id="gameover-banner" class="w-full hidden bg-slate-900/95 border-2 border-slate-600 p-8 rounded-3xl mb-6 text-center shadow-2xl z-10 flex flex-col items-center w-full">
+            <div id="gameover-title-area" class="w-full mb-6"></div>
+            <div id="endgame-stats-container" class="w-full mb-8"></div>
+            <button id="btn-restart-game" onclick="resetGame()" class="hidden bg-indigo-600 hover:bg-indigo-500 px-10 py-4 rounded-xl font-bold text-xl text-white shadow-lg transition hover:scale-105">방장: 처음부터 다시하기</button>
+        </div>
+
+        <div id="extension-vote-section" class="w-full hidden glass-panel p-8 rounded-3xl mb-6 text-center shadow-xl z-10">
             <h3 class="text-3xl font-bold text-yellow-400 mb-4">기본 15라운드 달성 완료!</h3>
             <p class="font-medium text-slate-300 text-lg mb-6">여기서 게임을 마무리할까요, 아니면 계속 도전할까요?<br>조원들의 투표로 결정해주세요!</p>
             <div class="flex justify-center gap-4 mb-4">
-                <button onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-3.5 rounded-xl font-bold text-white transition shadow">계속 도전</button>
-                <button onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-8 py-3.5 rounded-xl font-bold text-white transition border border-slate-500 shadow">종료하기</button>
+                <button onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-4 rounded-xl font-bold text-xl text-white transition shadow">계속 도전</button>
+                <button onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-8 py-4 rounded-xl font-bold text-xl text-white transition border border-slate-500 shadow">종료하기</button>
             </div>
             <div class="font-bold text-indigo-300 text-sm mt-3" id="ext-vote-status">찬성: 0명 / 반대: 0명</div>
         </div>
 
         <div id="section-waiting" class="w-full text-center py-12 glass-panel rounded-3xl hidden flex-col items-center border border-slate-700">
             <h2 class="text-3xl font-bold text-slate-200 mb-6">조원들을 기다리는 중...</h2>
-            <div id="waiting-players" class="flex flex-wrap justify-center gap-3 mb-8 text-lg font-bold w-full px-4 text-slate-300"></div>
-            <button id="btn-start-group" class="hidden bg-indigo-600 hover:bg-indigo-500 px-12 py-4 rounded-xl font-bold text-2xl text-white shadow-lg transition hover:scale-105">우리 조 게임 시작!</button>
-            <p id="msg-waiting-host" class="hidden text-slate-400 text-sm mt-4 font-medium">방장(첫 접속자)이 시작 버튼을 누르면 시작됩니다.</p>
+            <div id="waiting-players" class="flex flex-wrap justify-center gap-3 mb-10 text-lg font-bold w-full px-4 text-slate-300"></div>
+            
+            <!-- 방장 버튼 로직 강제 제어 -->
+            <button id="btn-start-group" class="bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-black text-2xl text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105 animate-pulse hidden">우리 조 게임 시작!</button>
+            <p id="msg-waiting-host" class="text-slate-400 text-base mt-4 font-medium hidden">방장(첫 접속자)이 시작 버튼을 누르면 시작됩니다.</p>
         </div>
 
         <div id="section-betting" class="w-full hidden flex-col items-center w-full">
-            <div class="w-full flex justify-between items-center mb-6 px-2">
-                <div id="betting-timer-display" class="text-lg text-yellow-400 font-bold bg-slate-900 border border-slate-700 px-5 py-3 rounded-xl shadow-inner">
-                    ⏳ 남은 시간: <span id="action-timer-text" class="text-xl">30</span>초
+            <div class="w-full flex flex-wrap md:flex-nowrap justify-between items-center mb-6 gap-4">
+                <div id="betting-timer-display" class="flex-1 text-xl text-yellow-400 font-bold bg-slate-900 border border-slate-700 px-6 py-4 rounded-2xl shadow-inner text-center md:text-left">
+                    ⏳ 남은 시간: <span id="action-timer-text" class="text-2xl">30</span>초
                 </div>
-                <div class="text-xl text-yellow-300 font-black bg-slate-900 border border-slate-700 px-6 py-3 rounded-xl shadow-inner">
-                    내 자산: <span id="my-current-gold" class="text-2xl">0</span> 💰
+                <div class="flex-1 text-2xl text-yellow-300 font-black bg-slate-900 border border-slate-700 px-6 py-4 rounded-2xl shadow-inner text-center md:text-right">
+                    내 자산: <span id="my-current-gold" class="text-3xl">0</span> 💰
                 </div>
             </div>
 
-            <p class="text-lg text-slate-300 mb-4 font-bold w-full text-center">이번 라운드의 행동을 선택하세요. (제출 전까지 자유롭게 변경 가능)</p>
+            <p class="text-xl text-slate-300 mb-6 font-bold w-full text-center drop-shadow-sm">이번 라운드의 행동을 선택하세요. (제출 전 무한 변경 가능)</p>
             
-            <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-5 mb-6 px-2">
-                <button id="action-btn-greed" onclick="selectActionLocal('greed')" class="w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-md">
-                    <div class="text-5xl mb-3">😈</div><div class="text-2xl font-bold text-rose-400">욕심내기</div>
+            <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+                <button id="action-btn-greed" onclick="selectActionLocal('greed')" class="w-full bg-slate-800 border-2 border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-lg hover:bg-slate-700">
+                    <div class="text-5xl mb-3 drop-shadow-lg">😈</div><div class="text-2xl font-black text-rose-400">욕심내기</div>
                 </button>
-                <button id="action-btn-need" onclick="selectActionLocal('need')" class="w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-md">
-                    <div class="text-5xl mb-3">⛏️</div><div class="text-2xl font-bold text-amber-400">적당히</div>
+                <button id="action-btn-need" onclick="selectActionLocal('need')" class="w-full bg-slate-800 border-2 border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-lg hover:bg-slate-700">
+                    <div class="text-5xl mb-3 drop-shadow-lg">⛏️</div><div class="text-2xl font-black text-amber-400">적당히</div>
                 </button>
-                <button id="action-btn-care" onclick="selectActionLocal('care')" class="w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-md">
-                    <div class="text-5xl mb-3">💖</div><div class="text-2xl font-bold text-emerald-400">돌보기</div>
+                <button id="action-btn-care" onclick="selectActionLocal('care')" class="w-full bg-slate-800 border-2 border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-lg hover:bg-slate-700">
+                    <div class="text-5xl mb-3 drop-shadow-lg">💖</div><div class="text-2xl font-black text-emerald-400">돌보기</div>
                 </button>
             </div>
 
-            <button id="btn-submit-action" onclick="confirmActionSubmit()" class="hidden bg-emerald-600 hover:bg-emerald-500 px-16 py-4 rounded-2xl font-bold text-2xl text-white shadow-lg transition hover:scale-105 mb-8 w-11/12 md:w-auto">결정 완료</button>
+            <button id="btn-submit-action" onclick="confirmActionSubmit()" class="hidden bg-emerald-600 hover:bg-emerald-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] transition hover:scale-105 mb-10 w-full md:w-auto tracking-wide">결정 완료</button>
 
             <!-- 개인 테크 패널 -->
-            <div class="w-full bg-slate-900 border border-slate-700 p-6 rounded-2xl mb-10 flex flex-wrap justify-between items-center gap-4 px-6 shadow-inner">
+            <div class="w-full glass-panel border border-slate-600 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-lg">
                 <div>
-                    <h4 class="text-lg font-bold text-slate-200 mb-1" id="my-tech-title">나의 생산 방식: 1단계 [전통]</h4>
-                    <p class="font-medium text-sm text-slate-400" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
+                    <h4 class="text-xl font-bold text-slate-200 mb-2" id="my-tech-title">나의 생산 방식: 1단계 [전통]</h4>
+                    <p class="font-bold text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg inline-block" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
                 </div>
-                <div class="flex gap-2">
-                    <button id="btn-upgrade-tier2" onclick="upgradeTechTier(2)" class="bg-slate-700 hover:bg-slate-600 border border-amber-500/50 px-4 py-2.5 rounded-xl font-bold text-sm text-amber-100 transition shadow">2단계 산업화 (15💰)</button>
-                    <button id="btn-upgrade-tier3" onclick="upgradeTechTier(3)" class="bg-slate-700 hover:bg-slate-600 border border-teal-500/50 px-4 py-2.5 rounded-xl font-bold text-sm text-teal-100 transition shadow hidden">3단계 생태전환 (30💰)</button>
+                <div class="flex gap-3">
+                    <button id="btn-upgrade-tier2" onclick="upgradeTechTier(2)" class="bg-slate-700 hover:bg-slate-600 border border-amber-500/50 px-5 py-3 rounded-xl font-bold text-base text-amber-100 transition shadow-md">2단계 산업화 (15💰)</button>
+                    <button id="btn-upgrade-tier3" onclick="upgradeTechTier(3)" class="bg-slate-700 hover:bg-slate-600 border border-teal-500/50 px-5 py-3 rounded-xl font-bold text-base text-teal-100 transition shadow-md hidden">3단계 생태전환 (30💰)</button>
                 </div>
             </div>
             
             <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 px-2"></div>
             
-            <button id="btn-reveal" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-bold text-2xl text-white shadow-lg transition hover:scale-105 mt-4 w-11/12 md:w-auto">결과 공개하기</button>
+            <button id="btn-reveal" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105 mt-4 w-full md:w-auto tracking-wide">결과 공개하기</button>
         </div>
 
         <div id="section-reveal" class="w-full hidden flex-col items-center w-full">
-            <h3 class="text-3xl font-bold text-slate-200 mb-6">라운드 결과</h3>
+            <h3 class="text-3xl font-bold text-slate-200 mb-6 drop-shadow-md">라운드 결과</h3>
             
-            <div id="active-law-banner" class="hidden w-full bg-slate-900 border border-slate-700 p-4 rounded-xl mb-6 text-center font-bold text-base text-slate-300 shadow-inner">
+            <div id="active-law-banner" class="hidden w-full bg-slate-900 border border-slate-700 p-4 rounded-xl mb-8 text-center font-bold text-lg text-slate-300 shadow-inner">
                 📜 현재 적용된 법안 (종료 시 해제): <span id="active-law-text" class="font-black text-emerald-400">없음</span>
             </div>
 
             <!-- 블라인드 결과창 -->
-            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 px-2 w-full"></div>
+            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-5 mb-10 px-2 w-full"></div>
             
             <!-- 자치 회의 패널 -->
-            <div id="sanction-panel" class="hidden w-full bg-slate-900 border border-slate-700 p-8 rounded-3xl mb-8 text-center shadow-xl">
+            <div id="sanction-panel" class="hidden w-full glass-panel p-8 rounded-3xl mb-8 text-center shadow-2xl">
                 
                 <div id="meeting-closed-msg" class="hidden w-full py-4">
-                    <h4 class="text-xl font-bold text-slate-300 mb-1">🔒 이번 라운드 자치 회의 종료</h4>
-                    <p class="font-medium text-sm text-slate-500">안건 상정이 완료되어 다음 라운드를 기약하세요.</p>
+                    <h4 class="text-2xl font-bold text-slate-300 mb-2">🔒 이번 라운드 자치 회의 종료</h4>
+                    <p class="font-medium text-base text-slate-500">안건 상정이 완료되어 다음 라운드를 기약하세요.</p>
                 </div>
 
                 <div id="proposal-buttons-wrapper" class="w-full">
-                    <h4 class="text-2xl font-bold text-slate-200 mb-2">마을 자치 회의 & 생태 법안 발의</h4>
-                    <p class="font-medium text-base text-slate-400 mb-6">라운드당 1개의 안건만 통과시킬 수 있습니다. 유리한 안건을 먼저 발의하세요!</p>
+                    <h4 class="text-2xl font-black text-yellow-300 mb-3">마을 자치 회의 & 생태 법안 발의</h4>
+                    <p class="font-medium text-base text-slate-300 mb-6">라운드당 1개의 안건만 통과시킬 수 있습니다. 유리한 안건을 먼저 선점하세요!</p>
                     
                     <div id="law-buttons-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
 
-                    <div class="w-full border-t border-slate-700 pt-6 mt-2">
-                        <p class="font-medium text-sm text-slate-400 mb-4">특정 조원 제재 (수익 몰수) 발의</p>
+                    <div class="w-full border-t border-slate-600/50 pt-6 mt-4">
+                        <p class="font-bold text-sm text-slate-400 mb-4">특정 조원 제재 (수익 몰수) 발의</p>
                         <div id="sanction-targets-container" class="flex flex-wrap justify-center gap-3"></div>
                     </div>
                 </div>
 
-                <!-- 안건 2단계 확인 팝업창 -->
-                <div id="law-preview-box" class="hidden mt-6 p-6 bg-slate-800 border-2 border-indigo-500/50 rounded-2xl text-left shadow-lg mx-auto max-w-2xl">
-                    <h5 id="law-preview-title" class="text-xl font-bold text-indigo-300 mb-3"></h5>
-                    <p id="law-preview-desc" class="text-slate-300 text-base mb-6 leading-relaxed"></p>
-                    <div class="flex justify-center gap-4">
-                        <button onclick="confirmLawVote()" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold text-white transition shadow">이 안건 상정하기</button>
-                        <button onclick="cancelLawSelection()" class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-xl font-bold text-white transition border border-slate-500">취소</button>
+                <!-- 안건 상세 설명 및 상정 확인 모달 -->
+                <div id="law-preview-box" class="hidden mt-6 p-8 bg-slate-900 border border-indigo-500 rounded-2xl text-left shadow-2xl mx-auto max-w-2xl">
+                    <h5 id="law-preview-title" class="text-2xl font-black text-indigo-400 mb-4"></h5>
+                    <p id="law-preview-desc" class="text-slate-300 text-lg mb-8 leading-relaxed"></p>
+                    <div class="flex justify-center gap-5">
+                        <button onclick="confirmLawVote()" class="bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-bold text-lg text-white transition shadow-lg hover:scale-105">이 안건 상정하기</button>
+                        <button onclick="cancelLawSelection()" class="bg-slate-700 hover:bg-slate-600 px-8 py-4 rounded-xl font-bold text-lg text-white transition border border-slate-500">취소</button>
                     </div>
                 </div>
                 
                 <!-- 15초 투표 대기 영역 -->
-                <div id="active-sanction-vote" class="hidden bg-slate-800 p-8 rounded-2xl border border-slate-600 mt-6 text-center shadow-inner">
-                    <p class="text-slate-200 mb-3 font-bold text-xl" id="sanction-vote-question"></p>
-                    <div id="sanction-vote-desc" class="font-medium text-base text-slate-400 mb-6 leading-relaxed bg-slate-900 p-4 rounded-xl border border-slate-700"></div>
+                <div id="active-sanction-vote" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-600 mt-6 text-center shadow-inner">
+                    <p class="text-slate-200 mb-4 font-bold text-2xl" id="sanction-vote-question"></p>
+                    <div id="sanction-vote-desc" class="font-medium text-base text-slate-400 mb-6 leading-relaxed bg-slate-800 p-5 rounded-xl border border-slate-700"></div>
                     
-                    <p id="vote-timer-text" class="text-yellow-400 mb-6 font-bold text-lg bg-slate-900 py-3 rounded-xl shadow-inner animate-pulse"></p>
+                    <p id="vote-timer-text" class="text-yellow-400 mb-6 font-bold text-lg bg-black/50 py-3 rounded-xl shadow-inner animate-pulse"></p>
 
-                    <div class="flex justify-center gap-5">
-                        <button id="btn-vote-yes" onclick="voteSanction(true)" class="bg-emerald-700 hover:bg-emerald-600 px-10 py-4 rounded-xl font-bold text-lg text-white transition shadow">찬성</button>
-                        <button id="btn-vote-no" onclick="voteSanction(false)" class="bg-rose-700 hover:bg-rose-600 px-10 py-4 rounded-xl font-bold text-lg text-white transition shadow">반대</button>
+                    <div class="flex justify-center gap-6">
+                        <button id="btn-vote-yes" onclick="voteSanction(true)" class="bg-emerald-600 hover:bg-emerald-500 px-12 py-4 rounded-xl font-black text-xl text-white transition shadow-lg">찬성</button>
+                        <button id="btn-vote-no" onclick="voteSanction(false)" class="bg-rose-600 hover:bg-rose-500 px-12 py-4 rounded-xl font-black text-xl text-white transition shadow-lg">반대</button>
                     </div>
-                    <div class="text-base text-slate-400 mt-5 font-bold" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
+                    <div class="text-base text-slate-400 mt-6 font-bold" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
                 </div>
             </div>
 
-            <button id="btn-next-round" class="hidden bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-bold text-2xl text-white shadow-lg transition hover:scale-105 mt-2 w-11/12 md:w-auto">다음 라운드 준비</button>
+            <button id="btn-next-round" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-2 w-11/12 md:w-auto tracking-wide">다음 라운드 준비</button>
         </div>
         
     </div>
 
-    <!-- 상시 규칙 확인 모달 -->
-    <div id="modal-ingame-rules" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <!-- 인게임 상세 규칙 (UI/가독성 극대화) -->
+    <div id="modal-ingame-rules" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 max-w-4xl w-full p-8 md:p-12 rounded-3xl max-h-[90vh] overflow-y-auto text-left relative shadow-2xl text-slate-200">
-            <button onclick="closeIngameRuleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white text-4xl font-bold transition">&times;</button>
-            <h3 class="text-3xl font-bold text-emerald-400 mb-6 border-b border-slate-700 pb-4">📖 생존 규칙 및 시스템 마스터 가이드</h3>
+            <button onclick="closeIngameRuleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white text-4xl font-bold transition hover:scale-110">&times;</button>
+            <h3 class="text-3xl md:text-4xl font-black text-emerald-400 mb-8 border-b border-slate-700 pb-5">📖 게임 세부 룰북</h3>
             
             <div class="space-y-6 text-base md:text-lg font-medium leading-relaxed">
-                <div class="bg-slate-800 p-6 rounded-2xl shadow-inner border border-slate-700/50">
-                    <h4 class="text-xl font-bold text-emerald-400 mb-3">1. 행동 선택 & 블라인드 룰</h4>
+                <div class="bg-slate-800/50 p-6 rounded-2xl shadow-inner border border-slate-700/50">
+                    <h4 class="text-xl font-black text-emerald-400 mb-3">1. 행동 선택 & 블라인드 룰</h4>
                     <ul class="space-y-2 text-slate-300">
-                        <li>• <strong class="text-rose-400">욕심내기:</strong> +5💰 / -10🌿 <span class="text-sm bg-slate-900 px-2 rounded ml-1 text-rose-300">과반수 겹치면 전원 0원, 숲 위험 시 1원 폭락</span></li>
-                        <li>• <strong class="text-amber-400">적당히:</strong> +2💰 / -2🌿</li>
-                        <li>• <strong class="text-emerald-400">돌보기:</strong> 0💰 / +10🌿 <span class="text-sm bg-slate-900 px-2 rounded ml-1 text-emerald-300">보조금 지원 받음</span></li>
-                        <li class="pt-2 text-slate-400 text-sm md:text-base">🕵️ <strong>블라인드:</strong> 나와 교사를 제외한 타인의 행동과 자산은 항상 감춰집니다! 전체 숲의 피해량과 공개된 '테크 단계'를 종합해 범인을 추론하세요.</li>
+                        <li>• <strong class="text-rose-400 font-bold">욕심:</strong> +5💰 / -10🌿 <span class="text-sm bg-slate-900 px-2 rounded ml-1">※ 조원의 과반수가 겹치면 전원 0원. 숲 위험 시 1원 폭락.</span></li>
+                        <li>• <strong class="text-amber-400 font-bold">적당히:</strong> +2💰 / -2🌿</li>
+                        <li>• <strong class="text-emerald-400 font-bold">돌보기:</strong> 0💰 / +10🌿 <span class="text-sm bg-slate-900 px-2 rounded ml-1">※ 조원들의 보조금을 나누어 받습니다.</span></li>
+                        <li class="pt-2 text-slate-400 font-normal border-t border-slate-700 mt-2">🕵️ <strong class="text-slate-300">블라인드 시스템:</strong> 남의 행동과 돈은 모두 가려지며 '테크 단계'만 공개됩니다. 전체 피해량을 보고 누가 이기적인 선택을 했는지 추론하세요!</li>
                     </ul>
                 </div>
-                <div class="bg-slate-800 p-6 rounded-2xl shadow-inner border border-slate-700/50">
-                    <h4 class="text-xl font-bold text-emerald-400 mb-3">2. 개인 테크 트리</h4>
-                    <ul class="space-y-3 text-sm md:text-base">
-                        <li class="bg-slate-900 p-3 rounded-xl border border-amber-500/30">🏭 <strong>2단계 [산업화] (15💰):</strong> 욕심 +10💰 / 파괴 -20🌿 <span class="text-rose-300">(수익과 숲 파괴가 2배인 위험한 선택)</span></li>
-                        <li class="bg-slate-900 p-3 rounded-xl border border-teal-500/30">🔬 <strong>3단계 [생태전환] (30💰):</strong> 욕심 +10💰 / 파괴 -5🌿 <span class="text-emerald-300">(파괴 최소화, 돌보기 치유 효율 극대화)</span></li>
+                
+                <div class="bg-slate-800/50 p-6 rounded-2xl shadow-inner border border-slate-700/50">
+                    <h4 class="text-xl font-black text-emerald-400 mb-3">2. 개인 테크 트리 (기술의 양면성)</h4>
+                    <ul class="space-y-3">
+                        <li class="bg-slate-900 p-4 rounded-xl border border-amber-500/30">🏭 <strong class="text-amber-300 font-bold">2단계 [산업화] (15💰):</strong> 욕심 +10💰 / 파괴 -20🌿 <br><span class="text-slate-400 text-sm">수익은 2배로 폭증하지만 숲 파괴도 2배가 되는 위험한 선택입니다.</span></li>
+                        <li class="bg-slate-900 p-4 rounded-xl border border-teal-500/30">🔬 <strong class="text-teal-300 font-bold">3단계 [생태전환] (30💰):</strong> 욕심 +10💰 / 파괴 -5🌿 <br><span class="text-slate-400 text-sm">파괴는 최소화되며, 돌보기 치유량이 +15🌿로 극대화됩니다.</span></li>
                     </ul>
                 </div>
-                <div class="bg-slate-800 p-6 rounded-2xl shadow-inner border border-slate-700/50">
-                    <h4 class="text-xl font-bold text-emerald-400 mb-3">3. 자치 회의 & 내부 고발 시스템</h4>
-                    <p class="text-slate-300 mb-2">• <strong>1안건 선점:</strong> 회의 안건은 라운드당 딱 1개만 발의되며, 발의 후 15초의 토론이 강제 진행됩니다.</p>
-                    <p class="text-slate-300 mb-2">• <strong class="text-rose-400">내부고발 룰:</strong> '돌보기 결의안'이 발동되었을 때 배신하면, <strong>시스템이 정체와 전 재산을 강제로 폭로(주홍글씨)</strong>합니다. 폭로 상태는 돌보기를 선택해 신뢰를 회복하기 전까지 계속 유지됩니다.</p>
-                    <p class="text-slate-300">• <strong class="text-yellow-400">무응답 페널티:</strong> 선택 제한 시간(30초) 초과 시 '적당히' 파괴력(-2)은 주면서 수익은 0💰이 되는 '태만' 처리를 받습니다.</p>
+                
+                <div class="bg-slate-800/50 p-6 rounded-2xl shadow-inner border border-slate-700/50">
+                    <h4 class="text-xl font-black text-emerald-400 mb-3">3. 자치 회의 & 내부 고발 시스템</h4>
+                    <p class="text-slate-300 mb-2">• <strong class="text-indigo-300 font-bold">1안건 선점:</strong> 회의 안건은 라운드당 딱 1개만 발의되며, 발의 후 15초 강제 토론이 진행됩니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-rose-400 font-bold">내부고발 룰:</strong> '돌보기 결의안' 발동 시 이를 어기고 욕심/적당히를 선택하면 <strong>시스템이 정체와 전 재산을 강제로 폭로(주홍글씨)</strong>합니다. 이 폭로 상태는 돌보기를 선택해 신뢰를 회복할 때까지 유지됩니다.</p>
+                    <p class="text-slate-300">• <strong class="text-yellow-400 font-bold">무응답 페널티:</strong> 선택 제한 시간(30초) 초과 시 '적당히' 파괴력(-2)은 주면서 수익은 0💰이 되는 '태만' 처리를 받습니다.</p>
                 </div>
             </div>
 
-            <div class="text-center mt-8">
-                <button onclick="closeIngameRuleModal()" class="bg-slate-700 hover:bg-slate-600 border border-slate-500 px-12 py-4 rounded-xl font-bold text-xl text-white transition shadow">확인 완료 및 닫기</button>
+            <div class="text-center mt-10">
+                <button onclick="closeIngameRuleModal()" class="bg-slate-700 hover:bg-slate-600 border border-slate-500 px-12 py-4 rounded-2xl font-bold text-xl text-white transition shadow-lg">확인 완료 및 닫기</button>
             </div>
         </div>
     </div>
@@ -386,11 +390,71 @@
         let isTeacher = false;
 
         let localChoice = ""; 
-        let actionTimerInterval = null;
-        let voteTimerInterval = null; 
         let currentLocalRound = 0; 
         let currentActiveLaw = null; 
         let selectedLawToPropose = null; 
+        let currentGroupData = null; // 마스터 타이머용 전역 데이터
+
+        // 마스터 타이머 로직 (setInterval 중복 방지 및 완벽 동기화)
+        setInterval(() => {
+            if (!currentGroupData) return;
+            const state = currentGroupData.state;
+            const pKeys = Object.keys(currentGroupData.players || {});
+            const now = Date.now();
+            const isGroupLeader = (state.leader === myName);
+
+            // 1. 행동 선택 30초 타이머
+            if (state.phase === 'betting' && state.bettingEndTime) {
+                const remain = Math.max(0, Math.ceil((state.bettingEndTime - now) / 1000));
+                const timerEl = document.getElementById('action-timer-text');
+                if(timerEl) timerEl.innerText = remain;
+
+                // 개인별 타임아웃 자동 제출 (태만 처리)
+                const myPlayer = currentGroupData.players?.[myName];
+                const hasSubmitted = myPlayer && myPlayer.choice && myPlayer.choice !== "";
+                if (remain === 0 && !hasSubmitted && !isTeacher) {
+                    localChoice = 'timeout';
+                    confirmActionSubmit(true); 
+                }
+
+                // 방장 [결과 공개] 버튼 강제 노출 조건
+                if (isGroupLeader) {
+                    let allChosen = true;
+                    if(pKeys.length === 0) allChosen = false;
+                    pKeys.forEach(k => {
+                        if (!currentGroupData.players[k].choice || currentGroupData.players[k].choice === "") {
+                            allChosen = false;
+                        }
+                    });
+                    const btnRev = document.getElementById('btn-reveal');
+                    if (allChosen || remain === 0) {
+                        btnRev.classList.remove('hidden');
+                        btnRev.classList.add('block'); // 확실한 노출
+                    } else {
+                        btnRev.classList.add('hidden');
+                        btnRev.classList.remove('block');
+                    }
+                }
+            }
+
+            // 2. 15초 투표 강제 토론 타이머
+            if (state.phase === 'reveal' && state.sanctionVote && state.sanctionVote.createdAt && !state.voteUsed) {
+                const remain = Math.max(0, Math.ceil((15000 - (now - state.sanctionVote.createdAt)) / 1000));
+                const timerText = document.getElementById('vote-timer-text');
+                const btnYes = document.getElementById('btn-vote-yes');
+                const btnNo = document.getElementById('btn-vote-no');
+
+                if (remain > 0) {
+                    if(timerText) timerText.innerText = `⏳ 의무 토론 시간: ${remain}초 후 투표 활성화`;
+                    if(btnYes) { btnYes.disabled = true; btnYes.classList.add('opacity-40', 'cursor-not-allowed'); }
+                    if(btnNo) { btnNo.disabled = true; btnNo.classList.add('opacity-40', 'cursor-not-allowed'); }
+                } else {
+                    if(timerText) timerText.innerText = `의무 토론 종료! 투표가 활성화되었습니다.`;
+                    if(btnYes) { btnYes.disabled = false; btnYes.classList.remove('opacity-40', 'cursor-not-allowed'); }
+                    if(btnNo) { btnNo.disabled = false; btnNo.classList.remove('opacity-40', 'cursor-not-allowed'); }
+                }
+            }
+        }, 500);
 
         window.addEventListener('beforeunload', (e) => {
             if (myClass && !isTeacher) { e.preventDefault(); e.returnValue = ''; }
@@ -416,7 +480,6 @@
             return Promise.race([ promise, new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과')), ms)) ]);
         };
 
-        // 비밀번호 관리 (초기 비밀번호 숨김)
         window.changeTeacherPassword = async () => {
             const configRef = ref(db, 'config/teacherPassword');
             const snap = await get(configRef);
@@ -439,7 +502,7 @@
             const inputPwd = document.getElementById('input-teacher-pwd').value.trim();
             
             if(!className || !groupCount || groupCount < 1) return alert("학급 이름과 조 개수를 올바르게 입력하세요.");
-            if(!inputPwd) return alert("교사 인증 비밀번호를 입력하세요.");
+            if(!inputPwd) return alert("교사 비밀번호를 입력하세요.");
 
             const configRef = ref(db, 'config/teacherPassword');
             const snap = await get(configRef);
@@ -499,10 +562,10 @@
                     else if (g.state.phase === 'victory') phaseText = '생존';
                     else if (g.state.phase === 'extension_vote') phaseText = '연장 투표';
 
-                    const hpColor = g.state.hp > 40 ? 'text-emerald-400' : (g.state.hp > 0 ? 'text-rose-400' : 'text-slate-500');
+                    const hpColor = g.state.hp > 40 ? 'text-emerald-400' : (g.state.hp > 0 ? 'text-rose-400 animate-pulse' : 'text-slate-500');
 
                     grid.innerHTML += `
-                        <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer bg-slate-800 p-6 rounded-2xl hover:bg-slate-700 transition border border-slate-600 shadow">
+                        <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer bg-slate-800/80 p-6 rounded-2xl hover:bg-slate-700 transition border border-slate-600 shadow-lg">
                             <h3 class="text-2xl font-bold text-slate-100 mb-3">${gId}조</h3>
                             <div class="text-sm text-slate-400 mb-4 flex justify-between font-bold">
                                 <span>참여: ${pCount}명</span>
@@ -532,7 +595,6 @@
             listenGroupMicro();
         };
 
-        // 학생 접속 로직 (중복 닉네임 방지 완벽 처리)
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value.trim();
@@ -550,7 +612,7 @@
                 const isExistingPlayer = gData.players && gData.players[nickname];
 
                 if (gData.state.phase === 'waiting' && isExistingPlayer) {
-                    return alert("이미 대기실에 동일한 닉네임이 있습니다. 다른 이름을 입력해주세요.");
+                    return alert("이미 대기실에 동일한 닉네임이 존재합니다. 다른 닉네임을 사용해주세요.");
                 }
                 if (gData.state.phase !== 'waiting' && !isExistingPlayer) {
                     return alert("이미 진행 중인 게임입니다. (튕긴 기존 참여자만 재접속 가능)");
@@ -592,15 +654,15 @@
             if(greedBtn && greedBtn.disabled && choice === 'greed') return; 
             
             if (currentActiveLaw === 'mandatory_care' && choice !== 'care') {
-                alert("🚨 [내부 고발 경고]\n\n현재 '돌보기 결의안'이 발동 중입니다!\n이대로 이익을 취하면 당신의 정체와 재산이 조원들에게 폭로되어 제재 타겟이 됩니다.");
+                alert("🚨 [내부 고발 경고]\n\n현재 '돌보기 결의안'이 채택 중입니다!\n\n이대로 이익을 취하면 당신의 행동과 은닉된 자산이 모두에게 강제로 폭로되어 다음 라운드 제재 타겟이 될 확률이 매우 높습니다.");
             }
 
             localChoice = choice;
             
             const btnClasses = {
-                'greed': { base: 'w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700', active: 'w-full bg-slate-700 border-2 border-rose-500 py-8 rounded-2xl transition flex flex-col items-center scale-[1.03] shadow-[0_0_20px_rgba(244,63,94,0.5)]' },
-                'need': { base: 'w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700', active: 'w-full bg-slate-700 border-2 border-amber-500 py-8 rounded-2xl transition flex flex-col items-center scale-[1.03] shadow-[0_0_20px_rgba(245,158,11,0.5)]' },
-                'care': { base: 'w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700', active: 'w-full bg-slate-700 border-2 border-emerald-500 py-8 rounded-2xl transition flex flex-col items-center scale-[1.03] shadow-[0_0_20px_rgba(16,185,129,0.5)]' }
+                'greed': { base: 'w-full bg-slate-800 border border-slate-700 py-6 rounded-3xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700', active: 'w-full bg-slate-700 border-2 border-rose-500 py-6 rounded-3xl transition flex flex-col items-center scale-[1.03] shadow-[0_0_20px_rgba(244,63,94,0.5)]' },
+                'need': { base: 'w-full bg-slate-800 border border-slate-700 py-6 rounded-3xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700', active: 'w-full bg-slate-700 border-2 border-amber-500 py-6 rounded-3xl transition flex flex-col items-center scale-[1.03] shadow-[0_0_20px_rgba(245,158,11,0.5)]' },
+                'care': { base: 'w-full bg-slate-800 border border-slate-700 py-6 rounded-3xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700', active: 'w-full bg-slate-700 border-2 border-emerald-500 py-6 rounded-3xl transition flex flex-col items-center scale-[1.03] shadow-[0_0_20px_rgba(16,185,129,0.5)]' }
             };
 
             ['greed', 'need', 'care'].forEach(id => {
@@ -651,7 +713,7 @@
                 });
                 alert("🏭 2단계 산업화 완료! 수익이 폭증하지만 숲 파괴 데미지도 커집니다!");
             } else if (targetTier === 3) {
-                if (currentTier < 2) return alert("먼저 2단계 산업화를 거쳐야 3단계 생태전환이 가능합니다!");
+                if (currentTier < 2) return alert("먼저 2단계 산업화를 거쳐야 3단계 생태전환 연구가 가능합니다!");
                 if (currentTier >= 3) return alert("이미 최고 단계(3단계)입니다!");
                 if (playerData.gold < 30) return alert("자산(돈)이 부족합니다! 3단계 생태전환에는 30💰가 필요합니다.");
                 
@@ -659,11 +721,10 @@
                     gold: playerData.gold - 30,
                     techTier: 3
                 });
-                alert("🔬 3단계 생태전환 완료! 파괴를 최소화하며 안정적인 수익을 유지합니다.");
+                alert("🔬 3단계 생태전환 기술 완성! 파괴를 최소화하며 안정적인 수익을 유지합니다.");
             }
         };
 
-        // 법안 2단계 선택 (상세 설명 -> 상정)
         window.selectLaw = (lawType, targetName = null) => {
             const previewBox = document.getElementById('law-preview-box');
             const pTitle = document.getElementById('law-preview-title');
@@ -676,7 +737,7 @@
 
             if (lawType === 'sanction') {
                 qText = `⚖️ [제재] "${targetName}" 조원 수익 몰수`;
-                descText = `숲을 파괴한 이기적인 조원을 심판합니다. 과반수가 찬성하면 이번 라운드 수익이 0원이 됩니다.`;
+                descText = `숲을 파괴한 이기적인 조원을 심판합니다. 과반수가 찬성하면 이번 라운드 수익이 0원이 됩니다. (15초 의무 토론)`;
                 selectedLawToPropose = { type: 'sanction', target: targetName, question: qText, description: descText };
             } else {
                 if (lawType === 'tax') {
@@ -687,21 +748,21 @@
                     descText = "다음 라운드에 '욕심내기'를 한 사람에게서 2💰 벌금을 징수해 숲을 회복시킵니다.";
                 } else if (lawType === 'mandatory_care') {
                     qText = "📜 모두 돌보기 결의안 (내부 고발제)";
-                    descText = "다음 라운드엔 모두 '돌보기'가 권장되며, 배신하여 욕심/적당히를 선택한 플레이어는 정체와 재산이 모두에게 강제로 폭로됩니다!";
+                    descText = "다음 라운드엔 모두 '돌보기'가 권장되며, 배신하여 이익을 챙긴 플레이어는 정체와 재산이 모두에게 강제로 폭로됩니다!";
                 } else if (lawType === 'rationing') {
                     qText = "📦 자원 배급제 (욕심 봉쇄) 법안";
-                    descText = "다음 라운드 동안 모든 조원의 '욕심내기' 버튼이 봉쇄되어 자연을 강제로 보호합니다.";
+                    descText = "다음 라운드 동안 모든 조원의 '욕심내기' 버튼이 완전히 봉쇄되어 자연을 보호합니다.";
                 } else if (lawType === 'tech_ban') {
                     qText = "📦 공장 가동 임시 중단 법안";
-                    descText = "다음 라운드에 2단계, 3단계 플레이어의 기술이 일시적으로 1단계 수준으로 하향 조정됩니다.";
+                    descText = "다음 라운드에 2단계, 3단계 플레이어의 모든 기술 효과가 무효화(1단계 하향)되어 데미지와 수익이 감소합니다.";
                 } else if (lawType === 'subsidy_2') {
-                    qText = "💖 돌보기 수익금(보상) 2원 상향 법안";
+                    qText = "💖 돌보기 보상금 2원 상향 법안";
                     descText = "통과 시: '돌보기' 기여자에게 조원들이 나눠주는 보조금이 2원으로 늘어납니다.";
                 } else if (lawType === 'subsidy_3') {
-                    qText = "💖 돌보기 수익금(보상) 3원 폭등 법안";
-                    descText = "통과 시: '돌보기' 기여자에게 지급되는 보조금이 3원으로 늘어납니다.";
+                    qText = "💖 돌보기 보상금 3원 폭등 법안";
+                    descText = "통과 시: '돌보기' 기여자에게 지급되는 보조금이 3원으로 극대화됩니다.";
                 }
-                selectedLawToPropose = { type: 'law', lawType: lawType, question: qText, description: descText };
+                selectedLawToPropose = { type: 'law', lawType: lawType, question: qText, description: descText + " (15초 의무 토론)" };
             }
             
             pTitle.innerText = qText;
@@ -742,7 +803,7 @@
         };
 
         window.voteSanction = async (isAgree) => {
-            if (!myClass || !myGroup || !myName) return alert("접속 정보 오류");
+            if (!myClass || !myGroup || !myName) return alert("오류 발생");
             try {
                 await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote/votes`), {
                     [myName]: isAgree
@@ -788,7 +849,6 @@
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), updates);
         };
 
-        // 이벤트 스플래시 함수
         function showEventSplash(evType) {
             const splash = document.getElementById('event-splash-screen');
             const content = document.getElementById('event-splash-content');
@@ -818,14 +878,12 @@
             }, 2500);
         }
 
-        let currentPhase = '';
-        let lastHp = 100;
-
         function listenGroupMicro() {
             onValue(ref(db, `classes/${myClass}/groups/${myGroup}`), (snapshot) => {
-                const data = snapshot.val();
-                if(!data) return;
+                currentGroupData = snapshot.val();
+                if(!currentGroupData) return;
 
+                const data = currentGroupData;
                 const currentHp = data.state.hp;
                 currentActiveLaw = data.state.activeLaw;
 
@@ -839,26 +897,27 @@
 
                 if (currentHp >= 70) {
                     fIcon.innerText = "🌿";
-                    hpBarEl.className = "h-full bg-emerald-500 transition-all duration-1000 ease-out";
+                    hpBarEl.className = "h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-1000 ease-out";
                     storyBanner.innerText = "푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)";
-                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2 rounded-lg bg-emerald-900/30 text-emerald-300 transition-all duration-500 border border-emerald-500/20";
+                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2.5 rounded-lg bg-emerald-900/30 text-emerald-300 transition-all duration-500 border border-emerald-500/20";
                 } else if (currentHp >= 40) {
                     fIcon.innerText = "🍂";
-                    hpBarEl.className = "h-full bg-amber-500 transition-all duration-1000 ease-out";
+                    hpBarEl.className = "h-full bg-gradient-to-r from-amber-500 to-amber-400 transition-all duration-1000 ease-out";
                     storyBanner.innerText = "조금씩 신음하는 숲 (나무들이 베여나가고 공동체에 갈등이 싹틉니다)";
-                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2 rounded-lg bg-amber-900/30 text-amber-300 transition-all duration-500 border border-amber-500/20";
+                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2.5 rounded-lg bg-amber-900/30 text-amber-300 transition-all duration-500 border border-amber-500/20";
                 } else if (currentHp > 0) {
                     fIcon.innerText = "⚠️";
-                    hpBarEl.className = "h-full bg-rose-500 animate-pulse transition-all duration-1000 ease-out";
+                    hpBarEl.className = "h-full bg-gradient-to-r from-rose-500 to-rose-400 animate-pulse transition-all duration-1000 ease-out";
                     storyBanner.innerText = "황폐해진 공유지 (매연이 자욱하고 불신이 극에 달했습니다)";
-                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2 rounded-lg bg-rose-900/30 text-rose-300 transition-all duration-500 border border-rose-500/30";
+                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2.5 rounded-lg bg-rose-900/30 text-rose-300 transition-all duration-500 border border-rose-500/30 shadow-[0_0_15px_rgba(225,29,72,0.3)]";
                 } else {
                     fIcon.innerText = "💀";
                     hpBarEl.className = "h-full bg-slate-700";
                     storyBanner.innerText = "완전한 파국 (모든 생명이 사라지고 공동체는 파멸했습니다)";
-                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2 rounded-lg bg-slate-900 text-slate-500 transition-all duration-500 border border-slate-700";
+                    storyBanner.className = "text-center text-sm md:text-base font-bold py-2.5 rounded-lg bg-slate-900 text-slate-500 transition-all duration-500 border border-slate-700";
                 }
 
+                // HP 애니메이션 처리
                 if (currentHp !== lastHp && !isTeacher) {
                     if (currentHp < lastHp) {
                         document.body.classList.remove('shake-screen', 'heal-screen');
@@ -908,18 +967,19 @@
                 gameoverBanner.classList.add('hidden');
                 extSection.classList.add('hidden');
 
-                if (currentHp <= 0 && data.state.phase === 'gameover') {
+                if (data.state.phase === 'gameover') {
                     gameoverBanner.classList.remove('hidden');
-                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="text-4xl font-black text-rose-500 mb-2">💀 파국 발생</h3><p class="text-base text-slate-300 font-bold">생태 점수가 0점이 되어 공동체가 무너졌습니다.</p>`;
-                    
+                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="text-4xl md:text-5xl font-black text-rose-500 mb-3">💀 파국 발생</h3><p class="text-lg text-slate-300 font-medium">생태 점수가 0점이 되어 공동체가 무너졌습니다.</p>`;
                     if (data.state.leader === myName || isTeacher) {
                         document.getElementById('btn-restart-game').classList.remove('hidden');
+                        document.getElementById('btn-restart-game').classList.add('block');
                     }
                 } else if (data.state.phase === 'victory') {
                     gameoverBanner.classList.remove('hidden');
-                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="text-4xl font-black text-emerald-400 mb-2">🎉 생존 성공!</h3><p class="text-base text-slate-300 font-bold">합의된 규범과 협력으로 지속 가능한 문명을 이뤄냈습니다.</p>`;
+                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="text-4xl md:text-5xl font-black text-emerald-400 mb-3">🎉 생존 성공!</h3><p class="text-lg text-slate-300 font-medium">합의된 규범과 협력으로 지속 가능한 문명을 이뤄냈습니다.</p>`;
                     if (data.state.leader === myName || isTeacher) {
                         document.getElementById('btn-restart-game').classList.remove('hidden');
+                        document.getElementById('btn-restart-game').classList.add('block');
                     }
                 } else if (data.state.phase === 'extension_vote') {
                     extSection.classList.remove('hidden');
@@ -946,28 +1006,38 @@
                                 activeEvent: 'none'
                             });
                         } else {
-                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
-                                phase: 'victory',
-                                extVote: null
-                            });
+                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { phase: 'victory', extVote: null });
                         }
                     }
                 }
 
-                // 엔딩 통계 렌더링
+                // 랭킹 리더보드 출력
                 if (data.state.phase === 'gameover' || data.state.phase === 'victory') {
                     const pKeys = Object.keys(data.players || {});
-                    let statsHTML = `<div class="w-full bg-slate-800 border border-slate-700 rounded-xl p-5 text-left mb-6 shadow-inner">
-                        <h4 class="text-lg font-bold text-slate-200 mb-4 text-center border-b border-slate-600 pb-2">📊 최종 생태 기여도 성적표</h4>
+                    
+                    // 골드 기준 내림차순 정렬
+                    let sortedPlayers = pKeys.map(k => ({ name: k, ...data.players[k] }));
+                    sortedPlayers.sort((a, b) => (b.gold || 0) - (a.gold || 0));
+
+                    let statsHTML = `<div class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 text-left mb-6 shadow-inner max-w-2xl mx-auto">
+                        <h4 class="text-xl md:text-2xl font-black text-yellow-300 mb-5 text-center">📊 최종 생태 기여도 & 자산 순위</h4>
                         <div class="space-y-3">`;
-                    pKeys.forEach(k => {
-                        const pStats = data.players[k].stats || {greed:0, need:0, care:0};
-                        statsHTML += `<div class="flex justify-between items-center bg-slate-900 px-4 py-2 rounded-lg border border-slate-700/50">
-                            <div class="font-bold text-sm text-slate-100">${k}</div>
-                            <div class="text-xs font-bold flex gap-3">
-                                <span class="text-emerald-400">돌보기 ${pStats.care || 0}회</span>
-                                <span class="text-amber-400">적당히 ${pStats.need || 0}회</span>
-                                <span class="text-rose-400">욕심 ${pStats.greed || 0}회</span>
+                    
+                    sortedPlayers.forEach((p, index) => {
+                        const pStats = p.stats || {greed:0, need:0, care:0};
+                        const isFirst = (index === 0 && data.state.phase === 'victory');
+                        const rankClass = isFirst ? 'rank-1 shadow-[0_0_15px_rgba(251,191,36,0.3)]' : 'border border-slate-700/50';
+                        const crown = isFirst ? '👑' : `${index + 1}위`;
+
+                        statsHTML += `<div class="flex justify-between items-center bg-slate-800/80 px-4 py-3 rounded-xl ${rankClass}">
+                            <div class="font-black text-base text-white flex items-center gap-2"><span class="text-yellow-400 text-sm w-6 text-center">${crown}</span> ${p.name}</div>
+                            <div class="flex flex-col items-end">
+                                <div class="text-yellow-400 font-black text-lg mb-1">${p.gold || 0} 💰</div>
+                                <div class="text-[11px] md:text-xs font-bold flex gap-2">
+                                    <span class="text-emerald-400 bg-emerald-900/30 px-1.5 rounded">돌보기 ${pStats.care || 0}</span>
+                                    <span class="text-amber-400 bg-amber-900/30 px-1.5 rounded">적당히 ${pStats.need || 0}</span>
+                                    <span class="text-rose-400 bg-rose-900/30 px-1.5 rounded">욕심 ${pStats.greed || 0}</span>
+                                </div>
                             </div>
                         </div>`;
                     });
@@ -975,14 +1045,12 @@
                     document.getElementById('endgame-stats-container').innerHTML = statsHTML;
                 }
 
-                currentPhase = data.state.phase;
-
                 const sWait = document.getElementById('section-waiting');
                 const sBet = document.getElementById('section-betting');
                 const sRev = document.getElementById('section-reveal');
-                sWait.classList.add('hidden');
-                sBet.classList.add('hidden');
-                sRev.classList.add('hidden');
+                sWait.classList.add('hidden'); sWait.classList.remove('flex');
+                sBet.classList.add('hidden'); sBet.classList.remove('flex');
+                sRev.classList.add('hidden'); sRev.classList.remove('flex');
 
                 const players = data.players || {};
                 const pKeys = Object.keys(players);
@@ -1000,10 +1068,11 @@
                     document.getElementById('my-role-badge').classList.add('hidden');
                 }
 
+                // 버튼 로컬 리셋 (라운드 변경 시)
                 if (currentLocalRound !== data.state.round) {
                     currentLocalRound = data.state.round;
                     localChoice = "";
-                    const btnClasses = "w-full bg-slate-800 border border-slate-700 py-8 rounded-2xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700";
+                    const btnClasses = "w-full bg-slate-800 border border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-sm cursor-pointer hover:bg-slate-700";
                     ['greed', 'need', 'care'].forEach(id => {
                         const b = document.getElementById(`action-btn-${id}`);
                         if(b) b.className = btnClasses;
@@ -1024,7 +1093,6 @@
                 }
 
                 if (data.state.phase === 'waiting') {
-                    clearInterval(actionTimerInterval);
                     sWait.classList.remove('hidden');
                     sWait.classList.add('flex');
                     const wContainer = document.getElementById('waiting-players');
@@ -1036,12 +1104,14 @@
                     
                     const btnStart = document.getElementById('btn-start-group');
                     const msgHost = document.getElementById('msg-waiting-host');
-                    // ★ 방장 버튼 완벽 통제 로직 ★
+                    // ★ 방장 버튼 완벽 제어
                     if (isGroupLeader) {
                         btnStart.classList.remove('hidden');
+                        btnStart.style.display = 'block';
                         msgHost.classList.add('hidden');
                     } else {
                         btnStart.classList.add('hidden');
+                        btnStart.style.display = 'none';
                         msgHost.classList.remove('hidden');
                     }
                 } 
@@ -1050,7 +1120,6 @@
                     sBet.classList.add('flex');
                     const myChoice = players[myName]?.choice;
                     
-                    // 인게임 배너 출력 (스플래시 끝난 뒤에도 유지)
                     const eventBanner = document.getElementById('random-event-banner');
                     const evTitle = document.getElementById('event-title');
                     const evDesc = document.getElementById('event-desc');
@@ -1080,27 +1149,11 @@
                     }
 
                     const bTimerDisplay = document.getElementById('betting-timer-display');
-                    const bTimerText = document.getElementById('action-timer-text');
                     
                     if (!isTeacher && (!myChoice || myChoice === "")) {
                         document.getElementById('action-buttons-container').classList.remove('hidden');
                         bTimerDisplay.classList.remove('hidden');
-                        
-                        // 스플래시 대기시간 3초 고려하여 33초 세팅됨.
-                        const endTime = data.state.bettingEndTime || (Date.now() + 30000);
-                        clearInterval(actionTimerInterval);
-                        actionTimerInterval = setInterval(() => {
-                            const remain = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
-                            if(bTimerText) bTimerText.innerText = remain;
-                            
-                            if (remain <= 0) {
-                                clearInterval(actionTimerInterval);
-                                if(!localChoice) localChoice = 'timeout'; // 태만 처리
-                                confirmActionSubmit(true);
-                            }
-                        }, 1000);
                     } else {
-                        clearInterval(actionTimerInterval);
                         bTimerDisplay.classList.add('hidden');
                         if (!isTeacher) {
                             document.getElementById('action-buttons-container').classList.add('hidden');
@@ -1131,7 +1184,7 @@
                         const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1">👑</span>' : '';
                         
                         if (pChoice && pChoice !== "") {
-                            grid.innerHTML += `<div class="w-full bg-slate-800 p-4 rounded-xl border border-slate-600 flex flex-col items-center justify-center h-28"><div class="text-2xl mb-1 text-slate-500">🔒</div><div class="font-bold text-sm text-slate-200 flex items-center">${pName}${hostTag}</div><div class="text-xs mt-1 bg-slate-700 px-2 py-0.5 rounded text-slate-400 font-bold">선택 완료</div></div>`;
+                            grid.innerHTML += `<div class="w-full bg-slate-800 p-4 rounded-xl border border-slate-600 flex flex-col items-center justify-center h-28"><div class="text-2xl mb-1 text-slate-500">🔒</div><div class="font-bold text-sm text-slate-300 flex items-center">${pName}${hostTag}</div><div class="text-xs mt-1 bg-slate-700 px-2 py-0.5 rounded text-slate-400 font-bold">제출 완료</div></div>`;
                         } else {
                             grid.innerHTML += `<div class="w-full bg-slate-900 p-4 rounded-xl border border-slate-700 flex flex-col items-center justify-center h-28"><div class="font-bold text-sm text-slate-400 flex items-center">${pName}${hostTag}</div><div class="text-xs mt-1 text-slate-500 font-medium animate-pulse">고민 중...</div></div>`;
                         }
@@ -1139,12 +1192,13 @@
 
                     if (isGroupLeader && allChosen && data.state.phase === 'betting') {
                         document.getElementById('btn-reveal').classList.remove('hidden');
+                        document.getElementById('btn-reveal').style.display = 'block';
                     } else {
                         document.getElementById('btn-reveal').classList.add('hidden');
+                        document.getElementById('btn-reveal').style.display = 'none';
                     }
                 }
                 else if (data.state.phase === 'reveal') {
-                    clearInterval(actionTimerInterval);
                     sRev.classList.remove('hidden');
                     sRev.classList.add('flex');
 
@@ -1153,18 +1207,19 @@
                     if (data.state.activeLaw) {
                         lawBanner.classList.remove('hidden');
                         let lDesc = "";
-                        if (data.state.activeLaw === 'tax') lDesc = "욕심내기 수익 절반 삭감";
-                        else if (data.state.activeLaw === 'eco_tax') lDesc = "환경 부담금 벌금 징수";
-                        else if (data.state.activeLaw === 'mandatory_care') lDesc = "돌보기 결의안 (위반자 강제 폭로 시스템 가동 중)";
-                        else if (data.state.activeLaw === 'rationing') lDesc = "자원 배급제 (욕심 봉쇄)";
-                        else if (data.state.activeLaw === 'tech_ban') lDesc = "공장 가동 임시 중단 (모두 1단계 하향)";
-                        else if (data.state.activeLaw === 'subsidy_2') lDesc = "돌보기 보상 2원 상향";
-                        else if (data.state.activeLaw === 'subsidy_3') lDesc = "돌보기 보상 3원 상향";
+                        if (data.state.activeLaw === 'tax') lDesc = "욕심내기 수익 절반 삭감 (이번 라운드 한정)";
+                        else if (data.state.activeLaw === 'eco_tax') lDesc = "환경 부담금 벌금 징수 (이번 라운드 한정)";
+                        else if (data.state.activeLaw === 'mandatory_care') lDesc = "돌보기 결의안 (배신자 강제 폭로 적용됨)";
+                        else if (data.state.activeLaw === 'rationing') lDesc = "자원 배급제 - 욕심내기 봉쇄 (이번 라운드 한정)";
+                        else if (data.state.activeLaw === 'tech_ban') lDesc = "공장 가동 임시 중단 - 모두 1단계 강제 하향 (이번 라운드 한정)";
+                        else if (data.state.activeLaw === 'subsidy_2') lDesc = "돌보기 보상금 2원 지원";
+                        else if (data.state.activeLaw === 'subsidy_3') lDesc = "돌보기 보상금 3원 지원";
                         lawText.innerText = lDesc;
                     } else {
                         lawBanner.classList.add('hidden');
                     }
 
+                    // 블라인드 시스템
                     const grid = document.getElementById('reveal-grid');
                     grid.innerHTML = '';
                     
@@ -1199,7 +1254,7 @@
                         }
 
                         if (isExposed && !isEnd) {
-                            exposeBadge = `<div class="absolute -top-3 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md animate-bounce shadow border border-rose-400 z-10">🚨 위반 폭로!</div>`;
+                            exposeBadge = `<div class="absolute -top-3 bg-rose-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md animate-bounce shadow border border-rose-400 z-10">🚨 결의안 위반!</div>`;
                             bgColor = 'bg-rose-950/40 border-2 border-rose-500 shadow-[0_0_15px_rgba(225,29,72,0.5)]';
                         }
                         
@@ -1233,31 +1288,6 @@
                         document.getElementById('sanction-vote-question').innerText = sVoteData.question;
                         document.getElementById('sanction-vote-desc').innerText = sVoteData.description;
                         
-                        const createdAt = sVoteData.createdAt || Date.now();
-                        const timeToWait = 15000; 
-                        clearInterval(voteTimerInterval);
-                        
-                        voteTimerInterval = setInterval(() => {
-                            const elapsed = Date.now() - createdAt;
-                            const remaining = Math.max(0, Math.ceil((timeToWait - elapsed) / 1000));
-                            const btnYes = document.getElementById('btn-vote-yes');
-                            const btnNo = document.getElementById('btn-vote-no');
-                            const timerText = document.getElementById('vote-timer-text');
-
-                            if (remaining > 0) {
-                                btnYes.disabled = true; btnNo.disabled = true;
-                                btnYes.classList.add('opacity-40', 'cursor-not-allowed'); 
-                                btnNo.classList.add('opacity-40', 'cursor-not-allowed');
-                                timerText.innerText = `⏳ 의무 토론 시간: ${remaining}초 후 투표 활성화`;
-                            } else {
-                                btnYes.disabled = false; btnNo.disabled = false;
-                                btnYes.classList.remove('opacity-40', 'cursor-not-allowed'); 
-                                btnNo.classList.remove('opacity-40', 'cursor-not-allowed');
-                                timerText.innerText = `의무 토론 종료! 투표가 활성화되었습니다.`;
-                                clearInterval(voteTimerInterval);
-                            }
-                        }, 1000);
-
                         const votes = sVoteData.votes || {};
                         let agreeCount = 0, disagreeCount = 0, totalVoted = 0;
                         Object.keys(votes).forEach(k => {
@@ -1290,7 +1320,6 @@
                             cancelLawSelection(); 
                         }
                     } else {
-                        clearInterval(voteTimerInterval);
                         pWrapper.classList.remove('hidden');
                         closedMsg.classList.add('hidden');
                         activeVoteBox.classList.add('hidden');
@@ -1299,11 +1328,11 @@
                         let lawsHTML = '';
                         
                         lawsHTML += `<button onclick="selectLaw('tax')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg text-sm font-bold border border-slate-500 shadow transition">욕심 수익 삭감</button>`;
-                        lawsHTML += `<button onclick="selectLaw('subsidy_2')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg text-sm font-bold border border-slate-500 shadow transition">보조금 2원 상향</button>`;
+                        lawsHTML += `<button onclick="selectLaw('subsidy_2')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg text-sm font-bold border border-slate-500 shadow transition">돌보기 보상금 2원</button>`;
                         
                         if (cRound >= 4) {
                             lawsHTML += `<button onclick="selectLaw('mandatory_care')" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-2 rounded-lg text-sm font-bold border border-emerald-600 shadow transition">돌보기 결의안</button>`;
-                            lawsHTML += `<button onclick="selectLaw('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-teal-100 px-3 py-2 rounded-lg text-sm font-bold border border-teal-600 shadow transition">보조금 3원 상향</button>`;
+                            lawsHTML += `<button onclick="selectLaw('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-teal-100 px-3 py-2 rounded-lg text-sm font-bold border border-teal-600 shadow transition">돌보기 보상금 3원</button>`;
                         }
                         if (cRound >= 7) {
                             lawsHTML += `<button onclick="selectLaw('rationing')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 px-3 py-2 rounded-lg text-sm font-bold border border-amber-600 shadow transition">자원 배급제 (봉쇄)</button>`;
@@ -1323,6 +1352,7 @@
 
                     if (isGroupLeader) {
                         document.getElementById('btn-next-round').classList.remove('hidden');
+                        document.getElementById('btn-next-round').style.display = 'block';
                     }
                 }
             });
@@ -1335,7 +1365,7 @@
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { 
                 phase: 'betting',
-                bettingEndTime: Date.now() + 33000 // 스플래시 대기시간 3초 보정
+                bettingEndTime: Date.now() + 33000 
             });
         });
 
@@ -1368,7 +1398,6 @@
 
             const isTragedy = greedCount > (pCount / 2); 
 
-            // 통계 및 서버 수익 계산
             pKeys.forEach(k => {
                 let choice = data.players[k].choice;
                 const tier = data.players[k].techTier || 1;
@@ -1409,8 +1438,7 @@
                     if (effectiveTier === 3) earned = 5;
                     
                     if (activeEvent === 'boom') earned += 2; 
-                    
-                    if (isTimeout) earned = 0; // 태만자 수익 박탈
+                    if (isTimeout) earned = 0; 
                     
                     data.players[k].gold += earned; 
                 }
@@ -1420,7 +1448,6 @@
                     totalRawHpChange += carePower; 
                 }
 
-                // 배신자 주홍글씨 및 면죄부 로직
                 if (activeLaw === 'mandatory_care') {
                     if (choice !== 'care') {
                         data.players[k].exposed = true; 
@@ -1500,7 +1527,7 @@
                 return;
             }
 
-            // 50% 평온 고정, 나머지 50%는 생태점수에 따른 변수 확률 부여
+            // 확률 밸런스: 평온 50%, 재난은 생태 점수에 비례
             const nRound = data.state.round + 1;
             let nextEvent = 'none';
             if (nRound >= 2) {
@@ -1515,7 +1542,7 @@
                         const evList = ['boom', 'activist', 'drought', 'wildfire'];
                         nextEvent = evList[Math.floor(Math.random() * evList.length)];
                     } else {
-                        const evList = ['drought', 'wildfire', 'drought', 'wildfire', 'activist']; // 재난 확률 80% (0.5 * 0.8 = 전체의 40%가 무조건 재난)
+                        const evList = ['drought', 'wildfire', 'drought', 'wildfire', 'activist'];
                         nextEvent = evList[Math.floor(Math.random() * evList.length)];
                     }
                 }
@@ -1527,7 +1554,7 @@
             data.state.sanctionVote = null;
             data.state.voteUsed = false; 
             data.state.activeEvent = nextEvent;
-            data.state.bettingEndTime = Date.now() + 33000; // 스플래시 3초 보정
+            data.state.bettingEndTime = Date.now() + 33000; 
             Object.keys(data.players).forEach(k => data.players[k].choice = "");
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
