@@ -137,6 +137,38 @@
         .setup-primary { min-height: 4rem; }
         button, input, select { -webkit-tap-highlight-color: transparent; }
 
+
+        /* v7: classroom readability and stable layout */
+        :root { --content-max: 72rem; --panel-radius: 1.15rem; }
+        body {
+            background-position:center center;
+            background-size:cover;
+            background-attachment:fixed;
+        }
+        body::before {
+            content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+            background:
+              radial-gradient(circle at 50% 16%, rgba(24,91,82,.16), transparent 36%),
+              linear-gradient(180deg, rgba(2,6,23,.42) 0%, rgba(2,6,23,.70) 55%, rgba(2,6,23,.90) 100%);
+        }
+        #panel-home,#panel-teacher-setup,#panel-student-login,#panel-group-game,#panel-teacher-macro,#panel-teacher-rules,#panel-student-rules {
+            width:min(100%,var(--content-max));
+        }
+        .setup-card,#panel-student-login > .glass-panel { width:min(100%,34rem); margin-inline:auto; }
+        .setup-card input,.setup-card select,#panel-student-login input,#panel-student-login select {
+            text-align:center!important; text-align-last:center!important; min-height:3.6rem;
+        }
+        .home-kicker { font-size:1.1rem!important; }
+        .home-subtitle { font-size:1.35rem!important; line-height:1.75!important; }
+        .home-choice .choice-title { font-size:2rem!important; }
+        .home-choice .choice-copy { font-size:1.15rem!important; line-height:1.65!important; }
+        .home-shell > p:last-child { font-size:1.08rem!important; }
+        .setup-hint,.accessibility-note,.setup-card .text-sm,#panel-student-login .text-sm {
+            font-size:1.05rem!important; line-height:1.7!important;
+        }
+        .setup-card input::placeholder,#panel-student-login input::placeholder { color:#94a3b8; opacity:1; }
+        .button-loading { opacity:.65; cursor:progress!important; transform:none!important; }
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -546,7 +578,7 @@
     <script>
         const initializeApp = (config) => firebase.initializeApp(config);
         const getDatabase = () => firebase.database();
-        const ref = (db, path = '') => db.ref(path);
+        const ref = (db, path = null) => (path === null || path === undefined || path === '' ? db.ref() : db.ref(path));
         const set = (r, value) => r.set(value);
         const onValue = (r, callback) => r.on('value', callback);
         const update = (r, values) => r.update(values);
@@ -905,48 +937,81 @@
             listenGroupMicro();
         };
 
-        // 🌟 학생 접속 로직 (원자적 방장 선출)
+        const dbPathSegment = (value, label) => {
+            const v = String(value ?? '').trim();
+            if (!v) throw new Error(`${label} 값이 비어 있습니다.`);
+            if (/[.#$\/\[\]]/.test(v)) throw new Error(`${label}에 사용할 수 없는 문자가 포함되어 있습니다.`);
+            return v;
+        };
+        const makeGroupPath = (className, groupNum) =>
+            `classes/${dbPathSegment(className, '학급 이름')}/groups/${dbPathSegment(groupNum, '조 번호')}`;
+
+        // 🌟 학생 접속 로직 (재접속 안전 + 원자적 방장 선출)
+        let isJoiningGroup = false;
         document.getElementById('btn-join-group').addEventListener('click', async () => {
+            const joinBtn = document.getElementById('btn-join-group');
+            if (isJoiningGroup) return;
             if (!db) return alert('게임 서버 연결을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 페이지를 새로고침하세요.');
+
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value;
             const nickname = document.getElementById('student-nickname').value.trim();
 
             if(!className || !groupNum || !nickname) return alert("학급 이름, 조 번호, 이름을 모두 입력하세요.");
             if(nickname.toLowerCase() === 'choice') return alert("사용할 수 없는 이름입니다.");
-            if(/[.#$\[\]/]/.test(nickname)) return alert("닉네임에 사용할 수 없는 문자가 포함되어 있습니다.");
 
+            let groupPath = "";
             try {
-                const groupPath = `classes/${className}/groups/${groupNum}`;
-                const groupRef = ref(db, groupPath);
-                const snapshot = await withTimeout(get(groupRef));
+                dbPathSegment(className, '학급 이름');
+                dbPathSegment(groupNum, '조 번호');
+                dbPathSegment(nickname, '닉네임');
+                groupPath = makeGroupPath(className, groupNum);
+
+                isJoiningGroup = true;
+                joinBtn.disabled = true;
+                joinBtn.classList.add('button-loading');
+                joinBtn.innerText = '접속 중...';
+
+                if (unsubscribeGroup) { unsubscribeGroup(); unsubscribeGroup = null; }
+                currentGroupData = null;
+                currentActiveLaw = null;
+                localChoice = "";
+                lastHp = null;
+                currentPhase = 'waiting';
+
+                const snapshot = await withTimeout(get(ref(db, groupPath)), 7000);
                 if (!snapshot.exists()) return alert("존재하지 않는 방입니다. 교사가 방을 만들었는지 확인하세요.");
 
-                const gData = snapshot.val();
+                const gData = snapshot.val() || {};
+                const state = gData.state || {};
                 const players = gData.players || {};
-                const isExistingPlayer = !!players[nickname];
 
-                if (gData.state.phase === 'waiting' && isExistingPlayer) {
-                    return alert("이미 대기실에 동일한 닉네임이 존재합니다. 다른 이름을 사용해주세요.");
-                }
-                if (gData.state.phase !== 'waiting' && !isExistingPlayer) {
-                    return alert("이미 게임이 진행 중입니다. 오류 시 교사에게 조 초기화를 요청하세요.");
+                const existingEntry = Object.entries(players).find(([key, p]) =>
+                    key === nickname || p?.nickname === nickname
+                );
+                const existingKey = existingEntry ? existingEntry[0] : null;
+                const isExistingPlayer = !!existingEntry;
+
+                if (state.phase !== 'waiting' && !isExistingPlayer) {
+                    return alert("이미 게임이 진행 중입니다. 게임에 참여했던 동일한 이름으로만 재접속할 수 있습니다.");
                 }
 
                 myClass = className;
-                myGroup = groupNum;
-                myName = nickname;
+                myGroup = String(groupNum);
+                myName = existingKey || nickname;
                 isTeacher = false;
 
-                // 플레이어 등록을 먼저 수행하고, leader는 transaction으로 단 한 명만 선점합니다.
                 if (!isExistingPlayer) {
-                    await update(ref(db), {
+                    await withTimeout(update(ref(db), {
                         [`${groupPath}/players/${myName}`]: {
+                            nickname: nickname,
                             choice: "", gold: 0, techTier: 1, exposed: false,
                             joinedAt: Date.now(), roundEarnings: 0,
                             stats: { greed:0, need:0, care:0 }
                         }
-                    });
+                    }), 7000);
+                } else if (!players[myName]?.nickname) {
+                    await update(ref(db, `${groupPath}/players/${myName}`), { nickname });
                 }
 
                 await runTransaction(ref(db, `${groupPath}/state/leader`), current => {
@@ -955,11 +1020,18 @@
                 });
 
                 document.getElementById('display-class-group').innerText = `${myClass} ${myGroup}조`;
-                if (gData.state.phase !== 'waiting') showPanel('panel-group-game');
+                if (state.phase !== 'waiting') showPanel('panel-group-game');
                 else showPanel('panel-student-rules');
+
                 listenGroupMicro();
             } catch (error) {
-                alert(`접속 오류: ${error.message}`);
+                console.error('학생 접속 오류:', error, {className, groupNum, nickname, groupPath});
+                alert(`접속 오류: ${error.message || error}`);
+            } finally {
+                isJoiningGroup = false;
+                joinBtn.disabled = false;
+                joinBtn.classList.remove('button-loading');
+                joinBtn.innerText = '입장하기';
             }
         });
 
@@ -969,7 +1041,8 @@
             if(unsubscribeGroup) { unsubscribeGroup(); unsubscribeGroup = null; }
 
             try {
-                const groupPath = `classes/${myClass}/groups/${myGroup}`;
+                const groupPath = makeGroupPath(myClass, myGroup);
+                if (!myName) throw new Error('현재 플레이어 정보가 없습니다.');
                 const playerRef = ref(db, `${groupPath}/players/${myName}`);
                 const leaderRef = ref(db, `${groupPath}/state/leader`);
                 const snapshot = await get(ref(db, groupPath));
@@ -1398,9 +1471,11 @@
 
         // 🌟 실시간 데이터 리스너 (강제 셀프 힐링 & 렌더링 통제)
         function listenGroupMicro() {
+            if (!db || !myClass || !myGroup) return;
+            const safeGroupPath = makeGroupPath(myClass, myGroup);
             if(unsubscribeGroup) unsubscribeGroup(); // 리스너 중복 실행 방지
-            
-            unsubscribeGroup = onValue(ref(db, `classes/${myClass}/groups/${myGroup}`), async (snapshot) => {
+
+            unsubscribeGroup = onValue(ref(db, safeGroupPath), async (snapshot) => {
                 currentGroupData = snapshot.val();
                 if(!currentGroupData) return;
 
@@ -1595,7 +1670,7 @@
                         const crown = `${index + 1}위`;
 
                         statsHTML += `<div class="flex justify-between items-center bg-slate-800/80 px-4 py-3 rounded-xl ${rankClass}">
-                            <div class="font-black text-base text-white flex items-center gap-2"><span class="text-yellow-400 text-sm w-8 text-center">${crown}</span> ${p.name}</div>
+                            <div class="font-black text-base text-white flex items-center gap-2"><span class="text-yellow-400 text-sm w-8 text-center">${crown}</span> ${p.nickname || p.name}</div>
                             <div class="flex flex-col items-end">
                                 <div class="text-yellow-400 font-black text-lg mb-1.5 drop-shadow-sm">${p.gold || 0} 자산</div>
                                 <div class="text-[11px] md:text-xs font-bold flex gap-2">
@@ -1641,9 +1716,9 @@
                 }
                 
                 // 만약 현재 학생이 DB에 없다면 (유령 상태) 강제로 다시 밀어넣기
-                if (!isTeacher && myName && !pKeys.includes(myName)) {
-                    update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), {
-                        choice: "", gold: 0, techTier: 1, exposed: false, stats: { greed:0, need:0, care:0 }
+                if (!isTeacher && myName && myClass && myGroup && !pKeys.includes(myName)) {
+                    update(ref(db, `${makeGroupPath(myClass, myGroup)}/players/${myName}`), {
+                        nickname: myName, choice: "", gold: 0, techTier: 1, exposed: false, roundEarnings: 0, stats: { greed:0, need:0, care:0 }
                     });
                     return; // 업데이트 후 다시 렌더링되므로 여기서 종료
                 }
@@ -1805,9 +1880,9 @@
                         const hostTag = isL ? '<span class="ml-2 text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-400/20">방장</span>' : '';
                         
                         if (pChoice && pChoice !== "") {
-                            grid.innerHTML += `<div class="w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center h-36 shadow-inner"><div class="text-xs mb-1 text-slate-500 uppercase tracking-wider">LOCKED</div><div class="font-bold text-base text-slate-300 flex items-center">${pName}${hostTag}</div><div class="font-body text-xs mt-2 bg-slate-700 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600">제출 완료</div></div>`;
+                            grid.innerHTML += `<div class="w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center h-36 shadow-inner"><div class="text-xs mb-1 text-slate-500 uppercase tracking-wider">LOCKED</div><div class="font-bold text-base text-slate-300 flex items-center">${displayName}${hostTag}</div><div class="font-body text-xs mt-2 bg-slate-700 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600">제출 완료</div></div>`;
                         } else {
-                            grid.innerHTML += `<div class="w-full bg-slate-900 p-5 rounded-2xl border border-slate-700 flex flex-col items-center justify-center h-36"><div class="font-bold text-base text-slate-400 flex items-center">${pName}${hostTag}</div><div class="font-body text-sm mt-2 text-slate-500 font-bold animate-pulse">고민 중...</div></div>`;
+                            grid.innerHTML += `<div class="w-full bg-slate-900 p-5 rounded-2xl border border-slate-700 flex flex-col items-center justify-center h-36"><div class="font-bold text-base text-slate-400 flex items-center">${displayName}${hostTag}</div><div class="font-body text-sm mt-2 text-slate-500 font-bold animate-pulse">고민 중...</div></div>`;
                         }
                     });
                 }
@@ -1873,7 +1948,7 @@
                             <div class="relative w-full ${bgColor} p-5 rounded-3xl border flex flex-col items-center justify-center h-48 transition-transform hover:scale-[1.02]">
                                 ${exposeBadge}
                                 <div class="text-5xl mb-3">${icon}</div>
-                                <div class="font-bold text-base text-slate-200 mb-2 flex items-center">${pName}${hostTag}</div>
+                                <div class="font-bold text-base text-slate-200 mb-2 flex items-center">${displayName}${hostTag}</div>
                                 <div class="mb-3">${tierBadge}</div>
                                 <div class="bg-slate-900 px-4 py-1.5 rounded-xl text-yellow-400 font-black text-lg border border-slate-700 shadow-inner">${displayGold} 자산</div>
                             </div>
