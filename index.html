@@ -87,12 +87,44 @@
 .hp-effect-active { animation: hpBadgePulse 2.6s ease-in-out infinite; }
 @keyframes hpBadgePulse { 0%,100% { opacity:.78; transform: translateY(0); } 50% { opacity:1; transform: translateY(-1px); } }
 
+
+        /* 안정성: Tailwind CDN이 지연되어도 투명 오버레이가 클릭을 막지 않도록 고정 */
+        #event-splash-screen { pointer-events:none !important; visibility:hidden; }
+        #event-splash-screen.opacity-0 { visibility:hidden !important; display:none !important; }
+        #modal-ingame-rules.hidden { display:none !important; }
+
+        /* 절제된 편집형 UI — 장식보다 정보 위계 우선 */
+        :root { --ui-panel: rgba(10,18,31,.88); --ui-line: rgba(148,163,184,.18); --ui-muted:#94a3b8; --ui-text:#f1f5f9; --ui-accent:#52c9a5; }
+        button, input, select { position:relative; z-index:2; }
+        .glass-panel { background:var(--ui-panel); border:1px solid var(--ui-line); box-shadow:0 12px 32px rgba(0,0,0,.28); backdrop-filter:blur(10px); }
+        .glass-panel:hover { border-color:rgba(148,163,184,.28); }
+        .home-shell { max-width: 62rem; margin: 0 auto; }
+        .home-kicker { letter-spacing:.22em; font-size:.76rem; color:#a7f3d0; text-transform:uppercase; margin-bottom:1rem; }
+        .home-title { font-family:'ElegantSerif',serif !important; font-size:clamp(3.3rem,8vw,6.5rem); line-height:1.02; letter-spacing:-.03em; margin-bottom:1rem; color:#f8fafc; }
+        .home-subtitle { max-width:48rem; margin:0 auto 2.8rem; color:#cbd5e1; font-size:1.12rem; line-height:1.75; }
+        .home-choice { min-height:8.5rem; border:1px solid rgba(148,163,184,.22); background:rgba(10,18,31,.84); border-radius:1.1rem; padding:1.8rem 2rem; text-align:left; box-shadow:none; }
+        .home-choice:hover { background:rgba(15,23,42,.94); transform:translateY(-2px); }
+        .home-choice .choice-title { font-size:1.75rem; font-weight:800; margin-bottom:.35rem; }
+        .home-choice .choice-copy { color:#94a3b8; font-size:.98rem; line-height:1.55; }
+        .setup-card { border-radius:1.25rem !important; padding:2rem !important; }
+        .setup-card h2 { font-family:'ElegantSerif',serif !important; color:#e2e8f0 !important; }
+        .setup-card input, .setup-card select { border-radius:.8rem !important; background:rgba(2,6,23,.72) !important; border-color:rgba(148,163,184,.2) !important; }
+        .setup-primary { background:#4f46e5 !important; box-shadow:none !important; border-radius:.8rem !important; }
+        .setup-primary:hover { background:#5b55e8 !important; }
+        .quiet-link { color:#94a3b8 !important; }
+        .danger-link { color:#f87171 !important; }
+
+        .editorial-divider { height:1px; background:rgba(148,163,184,.16); margin:1.25rem 0; }
+        .setup-hint { color:#64748b; font-size:.82rem; line-height:1.55; text-align:left; }
+        .home-choice:focus-visible, .setup-primary:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid rgba(110,231,183,.7); outline-offset:3px; }
+        .home-choice, .setup-primary { transition: background .18s ease, border-color .18s ease, transform .18s ease; }
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
 
     <!-- 이벤트 스플래시 -->
-    <div id="event-splash-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-500">
+    <div id="event-splash-screen" style="pointer-events:none!important" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-500">
         <div id="event-splash-content" class="text-center transform scale-75 opacity-0 transition-all duration-700 ease-out flex flex-col items-center w-full px-4">
             <div id="event-splash-icon" class="text-3xl md:text-5xl mb-5 font-title tracking-wide"></div>
             <h2 id="event-splash-title" class="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl whitespace-nowrap font-title text-white"></h2>
@@ -101,39 +133,42 @@
     </div>
 
     <!-- 1. 초기 홈 화면 -->
-    <div id="panel-home" class="w-full max-w-4xl text-center fade-in-up">
-        <div class="text-sm md:text-base tracking-[0.32em] text-emerald-300/80 font-bold mb-4">THE COMMONS DILEMMA · THE LAST FOREST</div><h1 class="text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 mb-6 font-title font-bold tracking-tight drop-shadow-xl">공유지의 딜레마</h1>
-        <div class="bg-slate-900/60 px-8 py-3 rounded-full backdrop-blur-md inline-block shadow-lg border border-slate-700 mb-12">
-            <p class="text-xl md:text-2xl text-emerald-100 font-bold tracking-wide">공유지는 모두의 것이지만, 선택의 대가는 모두가 함께 감당합니다. 과연 당신은 숲과 부를 동시에 지킬 수 있을까요?</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <button type="button" id="home-teacher-btn" class="glass-panel hover:bg-slate-800 p-12 rounded-[2rem] transition-all border-t-4 border-t-indigo-500/50 group shadow-xl hover:scale-[1.02]">
-                <div class="font-bold text-4xl text-indigo-400 font-title mb-3 transition">교사 (방장)</div>
-                <div class="text-lg text-slate-300 font-medium">학급 일괄 개설 및 게임 관리</div>
+    <div id="panel-home" class="w-full home-shell text-center fade-in-up">
+        <div class="home-kicker">공동의 숲을 함께 지키는 선택의 게임</div>
+        <h1 class="home-title">공유지의 딜레마</h1>
+        <p class="home-subtitle">공동의 숲을 지키면서도 자신의 자산을 늘려야 합니다.<br>당신의 선택은 개인의 이익을 넘어 모두의 공유지에 영향을 줍니다.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <button type="button" id="home-teacher-btn" class="home-choice group">
+                <div class="choice-title text-indigo-300">교사 <span class="text-sm font-bold text-slate-400">게임 개설 · 운영</span></div>
+                <div class="choice-copy">학급의 게임을 열고 각 조의 진행 상황을 관리합니다.</div>
             </button>
-            <button type="button" id="home-student-btn" class="glass-panel hover:bg-slate-800 p-12 rounded-[2rem] transition-all border-t-4 border-t-emerald-500/50 group shadow-xl hover:scale-[1.02]">
-                <div class="font-bold text-4xl text-emerald-400 font-title mb-3 transition">학생 (참여자)</div>
-                <div class="text-lg text-slate-300 font-medium">우리 조 방에 접속하기</div>
+            <button type="button" id="home-student-btn" class="home-choice group">
+                <div class="choice-title text-emerald-300">학생 <span class="text-sm font-bold text-slate-400">게임 참여</span></div>
+                <div class="choice-copy">학급과 조를 선택하고 닉네임으로 게임에 입장합니다.</div>
             </button>
         </div>
-        <p class="text-sm md:text-base text-slate-400 mt-6">한 사람의 선택이 모두의 숲에 영향을 줍니다.</p>
+        <p class="text-sm text-slate-500 mt-7">한 사람의 선택이 모두의 숲을 바꿉니다.</p>
     </div>
 
     <!-- 2. 교사: 일괄 개설 화면 -->
     <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
-        <div class="glass-panel p-10 rounded-3xl border border-slate-700 shadow-2xl relative">
-            <h2 class="text-3xl text-indigo-400 mb-8 font-title font-bold drop-shadow-md">학급 일괄 개설</h2>
+        <div class="glass-panel setup-card p-10 rounded-3xl border border-slate-700 shadow-2xl relative">
+            <div class="flex items-center justify-between mb-6">
+                <button type="button" onclick="showPanel('panel-home')" class="text-sm text-slate-500 hover:text-slate-200 transition">← 처음으로</button>
+                <span class="text-xs tracking-widest text-slate-500">TEACHER</span>
+            </div>
+            <h2 class="text-3xl text-indigo-400 mb-2 font-title font-bold drop-shadow-md">학급 일괄 개설</h2>
+            <p class="text-sm text-slate-400 mb-7">학급을 한 번 만들면 아래에서 각 조의 접속을 관리할 수 있습니다.</p>
             <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-5 rounded-xl bg-slate-900 border border-slate-600 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
             <input type="number" id="input-group-count" placeholder="총 조 개수 (예: 6)" min="1" max="12" class="font-bold w-full p-4 mb-5 rounded-xl bg-slate-900 border border-slate-600 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
             
             <input type="password" id="input-teacher-pwd" placeholder="교사 비밀번호" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-600 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
             
-            <button id="btn-create-class" class="w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl font-bold transition-all shadow-lg mb-6 text-white">전체 조 만들기</button>
+            <button type="button" id="btn-create-class" class="setup-primary w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl font-bold transition-all shadow-lg mb-6 text-white">전체 조 만들기</button>
             
             <div class="flex flex-col gap-4">
-                <button onclick="changeTeacherPassword()" class="text-sm text-slate-400 hover:text-white underline transition">교사 비밀번호 변경</button>
-                <button onclick="formatDatabase()" class="text-sm text-rose-500 hover:text-rose-400 font-bold underline transition">⚠️ 서버 데이터 전체 포맷 (DB 청소)</button>
+                <button onclick="changeTeacherPassword()" class="quiet-link text-sm text-slate-400 hover:text-white underline transition">교사 비밀번호 변경</button>
+                <button type="button" onclick="formatDatabase()" class="danger-link text-sm text-rose-500 hover:text-rose-400 font-bold underline transition">서버 데이터 전체 삭제</button>
             </div>
         </div>
     </div>
@@ -189,7 +224,7 @@
             </select>
             
             <input type="text" id="student-nickname" placeholder="내 이름 (예: 김철수)" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition shadow-inner">
-            <button id="btn-join-group" class="font-bold w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-lg transition text-white hover:scale-105">입장하기</button>
+            <button type="button" id="btn-join-group" class="font-bold w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-lg transition text-white hover:scale-105">입장하기</button>
         </div>
     </div>
 
@@ -302,7 +337,7 @@
             <h2 class="text-3xl font-bold text-slate-200 mb-8">조원들을 기다리는 중...</h2>
             <div id="waiting-players" class="flex flex-wrap justify-center gap-3 mb-10 text-lg font-bold w-full px-4 text-slate-300"></div>
             
-            <button id="btn-start-group" class="bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-black text-2xl text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105 animate-pulse hidden">우리 조 게임 시작!</button>
+            <button type="button" id="btn-start-group" class="bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-black text-2xl text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105 animate-pulse hidden">우리 조 게임 시작!</button>
             <p id="msg-waiting-host" class="text-slate-400 text-base mt-4 font-medium bg-slate-900 p-3 rounded-lg border border-slate-700 hidden">방장(첫 접속자)이 시작 버튼을 누르면 시작됩니다.</p>
             
             <button onclick="leaveWaitingRoom()" class="mt-12 text-slate-400 hover:text-white font-bold transition text-base underline">◀ 조 선택 다시하기 (방 나가기)</button>
@@ -335,7 +370,7 @@
 
             <div id="action-system-notice" class="w-full mb-5 text-center rounded-xl border border-slate-700 bg-slate-900/55 text-slate-400 px-4 py-3 text-sm md:text-base font-medium">선택은 제출 전까지 변경할 수 있습니다. 시간이 끝나면 미제출자는 태만으로 처리됩니다.</div>
 
-            <button id="btn-submit-action" onclick="confirmActionSubmit()" class="hidden bg-emerald-600 hover:bg-emerald-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mb-10 w-full md:w-auto">결정 완료</button>
+            <button type="button" id="btn-submit-action" onclick="confirmActionSubmit()" class="hidden bg-emerald-600 hover:bg-emerald-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mb-10 w-full md:w-auto">결정 완료</button>
 
             <!-- 개인 테크 패널 -->
             <div class="w-full glass-panel border border-slate-600 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-lg betting-rail">
@@ -354,7 +389,7 @@
             </div>
             <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 px-2 betting-rail"></div>
             
-            <button id="btn-reveal" class="result-cta hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-4 w-full md:w-auto tracking-wide">결과 공개하기</button>
+            <button type="button" id="btn-reveal" class="result-cta hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-4 w-full md:w-auto tracking-wide">결과 공개하기</button>
         </div>
 
         <!-- C. 결과 확인 및 마을 회의 -->
@@ -413,7 +448,7 @@
                 </div>
             </div>
 
-            <button id="btn-next-round" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-2 w-11/12 md:w-auto tracking-wide">다음 라운드 준비</button>
+            <button type="button" id="btn-next-round" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-2 w-11/12 md:w-auto tracking-wide">다음 라운드 준비</button>
         </div>
         
     </div>
@@ -475,12 +510,15 @@
       el.style.display = active ? ((id==='panel-teacher-macro'||id==='panel-group-game') ? 'flex' : 'block') : 'none';
     });
   };
-  document.addEventListener('DOMContentLoaded', function(){
+  function bindHomeNav(){
     var t=document.getElementById('home-teacher-btn');
     var st=document.getElementById('home-student-btn');
-    if(t) t.addEventListener('click', function(){ window.showPanel('panel-teacher-setup'); });
-    if(st) st.addEventListener('click', function(){ window.showPanel('panel-student-login'); });
-  });
+    if(t && !t.dataset.bound){ t.dataset.bound='1'; t.onclick=function(e){ e.preventDefault(); window.showPanel('panel-teacher-setup'); return false; }; }
+    if(st && !st.dataset.bound){ st.dataset.bound='1'; st.onclick=function(e){ e.preventDefault(); window.showPanel('panel-student-login'); return false; }; }
+  }
+  bindHomeNav();
+  document.addEventListener('DOMContentLoaded', bindHomeNav);
+  window.addEventListener('load', bindHomeNav);
 })();
 </script>
 <script type="module">
@@ -500,6 +538,8 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+        const splashSafe = document.getElementById('event-splash-screen');
+        if (splashSafe) { splashSafe.style.display='none'; splashSafe.style.visibility='hidden'; splashSafe.style.pointerEvents='none'; }
 
         let myClass = "";
         let myGroup = "";
@@ -1300,7 +1340,7 @@
             sTitle.className = `text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl ${toneClass} whitespace-nowrap font-title`;
             sDesc.innerText = info.desc;
 
-            splash.classList.remove('opacity-0', 'pointer-events-none');
+            splash.classList.remove('opacity-0', 'pointer-events-none'); splash.style.display='flex'; splash.style.visibility='visible';
             setTimeout(() => {
                 content.classList.remove('scale-75', 'opacity-0');
                 content.classList.add('scale-100', 'opacity-100');
@@ -1309,7 +1349,7 @@
             setTimeout(() => {
                 content.classList.remove('scale-100', 'opacity-100');
                 content.classList.add('scale-125', 'opacity-0');
-                splash.classList.add('opacity-0', 'pointer-events-none');
+                splash.classList.add('opacity-0', 'pointer-events-none'); splash.style.display='none'; splash.style.visibility='hidden';
                 setTimeout(() => {
                     content.classList.remove('scale-125');
                     content.classList.add('scale-75');
