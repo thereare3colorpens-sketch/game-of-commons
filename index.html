@@ -43,6 +43,10 @@
 
         /* 결과창 1위 하이라이트 */
         .rank-1 { background: linear-gradient(90deg, rgba(251,191,36,0.15) 0%, rgba(30,41,59,0) 100%); border-left: 4px solid #fbbf24; }
+        .endgame-title { font-family: 'ElegantSerif', serif !important; letter-spacing: -0.02em; text-shadow: 0 10px 35px rgba(0,0,0,0.55); }
+        .meeting-stage { border: 1px solid rgba(99,102,241,0.25); background: rgba(15,23,42,0.65); }
+        .vote-btn { min-width: 10rem; }
+        .vote-btn:disabled { filter: grayscale(0.35); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -98,7 +102,7 @@
         <div class="w-full flex justify-between items-center mb-8 glass-panel px-8 py-5 rounded-2xl flex-wrap gap-4 shadow-xl border border-slate-700">
             <h2 class="text-3xl text-emerald-400 font-title font-bold drop-shadow-md"><span id="macro-class-name" class="text-white"></span> 현황판</h2>
             <div class="flex gap-4">
-                <button onclick="resetEntireClass()" class="bg-rose-700 hover:bg-rose-600 px-6 py-3 rounded-xl font-bold text-lg transition text-white shadow-lg">학급 전체 초기화 🔄</button>
+                <button onclick="resetEntireClass()" class="bg-rose-700 hover:bg-rose-600 px-6 py-3 rounded-xl font-bold text-lg transition text-white shadow-lg">학급 전체 초기화</button>
                 <button onclick="showPanel('panel-teacher-rules')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl font-bold text-lg transition text-white shadow-lg">게임 목표 및 가이드</button>
             </div>
         </div>
@@ -163,7 +167,7 @@
                     <p>매 라운드 행동을 선택하여 수익을 모으고 기술(테크)을 업그레이드하면 막대한 부를 쌓을 수 있지만, 숲의 파괴 속도도 급격히 빨라집니다.</p>
                 </div>
                 <div class="bg-slate-900 p-6 rounded-2xl border border-slate-700 shadow-inner">
-                    <h3 class="text-2xl text-emerald-400 mb-2 font-black">⚖️ 돌발 기후와 자치 회의</h3>
+                    <h3 class="text-2xl text-emerald-400 mb-2 font-black">돌발 기후와 자치 회의</h3>
                     <p>숲이 파괴될수록 혹독한 기상 재난이 발생합니다. 파국을 피하려면 <strong>마을 자치 회의를 열어 법안을 통과</strong>시켜 조원들의 이기심을 통제하세요.</p>
                 </div>
                 <p class="text-base text-slate-400 text-center mt-4">※ 행동 수치와 블라인드 룰 등 세부 규칙은 게임 화면 상단 <strong>[상세 룰북]</strong>에서 확인 가능합니다.</p>
@@ -182,12 +186,12 @@
         <div class="w-full flex flex-wrap justify-between items-center mb-6 glass-panel p-4 md:p-5 rounded-2xl gap-4 border border-slate-700 shadow-lg">
             <div class="text-xl font-bold text-slate-200 flex items-center">
                 <span id="display-class-group"></span> 
-                <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-sm px-2.5 py-1 rounded font-bold shadow hidden">👑 방장</span>
+                <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-sm px-2.5 py-1 rounded font-bold shadow hidden">방장</span>
             </div>
             <div class="flex items-center gap-3">
-                <button id="btn-force-reset" onclick="resetGame()" class="hidden bg-rose-700 hover:bg-rose-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">초기화 🔄</button>
+                <button id="btn-force-reset" onclick="resetGame()" class="hidden bg-rose-700 hover:bg-rose-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">초기화</button>
                 <button id="btn-back-macro" onclick="backToTeacherMacro()" class="hidden bg-indigo-700 hover:bg-indigo-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">현황판으로 ↩</button>
-                <button id="btn-restart-game" onclick="resetGame()" class="hidden bg-emerald-700 hover:bg-emerald-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">다시 시작 🔁</button>
+                <button id="btn-restart-game" onclick="resetGame()" class="hidden bg-emerald-700 hover:bg-emerald-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">다시 시작</button>
                 <button onclick="openIngameRuleModal()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 px-4 py-2.5 rounded-xl text-sm font-bold transition shadow-sm text-slate-200">상세 룰북 📖</button>
                 <div class="text-2xl md:text-3xl text-emerald-400 font-title font-bold bg-slate-900 px-6 py-2.5 rounded-xl border border-slate-700 shadow-inner">제 <span id="display-round" class="font-black font-body text-white">1</span> / 15 라운드</div>
             </div>
@@ -198,7 +202,7 @@
             <div class="relative h-16 md:h-20 rounded-xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner">
                 <div id="hp-bar" class="h-full bg-emerald-500 transition-all duration-1000 ease-out" style="width: 100%;"></div>
                 <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl text-white font-bold tracking-wide drop-shadow-md">
-                    <span id="forest-icon-bar" class="mr-3 text-3xl md:text-4xl drop-shadow-lg">🌿</span> 생태 점수: <span id="hp-text" class="font-black text-3xl md:text-4xl ml-2">100</span>
+                    <span id="forest-icon-bar" class="mr-3 text-3xl md:text-4xl drop-shadow-lg">생태 점수: <span id="hp-text" class="font-black text-3xl md:text-4xl ml-2">100</span>
                 </div>
             </div>
             <div id="forest-story-banner" class="text-center text-base md:text-lg font-bold py-3 rounded-xl bg-slate-800 text-emerald-400 transition-all duration-500 border border-slate-700">
@@ -287,7 +291,7 @@
 
         <!-- C. 결과 확인 및 마을 회의 -->
         <div id="section-reveal" class="w-full hidden flex-col items-center w-full">
-            <h3 class="text-3xl font-bold text-slate-200 mb-6 drop-shadow-md">라운드 결과</h3>
+            <h3 class="text-3xl md:text-4xl font-title font-bold text-slate-200 mb-6 drop-shadow-md">라운드 결과 · 자치 회의</h3>
             
             <div id="active-law-banner" class="hidden w-full bg-slate-900 border border-slate-700 p-4 rounded-xl mb-8 text-center font-bold text-lg text-slate-300 shadow-inner">
                 📜 현재 적용된 법안 (종료 시 해제): <span id="active-law-text" class="font-black text-emerald-400">없음</span>
@@ -301,7 +305,7 @@
                 
                 <div id="meeting-closed-msg" class="hidden w-full py-4">
                     <h4 class="text-2xl font-bold text-slate-300 mb-2">🔒 이번 라운드 자치 회의 종료</h4>
-                    <p class="font-medium text-base text-slate-500">안건 상정이 완료되어 다음 라운드를 기약하세요.</p>
+                    <p class="font-medium text-base text-slate-500">이번 라운드 안건 처리가 끝났습니다. 다음 라운드를 준비하세요.</p>
                 </div>
 
                 <div id="proposal-buttons-wrapper" class="w-full">
@@ -327,15 +331,15 @@
                 </div>
                 
                 <!-- 15초 투표 창 -->
-                <div id="active-sanction-vote" class="hidden bg-slate-900 p-8 rounded-2xl border border-slate-600 mt-6 text-center shadow-inner">
+                <div id="active-sanction-vote" class="hidden meeting-stage p-8 rounded-2xl mt-6 text-center shadow-inner">
                     <p class="text-slate-200 mb-4 font-bold text-2xl" id="sanction-vote-question"></p>
                     <div id="sanction-vote-desc" class="font-medium text-base text-slate-400 mb-6 leading-relaxed bg-slate-800 p-5 rounded-xl border border-slate-700 text-center"></div>
                     
                     <p id="vote-timer-text" class="text-yellow-400 mb-6 font-bold text-lg bg-black/50 py-3 rounded-xl shadow-inner animate-pulse"></p>
 
                     <div class="flex justify-center gap-6">
-                        <button id="btn-vote-yes" onclick="voteSanction(true)" class="bg-emerald-600 hover:bg-emerald-500 px-12 py-4 rounded-xl font-black text-xl text-white transition shadow-lg">찬성</button>
-                        <button id="btn-vote-no" onclick="voteSanction(false)" class="bg-rose-600 hover:bg-rose-500 px-12 py-4 rounded-xl font-black text-xl text-white transition shadow-lg">반대</button>
+                        <button id="btn-vote-yes" onclick="voteSanction(true)" class="vote-btn bg-emerald-600 hover:bg-emerald-500 px-12 py-4 rounded-xl font-black text-xl text-white transition shadow-lg">찬성</button>
+                        <button id="btn-vote-no" onclick="voteSanction(false)" class="vote-btn bg-rose-600 hover:bg-rose-500 px-12 py-4 rounded-xl font-black text-xl text-white transition shadow-lg">반대</button>
                     </div>
                     <div class="text-base text-slate-400 mt-5 font-bold" id="sanction-vote-count">찬성: 0명 / 반대: 0명</div>
                 </div>
@@ -469,31 +473,43 @@
                 }
             }
 
-            // 2. 15초 투표 타이머
+            // 2. 자치회의: 15초 의무토론 → 15초 실제 투표
             if (state.phase === 'reveal' && state.sanctionVote && state.sanctionVote.createdAt && !state.voteUsed) {
-                const elapsed = now - state.sanctionVote.createdAt;
-                const remain = Math.max(0, Math.ceil((15000 - elapsed) / 1000));
+                const vote = state.sanctionVote;
+                const nowTs = Date.now();
+                const discussionEndAt = vote.discussionEndAt || ((vote.createdAt || nowTs) + 15000);
+                const votingEndAt = vote.votingEndAt || ((vote.createdAt || nowTs) + 30000);
+                const discussionRemain = Math.max(0, Math.ceil((discussionEndAt - nowTs) / 1000));
+                const votingRemain = Math.max(0, Math.ceil((votingEndAt - nowTs) / 1000));
                 const timerText = document.getElementById('vote-timer-text');
                 const btnYes = document.getElementById('btn-vote-yes');
                 const btnNo = document.getElementById('btn-vote-no');
-                const votes = state.sanctionVote.votes || {};
+                const votes = vote.votes || {};
                 const yes = Object.values(votes).filter(v => v === true).length;
                 const no = Object.values(votes).filter(v => v === false).length;
                 const pCount = Object.keys(currentGroupData.players || {}).length;
                 const myVote = votes[myName];
-
                 const countEl = document.getElementById('sanction-vote-count');
                 if (countEl) countEl.innerText = `찬성: ${yes}명 / 반대: ${no}명 (참여: ${yes + no}/${pCount}명)`;
 
-                if (remain > 0) {
-                    if(timerText) timerText.innerText = `⏳ 의무 토론 시간: ${remain}초 후 투표 활성화`;
+                const discussionOver = nowTs >= discussionEndAt;
+                const voteOver = nowTs >= votingEndAt;
+                if (!discussionOver) {
+                    if(timerText) timerText.innerText = `의무토론 ${discussionRemain}초 · 투표 준비 중`;
                     if(btnYes) { btnYes.disabled = true; btnYes.classList.add('opacity-40', 'cursor-not-allowed'); }
                     if(btnNo) { btnNo.disabled = true; btnNo.classList.add('opacity-40', 'cursor-not-allowed'); }
+                } else if (!voteOver) {
+                    if(timerText) timerText.innerText = myVote === undefined ? `투표 가능 · ${votingRemain}초 남음` : `내 투표: ${myVote ? '찬성' : '반대'} · ${votingRemain}초`;
+                    const locked = myVote !== undefined;
+                    if(btnYes) { btnYes.disabled = locked; btnYes.classList.toggle('opacity-40', locked); btnYes.classList.toggle('cursor-not-allowed', locked); }
+                    if(btnNo) { btnNo.disabled = locked; btnNo.classList.toggle('opacity-40', locked); btnNo.classList.toggle('cursor-not-allowed', locked); }
+                    // 과반수 투표가 끝난 경우 즉시 집계하되, 의무토론 종료 전에는 절대 집계하지 않음
+                    if ((yes + no) >= pCount) tryResolveSanctionVote(false);
                 } else {
-                    if(timerText) timerText.innerText = myVote === undefined ? `투표가 활성화되었습니다.` : `내 투표: ${myVote ? '찬성' : '반대'}`;
-                    if(btnYes) { btnYes.disabled = myVote !== undefined; btnYes.classList.toggle('opacity-40', myVote !== undefined); btnYes.classList.toggle('cursor-not-allowed', myVote !== undefined); }
-                    if(btnNo) { btnNo.disabled = myVote !== undefined; btnNo.classList.toggle('opacity-40', myVote !== undefined); btnNo.classList.toggle('cursor-not-allowed', myVote !== undefined); }
-                    tryResolveSanctionVote(false);
+                    if(timerText) timerText.innerText = `투표 종료 · 결과 집계 중`;
+                    if(btnYes) btnYes.disabled = true;
+                    if(btnNo) btnNo.disabled = true;
+                    tryResolveSanctionVote(true);
                 }
             }
         }, 500);
@@ -590,7 +606,7 @@
                     classData.groups[i] = { 
                         state: { 
                             round: 1, hp: 100, phase: 'waiting', leader: null, 
-                            sanctionVote: null, extVote: null, activeLaw: null, lastLaw: null, 
+                            sanctionVote: null, resolvingVote: null, voteResult: null, extVote: null, activeLaw: null, lastLaw: null, 
                             subsidyAmount: 1, voteUsed: false, bettingEndTime: null, activeEvent: 'none'
                         }, 
                         players: {} 
@@ -623,6 +639,8 @@
                 updates[`groups/${i}/state/lastLaw`] = null;
                 updates[`groups/${i}/state/voteUsed`] = false;
                 updates[`groups/${i}/state/sanctionVote`] = null;
+                updates[`groups/${i}/state/resolvingVote`] = null;
+                updates[`groups/${i}/state/voteResult`] = null;
                 updates[`groups/${i}/state/extVote`] = null;
                 updates[`groups/${i}/state/subsidyAmount`] = 1;
                 updates[`groups/${i}/state/bettingEndTime`] = null;
@@ -640,7 +658,7 @@
             const updates = {
                 'state/hp': 100, 'state/round': 1, 'state/phase': 'waiting',
                 'state/activeLaw': null, 'state/lastLaw': null, 'state/voteUsed': false,
-                'state/sanctionVote': null, 'state/extVote': null, 'state/subsidyAmount': 1,
+                'state/sanctionVote': null, 'state/resolvingVote': null, 'state/voteResult': null, 'state/extVote': null, 'state/subsidyAmount': 1,
                 'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/leader': null,
                 'players': null
             };
@@ -672,8 +690,8 @@
                     // 교사창 이모지 삭제, 디자인 안정화
                     grid.innerHTML += `
                         <div class="glass-panel p-6 rounded-3xl hover:bg-slate-800/80 transition-all border border-slate-600 shadow-lg relative">
-                            <h3 onclick="teacherViewGroup('${gId}')" class="text-2xl font-bold text-slate-100 mb-3 cursor-pointer hover:text-emerald-300 transition">${gId}조 🔍</h3>
-                            <button onclick="forceResetGroup('${gId}')" class="absolute top-5 right-5 bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded shadow cursor-pointer font-bold">초기화 🔄</button>
+                            <h3 onclick="teacherViewGroup('${gId}')" class="text-2xl font-bold text-slate-100 mb-3 cursor-pointer hover:text-emerald-300 transition">${gId}조 </h3>
+                            <button onclick="forceResetGroup('${gId}')" class="absolute top-5 right-5 bg-rose-600 hover:bg-rose-500 text-white text-xs px-3 py-1.5 rounded shadow cursor-pointer font-bold">초기화</button>
                             <div onclick="teacherViewGroup('${gId}')" class="cursor-pointer">
                                 <div class="text-sm text-slate-400 mb-4 flex justify-between font-bold">
                                     <span>참여: ${pCount}명</span>
@@ -812,7 +830,7 @@
             if(greedBtn && greedBtn.disabled && choice === 'greed') return; 
             
             if (currentActiveLaw === 'mandatory_care' && choice !== 'care') {
-                alert("🚨 [내부 고발 경고]\n\n현재 '돌보기 결의안'이 채택 중입니다!\n\n이대로 이익을 취하면 당신의 행동과 은닉된 자산이 모두에게 강제로 폭로되어 다음 라운드 제재 타겟이 될 확률이 매우 높습니다.");
+                alert("[내부 고발 경고]\n\n현재 '돌보기 결의안'이 채택 중입니다!\n\n이대로 이익을 취하면 당신의 행동과 은닉된 자산이 모두에게 강제로 폭로되어 다음 라운드 제재 타겟이 될 확률이 매우 높습니다.");
             }
 
             localChoice = choice;
@@ -935,8 +953,8 @@
                 const snapshot = await get(stateRef);
                 const state = snapshot.val();
                 if (!state) return;
-                if (state.voteUsed) return alert("🔒 이번 라운드의 회의는 이미 종료되었습니다.");
-                if (state.sanctionVote) return alert("⏳ 이미 진행 중인 투표가 있습니다!");
+                if (state.voteUsed) return alert("이번 라운드의 회의는 이미 종료되었습니다.");
+                if (state.sanctionVote) return alert("이미 진행 중인 투표가 있습니다.");
                 if (selectedLawToPropose.type === 'law' && state.lastLaw === selectedLawToPropose.lawType) {
                     return alert("⚠️ 직전 라운드에 발동했던 법안은 연속으로 통과시킬 수 없습니다. (쿨타임)");
                 }
@@ -953,8 +971,11 @@
                             question: selectedLawToPropose.question,
                             description: selectedLawToPropose.description,
                             createdAt: Date.now(),
+                            discussionEndAt: Date.now() + 15000,
+                            votingEndAt: Date.now() + 30000,
                             votes: {}
-                        }
+                        },
+                        voteResult: null
                     };
                 });
                 cancelLawSelection();
@@ -976,7 +997,7 @@
                 const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
                 const snapshot = await get(groupRef);
                 const data = snapshot.val();
-                if (!data?.state || data.state.phase !== 'reveal' || !data.state.sanctionVote || data.state.voteUsed) return;
+                if (!data?.state || data.state.phase !== 'reveal' || !data.state.sanctionVote || data.state.voteUsed || data.state.resolvingVote) return;
 
                 const vote = data.state.sanctionVote;
                 const players = data.players || {};
@@ -985,14 +1006,25 @@
                 const yes = Object.values(votes).filter(v => v === true).length;
                 const no = Object.values(votes).filter(v => v === false).length;
                 const voted = yes + no;
-                const expired = Date.now() - (vote.createdAt || 0) >= 15000;
-                if (!force && !expired && voted < pKeys.length) return;
-                if (voted === 0 && !expired) return;
+                const discussionEndAt = vote.discussionEndAt || ((vote.createdAt || 0) + 15000);
+                const votingEndAt = vote.votingEndAt || ((vote.createdAt || 0) + 30000);
+                const discussionOver = Date.now() >= discussionEndAt;
+                const votingExpired = Date.now() >= votingEndAt;
+                if (!discussionOver) return;
+                if (!force && !votingExpired && voted < pKeys.length) return;
+                if (!votingExpired && voted === 0) return;
 
                 const passed = yes > (pKeys.length / 2);
+                const claim = await runTransaction(ref(db, `classes/${myClass}/groups/${myGroup}/state/resolvingVote`), current => {
+                    if (current && (Date.now() - current) < 5000) return undefined;
+                    return Date.now();
+                });
+                if (!claim.committed) return;
                 const updates = {};
                 updates[`classes/${myClass}/groups/${myGroup}/state/sanctionVote`] = null;
                 updates[`classes/${myClass}/groups/${myGroup}/state/voteUsed`] = true;
+                updates[`classes/${myClass}/groups/${myGroup}/state/resolvingVote`] = null;
+                updates[`classes/${myClass}/groups/${myGroup}/state/voteResult`] = passed ? { passed: true, question: vote.question, yes, no, decidedAt: Date.now() } : { passed: false, question: vote.question, yes, no, decidedAt: Date.now() };
 
                 if (passed) {
                     if (vote.type === 'law') {
@@ -1021,7 +1053,12 @@
                 const snap = await get(voteRef);
                 const vote = snap.val();
                 if (!vote) return;
-                if (Date.now() - (vote.createdAt || 0) < 15000) return alert("아직 의무 토론 시간이 끝나지 않았습니다.");
+                const nowTs = Date.now();
+                const discussionEndAt = vote.discussionEndAt || ((vote.createdAt || 0) + 15000);
+                const votingEndAt = vote.votingEndAt || ((vote.createdAt || 0) + 30000);
+                if (nowTs < discussionEndAt) return alert("의무토론 시간이 끝난 뒤 투표할 수 있습니다.");
+                if (nowTs >= votingEndAt) return alert("투표 시간이 종료되었습니다.");
+                if (vote.votes && Object.prototype.hasOwnProperty.call(vote.votes, myName)) return;
                 await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote/votes`), { [myName]: isAgree });
                 await tryResolveSanctionVote(false);
             } catch (err) { alert("투표 실패"); }
@@ -1040,7 +1077,7 @@
             const updates = {
                 'state/hp': 100, 'state/round': 1, 'state/phase': 'waiting',
                 'state/activeLaw': null, 'state/lastLaw': null, 'state/voteUsed': false,
-                'state/sanctionVote': null, 'state/extVote': null, 'state/subsidyAmount': 1,
+                'state/sanctionVote': null, 'state/resolvingVote': null, 'state/voteResult': null, 'state/extVote': null, 'state/subsidyAmount': 1,
                 'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/leader': null,
                 'players': null
             };
@@ -1059,9 +1096,9 @@
             const sDesc = document.getElementById('event-splash-desc');
 
             if (evType === 'drought') { sIcon.innerText='🔥'; sTitle.innerText='극심한 가뭄'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-rose-500 whitespace-nowrap font-title text-white'; sDesc.innerText='이번 라운드는 숲이 자연 회복되지 않습니다.'; }
-            else if (evType === 'boom') { sIcon.innerText='🌾'; sTitle.innerText='자원 풍년'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-amber-400 whitespace-nowrap font-title text-white'; sDesc.innerText='적당히 선택 시 추가 수익(+2💰)을 얻습니다.'; }
-            else if (evType === 'activist') { sIcon.innerText='🕊️'; sTitle.innerText='생태 운동가 등장'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-emerald-400 whitespace-nowrap font-title text-white'; sDesc.innerText='돌보기 치유량이 대폭(+5🌿) 증가합니다.'; }
-            else if (evType === 'wildfire') { sIcon.innerText='🌪️'; sTitle.innerText='산불 건조주의보'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-rose-500 whitespace-nowrap font-title text-white'; sDesc.innerText='욕심내기 시 파괴 데미지가 심화(-5🌿)됩니다!'; }
+            else if (evType === 'boom') { sIcon.innerText=''; sTitle.innerText='자원 풍년'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-amber-400 whitespace-nowrap font-title text-white'; sDesc.innerText='적당히 선택 시 추가 수익(+2💰)을 얻습니다.'; }
+            else if (evType === 'activist') { sIcon.innerText=''; sTitle.innerText='생태 운동가 등장'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-emerald-400 whitespace-nowrap font-title text-white'; sDesc.innerText='돌보기 치유량이 대폭(+5🌿) 증가합니다.'; }
+            else if (evType === 'wildfire') { sIcon.innerText=''; sTitle.innerText='산불 건조주의보'; sTitle.className='text-5xl md:text-7xl font-black mb-4 drop-shadow-2xl text-rose-500 whitespace-nowrap font-title text-white'; sDesc.innerText='욕심내기 시 파괴 데미지가 심화(-5🌿)됩니다!'; }
 
             splash.classList.remove('opacity-0', 'pointer-events-none');
             setTimeout(() => {
@@ -1168,14 +1205,14 @@
 
                 if (currentHp <= 0 && data.state.phase === 'gameover') {
                     gameoverBanner.classList.remove('hidden'); gameoverBanner.style.display = 'flex';
-                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="text-4xl md:text-5xl font-black text-rose-500 mb-3 drop-shadow-md">💀 파국 발생</h3><p class="text-lg text-slate-300 font-bold">생태 점수가 0점이 되어 공동체가 무너졌습니다.</p>`;
+                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="endgame-title text-6xl md:text-8xl font-bold text-rose-400 mb-4">파국</h3><p class="text-lg text-slate-300 font-bold">생태 점수가 0점에 도달했습니다. 공동체의 생존이 실패했습니다.</p>`;
                     if (data.state.leader === myName || isTeacher) {
                         const rBtn = document.getElementById('btn-restart-game');
                         rBtn.classList.remove('hidden'); rBtn.style.display = 'block';
                     }
                 } else if (data.state.phase === 'victory') {
                     gameoverBanner.classList.remove('hidden'); gameoverBanner.style.display = 'flex';
-                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="text-4xl md:text-5xl font-black text-emerald-400 mb-3 drop-shadow-md">🎉 생존 성공!</h3><p class="text-lg text-slate-300 font-bold">합의된 규범과 협력으로 생태 문명을 이뤄냈습니다.</p>`;
+                    document.getElementById('gameover-title-area').innerHTML = `<h3 class="endgame-title text-6xl md:text-8xl font-bold text-emerald-300 mb-4">생존 성공</h3><p class="text-lg text-slate-300 font-bold">합의된 규범과 협력으로 15라운드를 견뎠습니다.</p>`;
                     if (data.state.leader === myName || isTeacher) {
                         const rBtn = document.getElementById('btn-restart-game');
                         rBtn.classList.remove('hidden'); rBtn.style.display = 'block';
@@ -1197,13 +1234,31 @@
                     const isGroupLeader = (data.state.leader === myName);
                     if ((isGroupLeader || isTeacher) && totalVoted >= pKeys.length) {
                         if (agree > end) {
-                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
-                                round: data.state.round + 1,
+                            const nextRound = data.state.round + 1;
+                            const nextLaw = data.state.pendingLaw || null;
+                            const nextSubsidy = nextLaw === 'subsidy_3' ? 3 : nextLaw === 'subsidy_2' ? 2 : 1;
+                            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
+                                round: nextRound,
                                 phase: 'betting',
                                 extVote: null,
+                                sanctionVote: null,
+                                resolvingVote: null,
+                                voteResult: null,
+                                voteUsed: false,
+                                pendingLaw: null,
+                                activeLaw: nextLaw,
+                                lastLaw: nextLaw,
+                                subsidyAmount: nextSubsidy,
                                 bettingEndTime: Date.now() + 30000,
                                 activeEvent: 'none'
                             });
+                            const playerUpdates = {};
+                            pKeys.forEach(k => {
+                                playerUpdates[`players/${k}/choice`] = '';
+                                playerUpdates[`players/${k}/roundEarnings`] = 0;
+                                playerUpdates[`players/${k}/sanctioned`] = false;
+                            });
+                            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), playerUpdates);
                         } else {
                             update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { phase: 'victory', extVote: null });
                         }
@@ -1217,7 +1272,7 @@
                     sortedPlayers.sort((a, b) => (b.gold || 0) - (a.gold || 0));
 
                     let statsHTML = `<div class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 text-left mb-6 shadow-inner max-w-2xl mx-auto">
-                        <h4 class="text-xl md:text-2xl font-black text-yellow-300 mb-5 text-center drop-shadow-sm">🏆 최종 자산 랭킹 & 성적표</h4>
+                        <h4 class="text-xl md:text-2xl font-black text-yellow-300 mb-5 text-center drop-shadow-sm">최종 자산 랭킹 · 성적표</h4>
                         <div class="space-y-3">`;
                     
                     sortedPlayers.forEach((p, index) => {
@@ -1229,7 +1284,7 @@
                         statsHTML += `<div class="flex justify-between items-center bg-slate-800/80 px-4 py-3 rounded-xl ${rankClass}">
                             <div class="font-black text-base text-white flex items-center gap-2"><span class="text-yellow-400 text-sm w-8 text-center">${crown}</span> ${p.name}</div>
                             <div class="flex flex-col items-end">
-                                <div class="text-yellow-400 font-black text-lg mb-1.5 drop-shadow-sm">${p.gold || 0} 💰</div>
+                                <div class="text-yellow-400 font-black text-lg mb-1.5 drop-shadow-sm">${p.gold || 0} 자산</div>
                                 <div class="text-[11px] md:text-xs font-bold flex gap-2">
                                     <span class="text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/20">돌보기 ${pStats.care || 0}회</span>
                                     <span class="text-amber-400 bg-amber-900/30 px-2 py-0.5 rounded border border-amber-500/20">적당히 ${pStats.need || 0}회</span>
@@ -1392,7 +1447,7 @@
                     pKeys.forEach(pName => {
                         const pChoice = players[pName].choice;
                         const isL = (currentLeader === pName);
-                        const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1">👑</span>' : '';
+                        const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1"></span>' : '';
                         
                         if (pChoice && pChoice !== "") {
                             grid.innerHTML += `<div class="w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center h-36 shadow-inner"><div class="text-3xl mb-1 text-slate-500">🔒</div><div class="font-bold text-base text-slate-300 flex items-center">${pName}${hostTag}</div><div class="font-body text-xs mt-2 bg-slate-700 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600">제출 완료</div></div>`;
@@ -1430,7 +1485,7 @@
                         const pData = players[pName];
                         const isMe = (pName === myName);
                         const isL = (currentLeader === pName);
-                        const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1">👑</span>' : '';
+                        const hostTag = isL ? '<span class="text-yellow-400 text-xl ml-1"></span>' : '';
                         const tTier = pData.techTier || 1;
                         let tierBadge = `<span class="ml-2 text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded font-bold border border-slate-600">1단계</span>`;
                         if (tTier === 2) tierBadge = `<span class="ml-2 text-[10px] bg-amber-600 text-amber-100 px-1.5 py-0.5 rounded font-bold shadow-[0_0_10px_rgba(245,158,11,0.4)]">2단:산업화</span>`;
@@ -1481,6 +1536,9 @@
                         pWrapper.classList.add('hidden'); pWrapper.style.display = 'none';
                         activeVoteBox.classList.add('hidden'); activeVoteBox.style.display = 'none';
                         closedMsg.classList.remove('hidden'); closedMsg.style.display = 'block';
+                        const vr = data.state.voteResult;
+                        const resultText = vr ? `${vr.passed ? '가결' : '부결'} · 찬성 ${vr.yes} / 반대 ${vr.no}` : '회의 종료';
+                        closedMsg.querySelector('h4').innerText = `이번 라운드 자치 회의 종료 · ${resultText}`;
                     } else if (data.state.sanctionVote) {
                         pWrapper.classList.add('hidden'); pWrapper.style.display = 'none';
                         closedMsg.classList.add('hidden'); closedMsg.style.display = 'none';
@@ -1489,6 +1547,8 @@
                         const sVoteData = data.state.sanctionVote;
                         document.getElementById('sanction-vote-question').innerText = sVoteData.question;
                         document.getElementById('sanction-vote-desc').innerText = sVoteData.description;
+                        const voteHint = document.getElementById('vote-timer-text');
+                        if (voteHint) voteHint.innerText = '의무토론 준비 중...';
                     } else {
                         pWrapper.classList.remove('hidden'); pWrapper.style.display = 'block';
                         closedMsg.classList.add('hidden'); closedMsg.style.display = 'none';
@@ -1542,7 +1602,7 @@
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { 
                 phase: 'betting',
-                bettingEndTime: Date.now() + 33000 
+                bettingEndTime: Date.now() + 30000 
             });
         });
 
@@ -1612,7 +1672,8 @@
                         totalRawHpChange += 5; 
                     }
 
-                    data.players[k].gold += earned; 
+                    data.players[k].gold += earned;
+                    data.players[k].roundEarnings += earned;
                 }
                 else if(choice === 'need') { 
                     totalRawHpChange -= 2; 
@@ -1623,7 +1684,8 @@
                     if (activeEvent === 'boom') earned += 2; 
                     if (isTimeout) earned = 0; // 태만자 수익 박탈
                     
-                    data.players[k].gold += earned; 
+                    data.players[k].gold += earned;
+                    data.players[k].roundEarnings += earned;
                 }
                 else if(choice === 'care') { 
                     let carePower = (effectiveTier === 3) ? 15 : 10; 
@@ -1657,10 +1719,14 @@
                             if (data.players[otherK].gold >= subAmount) {
                                 data.players[otherK].gold -= subAmount;
                                 data.players[k].gold += subAmount;
+                                data.players[k].roundEarnings = (data.players[k].roundEarnings || 0) + subAmount;
+                                data.players[otherK].roundEarnings = Math.max(0, (data.players[otherK].roundEarnings || 0) - subAmount);
                             } else if (data.players[otherK].gold > 0) {
                                 let rem = data.players[otherK].gold;
                                 data.players[otherK].gold = 0;
                                 data.players[k].gold += rem;
+                                data.players[k].roundEarnings = (data.players[k].roundEarnings || 0) + rem;
+                                data.players[otherK].roundEarnings = Math.max(0, (data.players[otherK].roundEarnings || 0) - rem);
                             }
                         });
                     }
@@ -1742,6 +1808,7 @@
             data.state.pendingLaw = null;
             data.state.sanctionVote = null;
             data.state.voteUsed = false;
+            data.state.voteResult = null;
             if (data.state.activeLaw !== 'subsidy_2' && data.state.activeLaw !== 'subsidy_3') data.state.subsidyAmount = 1;
             else data.state.subsidyAmount = data.state.activeLaw === 'subsidy_3' ? 3 : 2;
             data.state.activeEvent = nextEvent;
