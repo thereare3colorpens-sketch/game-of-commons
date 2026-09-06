@@ -186,6 +186,8 @@
             </div>
             <div class="flex items-center gap-3">
                 <button id="btn-force-reset" onclick="resetGame()" class="hidden bg-rose-700 hover:bg-rose-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">초기화 🔄</button>
+                <button id="btn-back-macro" onclick="backToTeacherMacro()" class="hidden bg-indigo-700 hover:bg-indigo-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">현황판으로 ↩</button>
+                <button id="btn-restart-game" onclick="resetGame()" class="hidden bg-emerald-700 hover:bg-emerald-600 px-3 py-2 rounded-lg text-sm font-bold transition shadow-sm text-white">다시 시작 🔁</button>
                 <button onclick="openIngameRuleModal()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 px-4 py-2.5 rounded-xl text-sm font-bold transition shadow-sm text-slate-200">상세 룰북 📖</button>
                 <div class="text-2xl md:text-3xl text-emerald-400 font-title font-bold bg-slate-900 px-6 py-2.5 rounded-xl border border-slate-700 shadow-inner">제 <span id="display-round" class="font-black font-body text-white">1</span> / 15 라운드</div>
             </div>
@@ -385,7 +387,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, onValue, update, get, remove, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAJHyFYFVwC10Y1PMlecYCS-gerZ_HhQgo",
@@ -412,7 +414,10 @@
         let selectedLawToPropose = null; 
         let currentGroupData = null; 
         let voteTimerInterval = null; 
-        let unsubscribeGroup = null; 
+        let unsubscribeGroup = null;
+        let unsubscribeClassMacro = null;
+        let lastHp = null;
+        let currentPhase = 'waiting'; 
 
         // 🌟 마스터 타이머 (독립 제어)
         setInterval(() => {
@@ -466,19 +471,29 @@
 
             // 2. 15초 투표 타이머
             if (state.phase === 'reveal' && state.sanctionVote && state.sanctionVote.createdAt && !state.voteUsed) {
-                const remain = Math.max(0, Math.ceil((15000 - (now - state.sanctionVote.createdAt)) / 1000));
+                const elapsed = now - state.sanctionVote.createdAt;
+                const remain = Math.max(0, Math.ceil((15000 - elapsed) / 1000));
                 const timerText = document.getElementById('vote-timer-text');
                 const btnYes = document.getElementById('btn-vote-yes');
                 const btnNo = document.getElementById('btn-vote-no');
+                const votes = state.sanctionVote.votes || {};
+                const yes = Object.values(votes).filter(v => v === true).length;
+                const no = Object.values(votes).filter(v => v === false).length;
+                const pCount = Object.keys(currentGroupData.players || {}).length;
+                const myVote = votes[myName];
+
+                const countEl = document.getElementById('sanction-vote-count');
+                if (countEl) countEl.innerText = `찬성: ${yes}명 / 반대: ${no}명 (참여: ${yes + no}/${pCount}명)`;
 
                 if (remain > 0) {
                     if(timerText) timerText.innerText = `⏳ 의무 토론 시간: ${remain}초 후 투표 활성화`;
                     if(btnYes) { btnYes.disabled = true; btnYes.classList.add('opacity-40', 'cursor-not-allowed'); }
                     if(btnNo) { btnNo.disabled = true; btnNo.classList.add('opacity-40', 'cursor-not-allowed'); }
                 } else {
-                    if(timerText) timerText.innerText = `의무 토론 종료! 투표가 활성화되었습니다.`;
-                    if(btnYes) { btnYes.disabled = false; btnYes.classList.remove('opacity-40', 'cursor-not-allowed'); }
-                    if(btnNo) { btnNo.disabled = false; btnNo.classList.remove('opacity-40', 'cursor-not-allowed'); }
+                    if(timerText) timerText.innerText = myVote === undefined ? `투표가 활성화되었습니다.` : `내 투표: ${myVote ? '찬성' : '반대'}`;
+                    if(btnYes) { btnYes.disabled = myVote !== undefined; btnYes.classList.toggle('opacity-40', myVote !== undefined); btnYes.classList.toggle('cursor-not-allowed', myVote !== undefined); }
+                    if(btnNo) { btnNo.disabled = myVote !== undefined; btnNo.classList.toggle('opacity-40', myVote !== undefined); btnNo.classList.toggle('cursor-not-allowed', myVote !== undefined); }
+                    tryResolveSanctionVote(false);
                 }
             }
         }, 500);
@@ -634,7 +649,8 @@
         };
 
         function listenClassMacro() {
-            onValue(ref(db, `classes/${myClass}/groups`), (snapshot) => {
+            if (unsubscribeClassMacro) unsubscribeClassMacro();
+            unsubscribeClassMacro = onValue(ref(db, `classes/${myClass}/groups`), (snapshot) => {
                 const groups = snapshot.val();
                 if(!groups) return;
 
@@ -674,6 +690,11 @@
             });
         }
 
+        window.backToTeacherMacro = () => {
+            if (unsubscribeGroup) { unsubscribeGroup(); unsubscribeGroup = null; }
+            showPanel('panel-teacher-macro');
+        };
+
         window.teacherViewGroup = (groupId) => {
             myGroup = groupId;
             document.getElementById('btn-back-macro').classList.remove('hidden');
@@ -689,23 +710,25 @@
             listenGroupMicro();
         };
 
-        // 🌟 학생 접속 로직 (서버 동기화, 강제 방장 부여)
+        // 🌟 학생 접속 로직 (원자적 방장 선출)
         document.getElementById('btn-join-group').addEventListener('click', async () => {
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value;
             const nickname = document.getElementById('student-nickname').value.trim();
-            
+
             if(!className || !groupNum || !nickname) return alert("학급 이름, 조 번호, 이름을 모두 입력하세요.");
             if(nickname.toLowerCase() === 'choice') return alert("사용할 수 없는 이름입니다.");
-            
+            if(/[.#$\[\]/]/.test(nickname)) return alert("닉네임에 사용할 수 없는 문자가 포함되어 있습니다.");
+
             try {
-                const groupRef = ref(db, `classes/${className}/groups/${groupNum}`);
+                const groupPath = `classes/${className}/groups/${groupNum}`;
+                const groupRef = ref(db, groupPath);
                 const snapshot = await withTimeout(get(groupRef));
                 if (!snapshot.exists()) return alert("존재하지 않는 방입니다. 교사가 방을 만들었는지 확인하세요.");
 
                 const gData = snapshot.val();
                 const players = gData.players || {};
-                const isExistingPlayer = players[nickname];
+                const isExistingPlayer = !!players[nickname];
 
                 if (gData.state.phase === 'waiting' && isExistingPlayer) {
                     return alert("이미 대기실에 동일한 닉네임이 존재합니다. 다른 이름을 사용해주세요.");
@@ -718,30 +741,26 @@
                 myGroup = groupNum;
                 myName = nickname;
                 isTeacher = false;
-                
-                const pKeys = Object.keys(players);
-                
-                // 🔥 원자적 업데이트 (동시 처리로 방장 유실 방지)
-                const updates = {};
-                if (!gData.state.leader || pKeys.length === 0) {
-                    updates[`classes/${myClass}/groups/${myGroup}/state/leader`] = myName;
-                }
+
+                // 플레이어 등록을 먼저 수행하고, leader는 transaction으로 단 한 명만 선점합니다.
                 if (!isExistingPlayer) {
-                    updates[`classes/${myClass}/groups/${myGroup}/players/${myName}`] = { choice: "", gold: 0, techTier: 1, exposed: false, stats: { greed:0, need:0, care:0 } };
+                    await update(ref(db), {
+                        [`${groupPath}/players/${myName}`]: {
+                            choice: "", gold: 0, techTier: 1, exposed: false,
+                            joinedAt: Date.now(), roundEarnings: 0,
+                            stats: { greed:0, need:0, care:0 }
+                        }
+                    });
                 }
 
-                if(Object.keys(updates).length > 0) {
-                    await update(ref(db), updates);
-                }
+                await runTransaction(ref(db, `${groupPath}/state/leader`), current => {
+                    if (current === null || current === undefined || current === '') return myName;
+                    return current;
+                });
 
                 document.getElementById('display-class-group').innerText = `${myClass} ${myGroup}조`;
-                
-                if (gData.state.phase !== 'waiting') {
-                    showPanel('panel-group-game');
-                } else {
-                    showPanel('panel-student-rules');
-                }
-
+                if (gData.state.phase !== 'waiting') showPanel('panel-group-game');
+                else showPanel('panel-student-rules');
                 listenGroupMicro();
             } catch (error) {
                 alert(`접속 오류: ${error.message}`);
@@ -751,21 +770,32 @@
         // 🌟 방 나가기 (조 선택 다시하기)
         window.leaveWaitingRoom = async () => {
             if(!confirm("대기실에서 나가시겠습니까?")) return;
-            if(unsubscribeGroup) unsubscribeGroup(); // 리스너 해제
+            if(unsubscribeGroup) { unsubscribeGroup(); unsubscribeGroup = null; }
 
             try {
-                // 서버에서 내 정보 지우기
-                await remove(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`));
-                // 내가 방장이었다면 방장 권한도 초기화
-                const snapshot = await get(ref(db, `classes/${myClass}/groups/${myGroup}/state/leader`));
-                if(snapshot.val() === myName) {
-                    await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { leader: null });
+                const groupPath = `classes/${myClass}/groups/${myGroup}`;
+                const playerRef = ref(db, `${groupPath}/players/${myName}`);
+                const leaderRef = ref(db, `${groupPath}/state/leader`);
+                const snapshot = await get(ref(db, groupPath));
+                const gData = snapshot.val();
+
+                await remove(playerRef);
+
+                if (gData?.state?.leader === myName) {
+                    const remaining = Object.entries(gData.players || {})
+                        .filter(([name]) => name !== myName)
+                        .sort((a,b) => (a[1]?.joinedAt || Number.MAX_SAFE_INTEGER) - (b[1]?.joinedAt || Number.MAX_SAFE_INTEGER));
+                    const nextLeader = remaining.length ? remaining[0][0] : null;
+                    await runTransaction(leaderRef, current => current === myName ? nextLeader : current);
                 }
             } catch (e) {
                 console.log("나가기 에러 무시", e);
             }
 
             myClass = ""; myGroup = ""; myName = "";
+            currentGroupData = null;
+            currentActiveLaw = null;
+            localChoice = "";
             showPanel('panel-student-login');
         };
 
@@ -813,7 +843,8 @@
         };
 
         window.confirmActionSubmit = async (auto = false) => {
-            if(!localChoice) localChoice = auto ? 'timeout' : 'need'; 
+            if(auto) localChoice = 'timeout';
+            if(!localChoice) return;
             try { 
                 await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), { choice: localChoice }); 
                 const subBtn = document.getElementById('btn-submit-action');
@@ -827,31 +858,22 @@
         };
 
         window.upgradeTechTier = async (targetTier) => {
-            const snapshot = await get(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`));
-            const playerData = snapshot.val();
-            if (!playerData) return;
-
-            const currentTier = playerData.techTier || 1;
-            if (targetTier === 2) {
-                if (currentTier >= 2) return alert("이미 2단계 이상입니다!");
-                if (playerData.gold < 15) return alert("자산(돈)이 부족합니다! 2단계 산업화에는 15💰가 필요합니다.");
-                
-                await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), {
-                    gold: playerData.gold - 15,
-                    techTier: 2
+            if (!myClass || !myGroup || !myName) return;
+            const playerRef = ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`);
+            try {
+                const result = await runTransaction(playerRef, playerData => {
+                    if (!playerData) return;
+                    const currentTier = playerData.techTier || 1;
+                    const cost = targetTier === 2 ? 15 : 30;
+                    if (targetTier === 2 && currentTier >= 2) return;
+                    if (targetTier === 3 && currentTier < 2) return;
+                    if (targetTier === 3 && currentTier >= 3) return;
+                    if ((playerData.gold || 0) < cost) return;
+                    return { ...playerData, gold: (playerData.gold || 0) - cost, techTier: targetTier };
                 });
-                alert("🏭 2단계 산업화 완료! 수익이 폭증하지만 숲 파괴 데미지도 커집니다!");
-            } else if (targetTier === 3) {
-                if (currentTier < 2) return alert("먼저 2단계 산업화를 거쳐야 3단계 생태전환 연구가 가능합니다!");
-                if (currentTier >= 3) return alert("이미 최고 단계(3단계)입니다!");
-                if (playerData.gold < 30) return alert("자산(돈)이 부족합니다! 3단계 생태전환에는 30💰가 필요합니다.");
-                
-                await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myName}`), {
-                    gold: playerData.gold - 30,
-                    techTier: 3
-                });
-                alert("🔬 3단계 생태전환 기술 완성! 파괴를 최소화하며 안정적인 수익을 유지합니다.");
-            }
+                if (!result.committed) return;
+                alert(targetTier === 2 ? "🏭 2단계 산업화 완료! 수익이 폭증하지만 숲 파괴 데미지도 커집니다!" : "🔬 3단계 생태전환 기술 완성! 파괴를 최소화하며 안정적인 수익을 유지합니다.");
+            } catch (e) { alert("기술 업그레이드 처리에 실패했습니다."); }
         };
 
         window.selectLaw = (lawType, targetName = null) => {
@@ -908,38 +930,100 @@
 
         window.confirmLawVote = async () => {
             if (!selectedLawToPropose) return;
-
-            const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
-            const snapshot = await get(groupRef);
-            const gData = snapshot.val();
-
-            if (gData.state.voteUsed) return alert("🔒 이번 라운드의 회의는 이미 종료되었습니다.");
-            if (gData.state.sanctionVote) return alert("⏳ 이미 진행 중인 투표가 있습니다!");
-            if (selectedLawToPropose.type === 'law' && gData.state.lastLaw === selectedLawToPropose.lawType) {
-                return alert("⚠️ 직전 라운드에 발동했던 법안은 연속으로 통과시킬 수 없습니다. (쿨타임)");
-            }
-
-            await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
-                sanctionVote: {
-                    type: selectedLawToPropose.type,
-                    lawType: selectedLawToPropose.lawType || null,
-                    target: selectedLawToPropose.target || null,
-                    question: selectedLawToPropose.question,
-                    description: selectedLawToPropose.description,
-                    createdAt: Date.now(),
-                    votes: {}
+            const stateRef = ref(db, `classes/${myClass}/groups/${myGroup}/state`);
+            try {
+                const snapshot = await get(stateRef);
+                const state = snapshot.val();
+                if (!state) return;
+                if (state.voteUsed) return alert("🔒 이번 라운드의 회의는 이미 종료되었습니다.");
+                if (state.sanctionVote) return alert("⏳ 이미 진행 중인 투표가 있습니다!");
+                if (selectedLawToPropose.type === 'law' && state.lastLaw === selectedLawToPropose.lawType) {
+                    return alert("⚠️ 직전 라운드에 발동했던 법안은 연속으로 통과시킬 수 없습니다. (쿨타임)");
                 }
-            });
 
-            cancelLawSelection();
+                await runTransaction(stateRef, current => {
+                    if (!current || current.voteUsed || current.sanctionVote) return;
+                    if (selectedLawToPropose.type === 'law' && current.lastLaw === selectedLawToPropose.lawType) return;
+                    return {
+                        ...current,
+                        sanctionVote: {
+                            type: selectedLawToPropose.type,
+                            lawType: selectedLawToPropose.lawType || null,
+                            target: selectedLawToPropose.target || null,
+                            question: selectedLawToPropose.question,
+                            description: selectedLawToPropose.description,
+                            createdAt: Date.now(),
+                            votes: {}
+                        }
+                    };
+                });
+                cancelLawSelection();
+            } catch (e) { alert("안건 상정에 실패했습니다."); }
         };
+
+        function applyPassedLaw(state, vote) {
+            if (!vote) return state;
+            if (vote.type === 'sanction') {
+                return state;
+            }
+            state.pendingLaw = vote.lawType || null;
+            return state;
+        }
+
+        async function tryResolveSanctionVote(force = false) {
+            if (!myClass || !myGroup) return;
+            try {
+                const groupRef = ref(db, `classes/${myClass}/groups/${myGroup}`);
+                const snapshot = await get(groupRef);
+                const data = snapshot.val();
+                if (!data?.state || data.state.phase !== 'reveal' || !data.state.sanctionVote || data.state.voteUsed) return;
+
+                const vote = data.state.sanctionVote;
+                const players = data.players || {};
+                const pKeys = Object.keys(players);
+                const votes = vote.votes || {};
+                const yes = Object.values(votes).filter(v => v === true).length;
+                const no = Object.values(votes).filter(v => v === false).length;
+                const voted = yes + no;
+                const expired = Date.now() - (vote.createdAt || 0) >= 15000;
+                if (!force && !expired && voted < pKeys.length) return;
+                if (voted === 0 && !expired) return;
+
+                const passed = yes > (pKeys.length / 2);
+                const updates = {};
+                updates[`classes/${myClass}/groups/${myGroup}/state/sanctionVote`] = null;
+                updates[`classes/${myClass}/groups/${myGroup}/state/voteUsed`] = true;
+
+                if (passed) {
+                    if (vote.type === 'law') {
+                        updates[`classes/${myClass}/groups/${myGroup}/state/pendingLaw`] = vote.lawType || null;
+                    } else if (vote.type === 'sanction' && vote.target && players[vote.target]) {
+                        const gain = players[vote.target].roundEarnings || 0;
+                        const currentGold = players[vote.target].gold || 0;
+                        updates[`classes/${myClass}/groups/${myGroup}/players/${vote.target}/gold`] = Math.max(0, currentGold - gain);
+                        updates[`classes/${myClass}/groups/${myGroup}/players/${vote.target}/sanctioned`] = true;
+                    }
+                    updates[`classes/${myClass}/groups/${myGroup}/state/lastLaw`] = vote.type === 'law' ? vote.lawType : null;
+                    if (vote.type === 'law' && vote.lawType === 'subsidy_2') updates[`classes/${myClass}/groups/${myGroup}/state/subsidyAmount`] = 2;
+                    else if (vote.type === 'law' && vote.lawType === 'subsidy_3') updates[`classes/${myClass}/groups/${myGroup}/state/subsidyAmount`] = 3;
+                } else {
+                    updates[`classes/${myClass}/groups/${myGroup}/state/lastLaw`] = null;
+                }
+
+                await update(ref(db), updates);
+            } catch (e) { console.error('투표 처리 실패', e); }
+        }
 
         window.voteSanction = async (isAgree) => {
             if (!myClass || !myGroup || !myName) return alert("접속 정보 오류");
             try {
-                await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote/votes`), {
-                    [myName]: isAgree
-                });
+                const voteRef = ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote`);
+                const snap = await get(voteRef);
+                const vote = snap.val();
+                if (!vote) return;
+                if (Date.now() - (vote.createdAt || 0) < 15000) return alert("아직 의무 토론 시간이 끝나지 않았습니다.");
+                await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote/votes`), { [myName]: isAgree });
+                await tryResolveSanctionVote(false);
             } catch (err) { alert("투표 실패"); }
         };
 
@@ -1033,7 +1117,7 @@
                     storyBanner.className = "text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-slate-900 text-slate-500 transition-all duration-500 border border-slate-700 shadow-inner";
                 }
 
-                if (currentHp !== lastHp && !isTeacher) {
+                if (lastHp !== null && currentHp !== lastHp && !isTeacher) {
                     if (currentHp < lastHp) {
                         document.body.classList.remove('shake-screen', 'heal-screen');
                         void document.body.offsetWidth;
@@ -1174,9 +1258,16 @@
                 let currentLeader = data.state.leader;
                 if (!currentLeader || !pKeys.includes(currentLeader)) {
                     if (pKeys.length > 0) {
-                        currentLeader = pKeys[0]; 
-                        if (myName === currentLeader && !isTeacher) { 
-                            update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { leader: currentLeader });
+                        currentLeader = pKeys.slice().sort((a,b) => {
+                            const ta = data.players[a]?.joinedAt || Number.MAX_SAFE_INTEGER;
+                            const tb = data.players[b]?.joinedAt || Number.MAX_SAFE_INTEGER;
+                            return ta - tb || a.localeCompare(b);
+                        })[0];
+                        if (myName === currentLeader && !isTeacher) {
+                            runTransaction(ref(db, `classes/${myClass}/groups/${myGroup}/state/leader`), current => {
+                                if (current && pKeys.includes(current)) return current;
+                                return currentLeader;
+                            });
                         }
                     }
                 }
@@ -1429,9 +1520,11 @@
                         });
                     }
 
-                    if (isGroupLeader) {
-                        const btnNext = document.getElementById('btn-next-round');
+                    const btnNext = document.getElementById('btn-next-round');
+                    if (isGroupLeader && (!data.state.sanctionVote || data.state.voteUsed)) {
                         btnNext.classList.remove('hidden'); btnNext.style.display = 'block';
+                    } else {
+                        btnNext.classList.add('hidden'); btnNext.style.display = 'none';
                     }
                 }
             });
@@ -1441,7 +1534,11 @@
         document.getElementById('btn-start-group').addEventListener('click', async () => {
             const snapshot = await get(ref(db, `classes/${myClass}/groups/${myGroup}/state`));
             const state = snapshot.val();
+            if (state.phase !== 'waiting') return;
             if (state.leader !== myName && !isTeacher) return alert("방장만 게임을 시작할 수 있습니다.");
+            if (!state.leader || (!myName && !isTeacher)) return alert("방장 정보가 아직 확정되지 않았습니다. 잠시 후 다시 눌러주세요.");
+            const groupSnap = await get(ref(db, `classes/${myClass}/groups/${myGroup}/players`));
+            if (!groupSnap.exists() || Object.keys(groupSnap.val() || {}).length === 0) return alert("아직 참가자가 없습니다.");
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { 
                 phase: 'betting',
@@ -1452,6 +1549,7 @@
         document.getElementById('btn-reveal').addEventListener('click', async () => {
             const snapshotGroup = await get(ref(db, `classes/${myClass}/groups/${myGroup}`));
             const data = snapshotGroup.val();
+            if (!data?.state || data.state.phase !== 'betting') return;
             const isGroupLeader = (data.state.leader === myName);
             if (!isGroupLeader && !isTeacher) return;
             
@@ -1600,6 +1698,8 @@
             const data = snapshotGroup.val();
             const isGroupLeader = (data.state.leader === myName);
             if (!isGroupLeader && !isTeacher) return;
+            if (data.state.phase !== 'reveal' && data.state.phase !== 'extension_vote') return;
+            if (data.state.sanctionVote && !data.state.voteUsed) return alert('진행 중인 회의 투표를 먼저 마쳐주세요.');
             
             if(data.state.round >= 15 && data.state.hp > 0) {
                 const pKeys = Object.keys(data.players || {});
@@ -1636,12 +1736,21 @@
 
             data.state.round = nRound;
             data.state.phase = 'betting';
-            data.state.activeLaw = null;
+            const nextLaw = data.state.pendingLaw || null;
+            data.state.activeLaw = nextLaw;
+            data.state.lastLaw = nextLaw;
+            data.state.pendingLaw = null;
             data.state.sanctionVote = null;
-            data.state.voteUsed = false; 
+            data.state.voteUsed = false;
+            if (data.state.activeLaw !== 'subsidy_2' && data.state.activeLaw !== 'subsidy_3') data.state.subsidyAmount = 1;
+            else data.state.subsidyAmount = data.state.activeLaw === 'subsidy_3' ? 3 : 2;
             data.state.activeEvent = nextEvent;
-            data.state.bettingEndTime = Date.now() + 33000; 
-            Object.keys(data.players).forEach(k => data.players[k].choice = "");
+            data.state.bettingEndTime = Date.now() + 33000;
+            Object.keys(data.players || {}).forEach(k => {
+                data.players[k].choice = "";
+                data.players[k].roundEarnings = 0;
+                data.players[k].sanctioned = false;
+            });
             
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), data);
         });
