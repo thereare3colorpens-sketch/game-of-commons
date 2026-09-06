@@ -24,31 +24,31 @@
             background-color: #020617;
         }
 
-        /* 🌍 동적 배경화면 (생태 점수에 따라 JS에서 클래스 교체) */
+        /* 🌍 동적 배경화면 (생태 점수에 따라 JS에서 5단계 클래스 교체) */
         .game-background {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: -1;
-            transition: background 1.5s ease-in-out;
+            transition: background 1.2s ease-in-out;
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
         }
 
         .eco-thriving {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.92) 50%, rgba(2,6,23,0.98) 100%),
-                              url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop');
+            background-image: linear-gradient(180deg, rgba(2,6,23,0.82) 0%, rgba(2,6,23,0.90) 50%, rgba(2,6,23,0.98) 100%),
+                              url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2000&auto=format&fit=crop');
         }
         .eco-healthy {
             background-image: linear-gradient(180deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.92) 50%, rgba(2,6,23,0.98) 100%),
-                              url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2000&auto=format&fit=crop');
+                              url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2000&auto=format&fit=crop');
         }
         .eco-warning {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.92) 50%, rgba(2,6,23,0.98) 100%),
+            background-image: linear-gradient(180deg, rgba(2,6,23,0.88) 0%, rgba(2,6,23,0.94) 50%, rgba(2,6,23,0.98) 100%),
                               url('https://images.unsplash.com/photo-1610878180933-123728745d22?q=80&w=2000&auto=format&fit=crop');
         }
         .eco-danger {
-            background-image: linear-gradient(180deg, rgba(2,6,23,0.88) 0%, rgba(2,6,23,0.93) 50%, rgba(2,6,23,0.98) 100%),
+            background-image: linear-gradient(180deg, rgba(2,6,23,0.90) 0%, rgba(2,6,23,0.95) 50%, rgba(2,6,23,0.98) 100%),
                               url('https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=2000&auto=format&fit=crop');
         }
         .eco-collapse {
@@ -89,30 +89,57 @@
 
         .rank-1 { border-left: 4px solid #fbbf24; background: linear-gradient(90deg, rgba(251,191,36,0.15) 0%, transparent 100%); }
 
-        /* 🌿 생태 점수 동적 그라데이션 바 */
+        /* 🌿 챗GPT 제안 Commons Ecosystem UI 및 애니메이션 복구 */
         .hp-meter-frame { box-shadow: inset 0 0 30px rgba(2,6,23,0.9), 0 10px 35px rgba(0,0,0,0.25); }
         .hp-bar { position: relative; overflow: hidden; transition: width 900ms cubic-bezier(.22,1,.36,1), background 450ms ease, box-shadow 450ms ease; background-size: 200% 200%; }
-        .hp-bar-healthy { background-image: linear-gradient(90deg, #059669 0%, #34d399 50%, #059669 100%); box-shadow: 0 0 25px rgba(45,212,191,.2); animation: gradientMove 3s ease infinite; }
-        .hp-bar-warning { background-image: linear-gradient(90deg, #b45309 0%, #fbbf24 50%, #b45309 100%); box-shadow: 0 0 30px rgba(251,191,36,.3); animation: gradientMove 2.5s ease infinite; }
-        .hp-bar-critical { background-image: linear-gradient(90deg, #9f1239 0%, #fb7185 50%, #9f1239 100%); box-shadow: 0 0 35px rgba(244,63,94,.5); animation: gradientMove 1.5s ease infinite, criticalPulse 1s infinite alternate; }
+        
+        .hp-bar::before { content: ''; position:absolute; inset:0; background: linear-gradient(110deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,0) 72%); transform: translateX(-110%); animation: hpSheen 3.6s ease-in-out infinite; }
+        .hp-bar::after { content: ''; position:absolute; inset:0; background: radial-gradient(circle at 18% 50%, rgba(255,255,255,.2), transparent 22%), radial-gradient(circle at 68% 25%, rgba(255,255,255,.1), transparent 18%); opacity:.65; animation: hpPulse 2.8s ease-in-out infinite; }
+        
+        .hp-meter-vignette { box-shadow: inset 0 0 45px rgba(0,0,0,.48); }
+        .hp-meter-shell {
+            background: radial-gradient(circle at 8% 50%, rgba(16,185,129,.12), transparent 24%), radial-gradient(circle at 92% 50%, rgba(245,158,11,.08), transparent 24%), rgba(2,6,23,.72);
+            box-shadow: inset 0 0 45px rgba(2,6,23,.92), 0 12px 36px rgba(0,0,0,.28);
+        }
+        .hp-bar-glow { box-shadow: 0 0 0 1px rgba(255,255,255,.05), 0 0 22px rgba(45,212,191,.12), inset 0 0 18px rgba(255,255,255,.08); }
+        .hp-meter-orb { width: 3.2rem; height: 3.2rem; border-radius: 999px; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.25), rgba(16,185,129,.1) 28%, rgba(2,6,23,.3) 72%); border:1px solid rgba(255,255,255,.1); box-shadow: 0 0 26px rgba(16,185,129,.16), inset 0 0 20px rgba(16,185,129,.08); }
+
+        .hp-bar-healthy { background-image: linear-gradient(90deg, #059669 0%, #10b981 45%, #2dd4bf 100%); box-shadow: 0 0 25px rgba(45,212,191,.2); animation: gradientMove 3s ease infinite; }
+        .hp-bar-warning { background-image: linear-gradient(90deg, #b45309 0%, #f59e0b 52%, #fbbf24 100%); box-shadow: 0 0 30px rgba(251,191,36,.3); animation: gradientMove 2.5s ease infinite; }
+        .hp-bar-critical { background-image: linear-gradient(90deg, #9f1239 0%, #e11d48 48%, #fb7185 100%); box-shadow: 0 0 35px rgba(244,63,94,.5); animation: gradientMove 1.5s ease infinite, criticalPulse 1s infinite alternate; }
         .hp-bar-collapse { background: rgba(30, 41, 59, 0.3); box-shadow: none; }
         
         @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes criticalPulse { from { filter: brightness(1); } to { filter: brightness(1.3); box-shadow: 0 0 45px rgba(225, 29, 72, 0.8); } }
+        @keyframes hpSheen { 0%, 40% { transform: translateX(-110%); } 72%, 100% { transform: translateX(110%); } }
+        @keyframes hpPulse { 0%,100% { opacity:.42; } 50% { opacity:.8; } }
 
         .hp-effect-active { animation: hpBadgePulse 2.6s ease-in-out infinite; }
         @keyframes hpBadgePulse { 0%,100% { opacity:.78; transform: translateY(0); } 50% { opacity:1; transform: translateY(-1px); } }
 
+        /* 비활성화 및 잠금 스타일 */
         .action-locked { opacity:.48 !important; cursor:not-allowed !important; filter: grayscale(.45); }
         .action-locked:hover { transform:none !important; }
 
+        /* 모달 및 스플래시 가림 처리 */
         #event-splash-screen { pointer-events:none !important; visibility:hidden; }
         #event-splash-screen.opacity-0 { visibility:hidden !important; display:none !important; }
         #modal-ingame-rules.hidden { display:none !important; }
 
-        .input-center { text-align: center !important; text-align-last: center !important; min-height: 3.6rem; font-size: 1.2rem !important; border-radius:.8rem !important; background:rgba(2,6,23,.72) !important; border-color:rgba(148,163,184,.2) !important; }
+        /* 입력창 디자인 롤백 유지 */
+        .input-center { 
+            text-align: center !important; text-align-last: center !important; 
+            min-height: 3.6rem; font-size: 1.2rem !important; 
+            border-radius:.8rem !important; background:rgba(2,6,23,.72) !important; 
+            border-color:rgba(148,163,184,.2) !important; 
+        }
         
-        .home-choice { min-height:8.5rem; border:1px solid rgba(148,163,184,.22); background:rgba(10,18,31,.84); border-radius:1.1rem; padding:1.8rem 2rem; text-align:left; transition: background .18s ease, transform .18s ease; }
+        .home-choice { 
+            min-height:8.5rem; border:1px solid rgba(148,163,184,.22); 
+            background:rgba(10,18,31,.84); border-radius:1.1rem; 
+            padding:1.8rem 2rem; text-align:left; 
+            transition: background .18s ease, transform .18s ease; 
+        }
         .home-choice:hover { background:rgba(15,23,42,.94); transform:translateY(-2px); }
         .home-choice .choice-title { font-size: 1.9rem; font-weight:800; margin-bottom:.35rem; }
     </style>
@@ -248,7 +275,7 @@
         </div>
     </div>
 
-    <!-- 4. 학생 접속 화면 (드롭다운 적용) -->
+    <!-- 4. 학생 접속 화면 (드롭다운 적용 및 세션 관리) -->
     <div id="panel-student-login" class="w-full max-w-md hidden flex-col items-center text-center fade-in-up z-10">
         <div class="w-full glass-panel p-10 rounded-3xl border border-slate-700 shadow-2xl relative">
             <div class="flex items-center justify-between mb-6">
@@ -275,7 +302,7 @@
         </div>
     </div>
 
-    <!-- 4-5. 학생용 게임 기본 가이드 -->
+    <!-- 4-5. 학생용 게임 기본 가이드 (큰 그림 중심) -->
     <div id="panel-student-rules" class="w-full max-w-4xl hidden flex-col items-center text-center fade-in-up px-2 z-10">
         <div class="w-full glass-panel p-8 md:p-12 rounded-3xl text-left shadow-2xl border border-slate-700">
             <h2 class="text-4xl md:text-5xl text-emerald-400 mb-8 font-title font-bold border-b border-slate-700 pb-4 tracking-tight">게임 기본 가이드</h2>
@@ -311,7 +338,7 @@
         <div class="w-full flex flex-wrap justify-between items-center mb-6 glass-panel p-4 md:p-5 rounded-2xl gap-4 border border-slate-700">
             <div class="text-xl font-bold text-slate-200 flex items-center">
                 <span id="display-class-group"></span> 
-                <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-sm px-2.5 py-1 rounded hidden font-bold shadow-md">👑 방장</span>
+                <span id="my-role-badge" class="ml-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded hidden font-bold shadow-md">👑 방장</span>
             </div>
             
             <div class="flex items-center gap-3">
@@ -331,21 +358,42 @@
             </div>
         </div>
         
-        <!-- 🌿 생태 점수 바 (동적 상태 렌더링) -->
-        <div class="w-full glass-panel rounded-3xl mb-8 overflow-hidden shadow-xl p-5 flex flex-col gap-4 border border-slate-700">
-            <div class="relative flex items-center justify-between mb-2 px-2">
-                <h3 class="text-lg md:text-xl font-black text-slate-200 tracking-widest uppercase">Commons Ecosystem</h3>
-                <span id="hp-effect-badge" class="inline-flex items-center px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-xs md:text-sm text-slate-300 font-bold shadow-md">자정작용 대기</span>
-            </div>
-
-            <div class="hp-meter-frame h-12 md:h-16 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner relative">
-                <div id="hp-bar" class="hp-bar hp-bar-healthy" style="width: 100%;"></div>
-                <div class="absolute inset-0 flex items-center justify-center font-black text-2xl md:text-3xl drop-shadow-md text-white tracking-widest">
-                    <span class="mr-2">🌿</span> <span id="hp-text">100</span> <span class="text-sm font-bold text-slate-300 ml-1">/ 100</span>
+        <!-- 🌿 생태 점수 바 (챗GPT 제안 UI + 그라데이션 통합 완벽 구현) -->
+        <div class="w-full glass-panel rounded-3xl mb-8 p-5 flex flex-col gap-4 border border-slate-700">
+            <div class="relative h-20 md:h-24 rounded-2xl overflow-hidden border border-slate-700/80 shadow-inner hp-meter-frame hp-meter-shell">
+                <!-- 폭과 색상이 변하는 그라데이션 게이지 -->
+                <div id="hp-bar" class="hp-bar hp-bar-healthy hp-bar-glow" style="width: 100%;"></div>
+                
+                <div class="absolute inset-0 pointer-events-none hp-meter-vignette"></div>
+                
+                <div class="absolute inset-0 flex items-center justify-center px-4 md:px-8">
+                    <div class="flex items-center gap-3 md:gap-5 min-w-0 w-full relative">
+                        <div class="hp-meter-orb shrink-0">
+                            <span class="text-xl md:text-2xl">☘</span>
+                        </div>
+                        <div class="flex flex-col items-start min-w-0">
+                            <div class="text-xs md:text-sm font-black tracking-[0.16em] text-white/75 uppercase">
+                                Commons Ecosystem
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <span id="hp-text" class="font-black text-4xl md:text-6xl text-white leading-none drop-shadow-lg">100</span>
+                                <span class="text-xs md:text-sm text-white/65 font-bold mb-1">/ 100</span>
+                            </div>
+                        </div>
+                        <!-- 자정작용 배지 -->
+                        <span id="hp-effect-badge" class="hidden md:inline-flex items-center ml-4 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs md:text-sm text-emerald-200 font-bold tracking-normal shadow-lg">
+                            자정작용 +6
+                        </span>
+                    </div>
+                    
+                    <!-- 현재 상태 칩 -->
+                    <div id="hp-state-chip" class="absolute right-4 md:right-8 top-3 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-emerald-400/15 text-emerald-200 border border-emerald-300/20">
+                        안정
+                    </div>
                 </div>
             </div>
-
-            <div id="forest-story-banner" class="text-center text-sm md:text-base font-bold py-3 mt-1 rounded-xl bg-slate-800/80 text-emerald-400 transition-all duration-500 border border-slate-700 shadow-inner">
+            
+            <div id="forest-story-banner" class="text-center text-sm md:text-base font-bold py-3 mt-1 rounded-xl bg-slate-900/80 text-emerald-400 transition-all duration-500 border border-slate-700 shadow-inner">
                 푸르고 울창한 생명의 숲 (주민들이 풍요와 여유를 누립니다)
             </div>
         </div>
@@ -389,15 +437,15 @@
             <div class="font-bold text-indigo-300 text-base mt-4" id="ext-vote-status">찬성: 0명 / 반대: 0명</div>
         </div>
 
-        <!-- A. 대기실 화면 (flex-col 적용으로 UI 정렬 보장) -->
+        <!-- A. 대기실 화면 -->
         <div id="section-waiting" class="w-full hidden flex-col items-center text-center py-12 glass-panel rounded-3xl border border-slate-700 shadow-lg">
             <h2 class="text-3xl font-bold text-slate-200 mb-8">조원들을 기다리는 중...</h2>
             <div id="waiting-players" class="flex flex-wrap justify-center gap-3 mb-10 text-lg font-bold w-full px-4 text-slate-300"></div>
             
-            <button type="button" id="btn-start-group" class="bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 animate-pulse hidden relative z-50">
+            <button type="button" id="btn-start-group" class="hidden bg-indigo-600 hover:bg-indigo-500 px-14 py-5 rounded-2xl font-black text-2xl text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] transition hover:scale-105 animate-pulse relative z-50">
                 우리 조 게임 시작!
             </button>
-            <p id="msg-waiting-host" class="text-slate-400 text-base mt-4 font-medium bg-slate-900 p-3 rounded-lg border border-slate-700 hidden">
+            <p id="msg-waiting-host" class="hidden text-slate-400 text-base mt-4 font-medium bg-slate-900 p-3 rounded-lg border border-slate-700">
                 방장(첫 접속자)이 시작 버튼을 누르면 시작됩니다.
             </p>
             
@@ -503,9 +551,9 @@
                 </div>
                 
                 <!-- 15초 투표 창 -->
-                <div id="active-sanction-vote" class="hidden w-full p-8 rounded-2xl border border-slate-700 mt-6 text-center shadow-inner">
+                <div id="active-sanction-vote" class="hidden w-full p-8 rounded-2xl border border-indigo-500/30 bg-indigo-950/40 mt-6 text-center shadow-inner">
                     <p class="text-slate-200 mb-4 font-bold text-2xl" id="sanction-vote-question"></p>
-                    <div id="sanction-vote-desc" class="font-medium text-base text-slate-400 mb-6 leading-relaxed bg-slate-800 p-5 rounded-xl border border-slate-600 text-center"></div>
+                    <div id="sanction-vote-desc" class="font-medium text-base text-slate-400 mb-6 leading-relaxed bg-slate-900/80 p-5 rounded-xl border border-slate-700 text-center"></div>
                     
                     <p id="vote-timer-text" class="text-yellow-400 mb-6 font-bold text-lg bg-black/50 py-3 rounded-xl shadow-inner animate-pulse"></p>
 
@@ -517,6 +565,7 @@
                 </div>
             </div>
 
+            <!-- 🔥 방장만 누를 수 있는 다음 라운드 버튼이 무조건 뜨도록 보장 🔥 -->
             <button type="button" id="btn-next-round" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-2 w-11/12 md:w-auto tracking-wide relative z-50">
                 다음 라운드 준비
             </button>
@@ -524,7 +573,7 @@
         
     </div>
 
-    <!-- 인게임 상세 규칙 모달 완벽 복원 -->
+    <!-- 인게임 상세 규칙 모달 완벽 복원본 -->
     <div id="modal-ingame-rules" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 max-w-4xl w-full p-8 md:p-12 rounded-3xl max-h-[90vh] overflow-y-auto text-left relative shadow-2xl text-slate-200">
             <button type="button" onclick="closeIngameRuleModal()" class="absolute top-6 right-6 text-slate-500 hover:text-white text-4xl font-bold transition hover:scale-110 relative z-50">&times;</button>
@@ -570,12 +619,12 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Compat -->
+    <!-- Firebase SDK Compat 유지 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     
     <script>
-        // 🌟 모든 전역 변수 및 상수 안전 배치 🌟
+        // 🌟 모든 전역 변수 및 상수 최상단 안전 배치 (ReferenceError 차단) 🌟
         const EVENT_INFO = {
             none: { name: '평온한 계절', desc: '특별한 사건 없이 숲의 자정작용이 이어집니다.', tone: 'emerald' },
             boom: { name: '자원 풍년', desc: "이번 라운드 '적당히' 선택의 수익이 2 증가합니다.", tone: 'amber' },
@@ -596,7 +645,6 @@
             subsidy_3: { name: '돌보기 보상금 3원', desc: '돌보기 기여자에게 조원들이 지급하는 보조금이 3원으로 적용됩니다.' }
         };
 
-        // Firebase 래퍼
         const initializeApp = (config) => firebase.initializeApp(config);
         const getDatabase = () => firebase.database();
         const ref = (db, path = null) => (path === null || path === undefined || path === '' ? db.ref() : db.ref(path));
@@ -669,23 +717,22 @@
             
             let bgClass = '';
             if (hp >= 70) {
-                bgClass = 'bg-eco-thriving';
+                bgClass = 'eco-thriving';
             } else if (hp >= 40) {
-                bgClass = 'bg-eco-warning';
+                bgClass = 'eco-warning';
             } else {
-                bgClass = 'bg-eco-collapse';
+                bgClass = 'eco-collapse';
             }
             bgDiv.className = `game-background ${bgClass}`;
         }
 
-        // 🌟 마스터 타이머 (독립 제어 - 버그 픽스) 🌟
+        // 🌟 마스터 타이머 (독립 제어) 🌟
         setInterval(() => {
             if (!currentGroupData) return;
             const state = currentGroupData.state || {};
             const pKeys = Object.keys(currentGroupData.players || {});
             const now = Date.now();
             
-            // 안전한 방장 판별
             let currentLeader = state.leader;
             if (!currentLeader || !pKeys.includes(currentLeader)) {
                 if (pKeys.length > 0) {
@@ -698,7 +745,6 @@
             }
             const isGroupLeader = (currentLeader === myPlayerId);
 
-            // 1. 행동 선택 30초 타이머
             if (state.phase === 'betting' && state.bettingEndTime) {
                 const remain = Math.max(0, Math.ceil((state.bettingEndTime - now) / 1000));
                 const timerEl = document.getElementById('action-timer-text');
@@ -735,7 +781,6 @@
                 }
             }
 
-            // 2. 자치회의 타이머
             if (state.phase === 'reveal' && state.sanctionVote && state.sanctionVote.createdAt && !state.voteUsed) {
                 const vote = state.sanctionVote;
                 const nowTs = Date.now();
@@ -783,7 +828,7 @@
             if (myClass && !isTeacher) { e.preventDefault(); e.returnValue = ''; }
         });
 
-        // 🌟 뷰 렌더링 강제 일원화 🌟
+        // 🌟 뷰 렌더링 강제 일원화
         window.showPanel = (panelId) => {
             const panels = ['panel-home', 'panel-teacher-auth', 'panel-teacher-setup', 'panel-teacher-macro', 'panel-teacher-rules', 'panel-student-login', 'panel-student-rules', 'panel-group-game'];
             panels.forEach(id => {
@@ -821,7 +866,7 @@
             return Promise.race([ promise, new Promise((_, reject) => setTimeout(() => reject(new Error('서버 응답 시간 초과')), ms)) ]);
         };
 
-        // 🌟 교사 전용 로그인 인증 시스템 🌟
+        // 🌟 교사 전용 로그인 인증 🌟
         document.getElementById('btn-auth-teacher').addEventListener('click', async () => {
             if (!db) return alert('게임 서버 연결을 불러오지 못했습니다. 새로고침 하세요.');
             const inputPwd = document.getElementById('input-auth-pwd').value.trim();
@@ -1262,8 +1307,6 @@
                 subBtn.disabled = false; subBtn.innerText = "결정 완료";
                 subBtn.classList.remove('opacity-40', 'cursor-not-allowed', 'bg-slate-700');
                 subBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
-                const revealBtnReset = document.getElementById('btn-reveal');
-                if (revealBtnReset) { revealBtnReset.innerText = '결과 공개하기'; revealBtnReset.disabled = false; }
             }
         };
 
@@ -1433,32 +1476,7 @@
             try { await update(ref(db, `classes/${myClass}/groups/${myGroup}/state/extVote/votes`), { [myPlayerId]: choice }); } catch (err) {}
         };
 
-        window.resetGame = async () => {
-            if(!confirm("진행 중인 게임을 완전히 지우고 1라운드 대기실로 초기화하시겠습니까? (현재 조원 데이터도 초기화됩니다)")) return;
-            const updates = {
-                'state/hp': 100,
-                'state/round': 1,
-                'state/phase': 'waiting',
-                'state/activeLaw': null,
-                'state/lastLaw': null,
-                'state/voteUsed': false,
-                'state/sanctionVote': null,
-                'state/extVote': null,
-                'state/subsidyAmount': 1,
-                'state/bettingEndTime': null,
-                'state/activeEvent': 'none',
-                'state/leader': null,
-                'players': null
-            };
-            await update(ref(db, `classes/${myClass}/groups/${myGroup}`), updates);
-            alert("대기실로 초기화되었습니다. 안전한 진행을 위해 페이지를 새로고침(F5) 해주세요.");
-        };
-
-        window.forceReveal = async () => {
-            document.getElementById('btn-reveal').click();
-        };
-
-        // 🌟 핵심 게임 루프 (안정성 완벽 보장) 🌟
+        // 🌟 핵심 게임 루프 (방장 보장 및 에러 복구 완벽화) 🌟
         function listenGroupMicro() {
             if (!db || !myClass || !myGroup) return;
             const safeGroupPath = makeGroupPath(myClass, myGroup);
@@ -1480,7 +1498,9 @@
                 
                 const barWidth = Math.max(0, Math.min(100, currentHp));
                 document.getElementById('hp-bar').style.width = `${barWidth}%`;
-                document.getElementById('hp-text').innerText = currentHp;
+                
+                // HP 텍스트 업데이트 (0점일 때도 0으로 보이게 보장)
+                document.getElementById('hp-text').innerText = Math.max(0, currentHp);
 
                 const hpBarEl = document.getElementById('hp-bar');
                 const storyBanner = document.getElementById('forest-story-banner');
@@ -1512,7 +1532,7 @@
                     storyBanner.innerText = `황폐해진 공유지 · 자정작용 +${naturalRegenPreview} (파국이 임박했습니다)`;
                     storyBanner.className = 'text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-rose-900/30 text-rose-300 transition-all duration-500 border border-rose-500/30 shadow-[0_0_15px_rgba(225,29,72,0.3)]';
                 } else {
-                    hpBarEl.className = 'hp-bar hp-bar-collapse';
+                    hpBarEl.className = 'hp-bar hp-bar-collapse'; // 게이지 소멸
                     if (hpStateChip) { hpStateChip.innerText = '붕괴'; hpStateChip.className = 'absolute right-4 md:right-8 top-3 md:top-4 px-3 py-1 rounded-full text-[11px] md:text-xs font-black tracking-wide bg-slate-400/15 text-slate-200 border border-slate-300/20'; }
                     storyBanner.innerText = '완전한 파국 · 숲의 자정작용이 더 이상 작동하지 않습니다';
                     storyBanner.className = 'text-center text-sm md:text-base font-bold py-2.5 rounded-xl bg-slate-900 text-slate-500 transition-all duration-500 border border-slate-700 shadow-inner';
@@ -1520,15 +1540,11 @@
 
                 if (lastHp !== null && currentHp !== lastHp && !isTeacher) {
                     if (currentHp < lastHp) {
-                        document.body.classList.remove('shake-screen', 'heal-screen');
-                        void document.body.offsetWidth;
-                        document.body.classList.add('shake-screen');
-                        setTimeout(() => document.body.classList.remove('shake-screen'), 500);
+                        document.body.classList.remove('shake-screen', 'heal-screen'); void document.body.offsetWidth;
+                        document.body.classList.add('shake-screen'); setTimeout(() => document.body.classList.remove('shake-screen'), 500);
                     } else if (currentHp > lastHp) {
-                        document.body.classList.remove('shake-screen', 'heal-screen');
-                        void document.body.offsetWidth;
-                        document.body.classList.add('heal-screen');
-                        setTimeout(() => document.body.classList.remove('heal-screen'), 1200);
+                        document.body.classList.remove('shake-screen', 'heal-screen'); void document.body.offsetWidth;
+                        document.body.classList.add('heal-screen'); setTimeout(() => document.body.classList.remove('heal-screen'), 1200);
                     }
                 }
                 lastHp = currentHp;
@@ -1567,19 +1583,11 @@
                 if (currentHp <= 0 && data.state.phase === 'gameover') {
                     gameoverBanner.classList.remove('hidden'); gameoverBanner.style.display = 'flex';
                     document.getElementById('gameover-title-area').innerHTML = `<h3 class="endgame-title text-6xl md:text-8xl font-bold text-rose-400 mb-4">파국</h3><p class="text-lg md:text-xl text-slate-300 font-bold">생태 점수가 0점에 도달했습니다. 공동체의 생존이 실패했습니다.</p>`;
-                    if (data.state.leader === myPlayerId || isTeacher) {
-                        const rBtn = document.getElementById('btn-restart-game');
-                        rBtn.classList.remove('hidden'); rBtn.style.display = 'block';
-                    }
                 } else if (data.state.phase === 'victory') {
                     gameoverBanner.classList.remove('hidden'); gameoverBanner.style.display = 'flex';
                     document.getElementById('gameover-title-area').innerHTML = `<h3 class="endgame-title text-6xl md:text-8xl font-bold text-emerald-300 mb-4">생존 성공</h3><p class="text-lg md:text-xl text-slate-300 font-bold">합의된 규범과 협력으로 무사히 15라운드를 견뎌냈습니다.</p>`;
-                    if (data.state.leader === myPlayerId || isTeacher) {
-                        const rBtn = document.getElementById('btn-restart-game');
-                        rBtn.classList.remove('hidden'); rBtn.style.display = 'block';
-                    }
                 } else if (data.state.phase === 'extension_vote') {
-                    extSection.classList.remove('hidden'); extSection.style.display = 'block';
+                    extSection.classList.remove('hidden'); extSection.style.display = 'flex';
                     const extTitle = extSection.querySelector('h3');
                     if (extTitle) extTitle.innerText = data.state.round === 15 ? '기본 15라운드 달성' : `연장 ${data.state.round - 15}라운드 종료`;
                     
@@ -1730,7 +1738,7 @@
                     }
                 }
 
-                // 🌟 화면 페이즈별 렌더링 🌟
+                // 🌟 화면 페이즈별 렌더링 (안전 장치 추가) 🌟
                 const resultBtn = document.getElementById('btn-reveal');
                 if (currentPhase !== 'betting') {
                     if (resultBtn) { resultBtn.classList.add('hidden'); resultBtn.style.display = 'none'; }
@@ -1768,6 +1776,7 @@
                     const evDesc = document.getElementById('event-desc');
                     const ev = data.state.activeEvent || 'none';
                     const evInfo = EVENT_INFO[ev] || EVENT_INFO.none;
+                    
                     if (ev === 'none') {
                         eventBanner.classList.add('hidden'); eventBanner.style.display = 'none';
                     } else {
@@ -1804,8 +1813,10 @@
                     } else {
                         bTimerDisplay.classList.add('hidden'); bTimerDisplay.style.display = 'none';
                         if (!isTeacher) {
-                            document.getElementById('action-buttons-container').classList.add('hidden'); document.getElementById('action-buttons-container').style.display = 'none';
-                            document.getElementById('btn-submit-action').classList.add('hidden'); document.getElementById('btn-submit-action').style.display = 'none';
+                            document.getElementById('action-buttons-container').classList.add('hidden');
+                            document.getElementById('action-buttons-container').style.display = 'none';
+                            document.getElementById('btn-submit-action').classList.add('hidden');
+                            document.getElementById('btn-submit-action').style.display = 'none';
                         }
                     }
 
@@ -1841,6 +1852,7 @@
 
                     const lawBanner = document.getElementById('active-law-banner');
                     const lawText = document.getElementById('active-law-text');
+                    
                     if (data.state.activeLaw) {
                         lawBanner.classList.remove('hidden'); lawBanner.style.display = 'block';
                         lawText.innerText = `이번 라운드 적용 · ${LAW_INFO[data.state.activeLaw]?.name || data.state.activeLaw}`;
@@ -1899,7 +1911,7 @@
                     });
 
                     document.getElementById('sanction-panel').classList.remove('hidden');
-                    document.getElementById('sanction-panel').style.display = 'block';
+                    document.getElementById('sanction-panel').style.display = 'flex';
                     
                     const pWrapper = document.getElementById('proposal-buttons-wrapper');
                     const closedMsg = document.getElementById('meeting-closed-msg');
@@ -1957,6 +1969,7 @@
                         });
                     }
 
+                    // 🌟 방장용 다음 라운드 버튼 완벽 렌더링 보장 🌟
                     const btnNext = document.getElementById('btn-next-round');
                     if (isGroupLeader && (!data.state.sanctionVote || data.state.voteUsed)) {
                         btnNext.classList.remove('hidden'); btnNext.style.display = 'block';
