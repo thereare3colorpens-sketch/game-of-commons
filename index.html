@@ -61,6 +61,10 @@
         @keyframes hpPulse { 0%,100% { opacity:.42; } 50% { opacity:.8; } }
         @keyframes criticalBar { 0%,100% { filter: saturate(1); } 50% { filter: saturate(1.25) brightness(1.08); } }
         .round-resolution-banner strong { color: #e2e8f0; }
+        .betting-rail { box-sizing: border-box; }
+.hp-effect-active { animation: hpBadgePulse 2.6s ease-in-out infinite; }
+@keyframes hpBadgePulse { 0%,100% { opacity:.78; transform: translateY(0); } 50% { opacity:1; transform: translateY(-1px); } }
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -217,8 +221,10 @@
             <div class="relative h-16 md:h-20 rounded-2xl overflow-hidden bg-slate-950/90 border border-slate-700/80 shadow-inner hp-meter-frame">
                 <div id="hp-bar" class="hp-bar hp-bar-healthy" style="width: 100%;"></div>
                 <div class="absolute inset-0 pointer-events-none hp-meter-vignette"></div>
-                <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl text-white font-bold tracking-wide drop-shadow-md">
-                    <span id="forest-icon-bar" class="mr-3 text-sm md:text-base tracking-[0.18em] uppercase text-white/80 font-semibold">ECOSYSTEM <span id="hp-text" class="font-black text-3xl md:text-4xl ml-2 text-white">100</span></span>
+                <div class="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl text-white font-bold tracking-wide drop-shadow-md gap-4">
+                    <span id="forest-icon-bar" class="text-sm md:text-base tracking-[0.14em] text-white/75 font-semibold">공유지 생태 점수</span>
+                    <span id="hp-text" class="font-black text-4xl md:text-5xl text-white leading-none">100</span>
+                    <span id="hp-effect-badge" class="hidden md:inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs md:text-sm text-emerald-200 font-bold tracking-normal">자정작용 +6</span>
                 </div>
             </div>
             <div id="forest-story-banner" class="text-center text-base md:text-lg font-bold py-3 rounded-xl bg-slate-800 text-emerald-400 transition-all duration-500 border border-slate-700">
@@ -273,7 +279,7 @@
 
         <!-- B. 행동 선택 화면 -->
         <div id="section-betting" class="w-full hidden flex-col items-center w-full">
-            <div class="w-full flex flex-wrap md:flex-nowrap justify-between items-center mb-6 gap-4 px-2">
+            <div class="w-full flex flex-wrap md:flex-nowrap justify-between items-center mb-6 gap-4 px-2 betting-rail">
                 <div id="betting-timer-display" class="flex-1 text-xl text-yellow-400 font-bold bg-slate-900 border border-slate-700 px-6 py-4 rounded-2xl shadow-inner text-center md:text-left">
                     ⏳ 남은 시간: <span id="action-timer-text" class="text-2xl text-white">30</span>초
                 </div>
@@ -282,7 +288,7 @@
                 </div>
             </div>
 
-            <p class="text-xl text-slate-300 mb-6 font-bold w-full text-center drop-shadow-sm">이번 라운드의 행동을 선택하세요. (제출 전 무한 변경 가능)</p>
+            <p class="text-xl text-slate-300 mb-6 font-bold w-full text-center drop-shadow-sm betting-rail">이번 라운드의 행동을 선택하세요. <span class="text-slate-500 font-medium">제출 전에는 언제든 변경할 수 있습니다.</span></p>
             
             <div id="action-buttons-container" class="w-full grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 px-2">
                 <button id="action-btn-greed" onclick="selectActionLocal('greed')" class="w-full bg-slate-800 border border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-lg hover:bg-slate-700 cursor-pointer">
@@ -299,7 +305,7 @@
             <button id="btn-submit-action" onclick="confirmActionSubmit()" class="hidden bg-emerald-600 hover:bg-emerald-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mb-10 w-full md:w-auto">결정 완료</button>
 
             <!-- 개인 테크 패널 -->
-            <div class="w-full glass-panel border border-slate-600 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-lg">
+            <div class="w-full glass-panel border border-slate-600 p-6 rounded-3xl mb-10 flex flex-wrap justify-between items-center gap-5 shadow-lg betting-rail">
                 <div>
                     <h4 class="text-xl font-bold text-slate-200 mb-2" id="my-tech-title">나의 생산 방식: 1단계 [전통]</h4>
                     <p class="font-bold text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg inline-block shadow-inner" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
@@ -310,12 +316,12 @@
                 </div>
             </div>
             
-            <div class="w-full text-left mb-2 px-2 border-b border-slate-700 pb-2">
-                <h4 class="text-lg font-bold text-slate-300">👥 현재 조원 현황 및 선택 상태</h4>
+            <div class="w-full text-left mb-2 px-2 border-b border-slate-700 pb-2 betting-rail">
+                <h4 class="text-lg font-bold text-slate-300">현재 조원 현황 · 선택 상태</h4>
             </div>
-            <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 px-2"></div>
+            <div id="betting-status-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 px-2 betting-rail"></div>
             
-            <button id="btn-reveal" onclick="forceReveal()" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-4 w-full md:w-auto tracking-wide">결과 공개하기</button>
+            <button id="btn-reveal" class="hidden bg-indigo-600 hover:bg-indigo-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mt-4 w-full md:w-auto tracking-wide">결과 공개하기</button>
         </div>
 
         <!-- C. 결과 확인 및 마을 회의 -->
@@ -1140,7 +1146,8 @@
         };
 
         window.forceReveal = async () => {
-            document.getElementById('btn-reveal').click();
+            const btn = document.getElementById('btn-reveal');
+            if (btn && !btn.disabled) btn.click();
         };
 
         const EVENT_INFO = {
@@ -1255,6 +1262,12 @@
 
                 const activeEventForRegen = data.state.activeEvent || 'none';
                 const naturalRegenPreview = getNaturalRegen(currentHp, activeEventForRegen);
+                const hpEffectBadge = document.getElementById('hp-effect-badge');
+                if (hpEffectBadge) {
+                    hpEffectBadge.innerText = naturalRegenPreview > 0 ? `자정작용 +${naturalRegenPreview}` : (currentHp > 0 ? '자정작용 0' : '자정작용 중단');
+                    hpEffectBadge.classList.toggle('hidden', currentHp <= 0);
+                    hpEffectBadge.classList.toggle('hp-effect-active', naturalRegenPreview > 0);
+                }
                 if (currentHp >= 70) {
                     hpBarEl.className = 'hp-bar hp-bar-healthy';
                     storyBanner.innerText = `울창한 공유지 · 자정작용 +${naturalRegenPreview} (숲이 스스로 회복합니다)`;
