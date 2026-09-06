@@ -119,6 +119,24 @@
         .home-choice:focus-visible, .setup-primary:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid rgba(110,231,183,.7); outline-offset:3px; }
         .home-choice, .setup-primary { transition: background .18s ease, border-color .18s ease, transform .18s ease; }
 
+        /* 수업용 가독성: 작은 보조 문구를 최소화하고 모든 입력값을 중앙 정렬 */
+        .home-shell { max-width: 68rem; }
+        .home-kicker { font-size: 1rem; letter-spacing: .15em; }
+        .home-subtitle { font-size: 1.3rem; line-height: 1.8; }
+        .home-choice .choice-title { font-size: 1.9rem; }
+        .home-choice .choice-title span { font-size: 1rem !important; }
+        .home-choice .choice-copy { font-size: 1.08rem; line-height: 1.65; }
+        .home-shell > p:last-child { font-size: 1rem !important; }
+        .setup-card, #panel-student-login > .glass-panel { width: min(100%, 34rem); margin-inline: auto; }
+        .setup-card input, .setup-card select, #panel-student-login input, #panel-student-login select { text-align: center !important; font-size: 1.2rem !important; }
+        .setup-card select, #panel-student-login select { text-align-last: center !important; }
+        .setup-card .text-sm, #panel-student-login .text-sm { font-size: 1rem !important; line-height: 1.6; }
+        .setup-card .text-xs { font-size: .9rem !important; }
+        .quiet-link, .danger-link { font-size: 1rem !important; }
+        .accessibility-note { font-size: 1.05rem !important; line-height: 1.65; }
+        .setup-primary { min-height: 4rem; }
+        button, input, select { -webkit-tap-highlight-color: transparent; }
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
@@ -151,20 +169,20 @@
     </div>
 
     <!-- 2. 교사: 일괄 개설 화면 -->
-    <div id="panel-teacher-setup" class="w-full max-w-md hidden text-center fade-in-up">
+    <div id="panel-teacher-setup" class="w-full max-w-lg hidden text-center fade-in-up">
         <div class="glass-panel setup-card p-10 rounded-3xl border border-slate-700 shadow-2xl relative">
             <div class="flex items-center justify-between mb-6">
                 <button type="button" onclick="showPanel('panel-home')" class="text-sm text-slate-500 hover:text-slate-200 transition">← 처음으로</button>
-                <span class="text-xs tracking-widest text-slate-500">TEACHER</span>
+                <span class="text-sm tracking-widest text-slate-400">TEACHER</span>
             </div>
             <h2 class="text-3xl text-indigo-400 mb-2 font-title font-bold drop-shadow-md">학급 일괄 개설</h2>
-            <p class="text-sm text-slate-400 mb-7">학급을 한 번 만들면 아래에서 각 조의 접속을 관리할 수 있습니다.</p>
+            <p class="text-sm text-slate-400 mb-7 accessibility-note">학급을 한 번 만들면 아래에서 각 조의 접속을 관리할 수 있습니다.</p>
             <input type="text" id="input-class-name" placeholder="학급 이름 (예: 3학년 5반)" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-5 rounded-xl bg-slate-900 border border-slate-600 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
             <input type="number" id="input-group-count" placeholder="총 조 개수 (예: 6)" min="1" max="12" class="font-bold w-full p-4 mb-5 rounded-xl bg-slate-900 border border-slate-600 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
             
             <input type="password" id="input-teacher-pwd" placeholder="교사 비밀번호" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-600 focus:border-indigo-500 outline-none text-xl text-center text-white placeholder-slate-500 transition">
             
-            <button type="button" id="btn-create-class" class="setup-primary w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl font-bold transition-all shadow-lg mb-6 text-white">전체 조 만들기</button>
+            <button type="button" id="btn-create-class" type="button" class="setup-primary w-full bg-indigo-600 hover:bg-indigo-500 p-4 rounded-xl text-2xl font-bold transition-all shadow-lg mb-6 text-white">전체 조 만들기</button>
             
             <div class="flex flex-col gap-4">
                 <button onclick="changeTeacherPassword()" class="quiet-link text-sm text-slate-400 hover:text-white underline transition">교사 비밀번호 변경</button>
@@ -211,9 +229,10 @@
     </div>
 
     <!-- 4. 학생 접속 (드롭다운 적용) -->
-    <div id="panel-student-login" class="w-full max-w-md hidden text-center fade-in-up">
+    <div id="panel-student-login" class="w-full max-w-lg hidden text-center fade-in-up">
         <div class="glass-panel p-10 rounded-3xl border border-slate-700 shadow-2xl">
-            <h2 class="text-4xl text-emerald-400 mb-8 font-title font-bold drop-shadow-md">우리 조 접속</h2>
+            <h2 class="text-4xl text-emerald-400 mb-3 font-title font-bold drop-shadow-md">우리 조 접속</h2>
+            <p class="accessibility-note text-slate-400 mb-7">학급과 조를 선택하고 이름을 입력해 입장하세요.</p>
             <input type="text" id="student-class-name" placeholder="학급 이름 (예: 3학년 5반)" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition shadow-inner">
             
             <select id="student-group-num" class="font-bold w-full p-4 mb-4 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white appearance-none transition shadow-inner cursor-pointer">
@@ -224,7 +243,7 @@
             </select>
             
             <input type="text" id="student-nickname" placeholder="내 이름 (예: 김철수)" autocomplete="off" spellcheck="false" class="font-bold w-full p-4 mb-8 rounded-xl bg-slate-900 border border-slate-600 focus:border-emerald-500 outline-none text-xl text-center text-white placeholder-slate-500 transition shadow-inner">
-            <button type="button" id="btn-join-group" class="font-bold w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-lg transition text-white hover:scale-105">입장하기</button>
+            <button type="button" id="btn-join-group" type="button" class="font-bold w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-2xl shadow-lg transition text-white hover:scale-105">입장하기</button>
         </div>
     </div>
 
@@ -521,9 +540,19 @@
   window.addEventListener('load', bindHomeNav);
 })();
 </script>
-<script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue, update, get, remove, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+<!-- Firebase classic SDK: ES module CORS 문제를 피해서 로컬 HTML에서도 게임 컨트롤러가 살아나도록 함 -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script>
+        const initializeApp = (config) => firebase.initializeApp(config);
+        const getDatabase = () => firebase.database();
+        const ref = (db, path = '') => db.ref(path);
+        const set = (r, value) => r.set(value);
+        const onValue = (r, callback) => r.on('value', callback);
+        const update = (r, values) => r.update(values);
+        const get = (r) => r.get();
+        const remove = (r) => r.remove();
+        const runTransaction = (r, updateFn) => r.transaction(updateFn);
 
         const firebaseConfig = {
             apiKey: "AIzaSyAJHyFYFVwC10Y1PMlecYCS-gerZ_HhQgo",
@@ -536,8 +565,14 @@
             measurementId: "G-DEYQX06ELY"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        let db = null;
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+        } catch (bootError) {
+            console.error('Firebase 초기화 실패:', bootError);
+            window.__gameBootError = bootError;
+        }
         const splashSafe = document.getElementById('event-splash-screen');
         if (splashSafe) { splashSafe.style.display='none'; splashSafe.style.visibility='hidden'; splashSafe.style.pointerEvents='none'; }
 
@@ -685,6 +720,7 @@
 
         // 🌟 서버 영구 포맷 버튼 (교사용)
         window.formatDatabase = async () => {
+            if (!db) return alert('게임 서버 연결을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 페이지를 새로고침하세요.');
             const pwd = prompt("⚠️ [경고] 서버의 모든 학급 데이터를 영구 삭제합니다.\n교사 비밀번호를 입력하세요:");
             if(!pwd) return;
             
@@ -701,6 +737,7 @@
         };
 
         window.changeTeacherPassword = async () => {
+            if (!db) return alert('게임 서버 연결을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 페이지를 새로고침하세요.');
             const configRef = ref(db, 'config/teacherPassword');
             const snap = await get(configRef);
             let validPwd = snap.exists() ? snap.val() : "createnewid";
@@ -717,6 +754,7 @@
         };
 
         document.getElementById('btn-create-class').addEventListener('click', async () => {
+            if (!db) return alert('게임 서버 연결을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 페이지를 새로고침하세요.');
             const className = document.getElementById('input-class-name').value.trim();
             const groupCount = parseInt(document.getElementById('input-group-count').value);
             const inputPwd = document.getElementById('input-teacher-pwd').value.trim();
@@ -869,6 +907,7 @@
 
         // 🌟 학생 접속 로직 (원자적 방장 선출)
         document.getElementById('btn-join-group').addEventListener('click', async () => {
+            if (!db) return alert('게임 서버 연결을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 페이지를 새로고침하세요.');
             const className = document.getElementById('student-class-name').value.trim();
             const groupNum = document.getElementById('student-group-num').value;
             const nickname = document.getElementById('student-nickname').value.trim();
@@ -1638,17 +1677,6 @@
                     if (data.state.phase === 'betting' && data.state.activeEvent && data.state.activeEvent !== 'none') {
                         showEventSplash(data.state.activeEvent);
                     }
-                }
-
-                const resolutionBanner = document.getElementById('round-resolution-banner');
-                if (data.state.lastResolution && currentPhase === 'reveal') {
-                    resolutionBanner.classList.remove('hidden');
-                    resolutionBanner.style.display = 'block';
-                    document.getElementById('round-resolution-title').innerText = data.state.lastResolution.title || '';
-                    document.getElementById('round-resolution-text').innerHTML = data.state.lastResolution.text || '';
-                } else {
-                    resolutionBanner.classList.add('hidden');
-                    resolutionBanner.style.display = 'none';
                 }
 
                 // 🌟 화면 페이즈별 강제 렌더링 🌟
