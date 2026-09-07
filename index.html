@@ -128,21 +128,30 @@
         .tech-panel-tier-3 { border-color:rgba(45,212,191,.62)!important; box-shadow:0 0 34px rgba(45,212,191,.18)!important; }
 
         .notice-card { min-height:96px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-        /* 법안은 최대 3열로 정렬. 3개=1x3, 4개=2x2, 5개=3+2(가운데), 6개=3x2 */
-        .law-grid { width:100%; max-width:920px; margin:0 auto 2rem; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.75rem; align-items:stretch; }
-        .law-grid > button { grid-column:span 2; width:100%; min-height:54px; padding:.7rem .75rem!important; line-height:1.25; }
+        /* 법안은 '많이 쌓이는 메뉴'가 아니라 상황에 따라 상위안으로 교체되는 최대 6개 카드형 선택지입니다. */
+        .law-grid { width:100%; max-width:920px; margin:0 auto 1.35rem; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.75rem; align-items:stretch; }
+        .law-grid > button { grid-column:span 2; width:100%; min-height:84px; padding:.8rem .9rem!important; line-height:1.2; text-align:left; position:relative; overflow:hidden; }
         .law-grid[data-count="1"] > button { grid-column:2 / span 4; }
         .law-grid[data-count="2"] > button, .law-grid[data-count="4"] > button { grid-column:span 3; }
         .law-grid[data-count="5"] > button:nth-child(4) { grid-column:2 / span 2; }
         .law-grid[data-count="5"] > button:nth-child(5) { grid-column:4 / span 2; }
-        .law-grid[data-count="7"] > button:nth-child(7) { grid-column:3 / span 2; }
-        .law-grid[data-count="8"] > button:nth-child(7) { grid-column:2 / span 2; }
-        .law-grid[data-count="8"] > button:nth-child(8) { grid-column:4 / span 2; }
-        .law-grid[data-count="10"] > button:nth-child(10) { grid-column:3 / span 2; }
+        .law-choice { border:1px solid rgba(148,163,184,.28); background:linear-gradient(145deg,rgba(30,41,59,.88),rgba(15,23,42,.96)); color:#e2e8f0; box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 18px rgba(0,0,0,.18); transition:transform .18s ease,border-color .18s ease,filter .18s ease; }
+        .law-choice:hover { transform:translateY(-2px); filter:brightness(1.08); }
+        .law-choice[data-family="control"] { border-color:rgba(251,191,36,.38); }
+        .law-choice[data-family="care"] { border-color:rgba(45,212,191,.38); }
+        .law-choice[data-family="restore"] { border-color:rgba(34,211,238,.38); }
+        .law-choice[data-family="accountability"] { border-color:rgba(167,139,250,.42); }
+        .law-choice[data-family="tech"] { border-color:rgba(74,222,128,.40); }
+        .law-family-chip { display:inline-flex; align-items:center; padding:.18rem .48rem; border-radius:999px; background:rgba(15,23,42,.78); border:1px solid rgba(148,163,184,.2); color:#94a3b8; font-size:.64rem; font-weight:900; letter-spacing:.08em; margin-bottom:.42rem; }
+        .law-choice-title { display:block; font-size:.92rem; font-weight:900; color:#f8fafc; margin-bottom:.22rem; }
+        .law-choice-desc { display:block; font-size:.72rem; line-height:1.35; color:#94a3b8; font-weight:700; }
+        .law-menu-hint { margin:-.25rem auto .9rem; max-width:860px; padding:.5rem .8rem; border-radius:.75rem; background:rgba(15,23,42,.58); border:1px solid rgba(148,163,184,.14); color:#94a3b8; font-size:.76rem; font-weight:700; }
+        .tech-progress-hint { margin-top:.55rem; font-size:.76rem; font-weight:800; color:#94a3b8; }
+        .upgrade-btn-locked { opacity:.5!important; cursor:not-allowed!important; filter:grayscale(.35); }
         @media (max-width:640px) {
             .law-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.6rem; }
-            .law-grid > button, .law-grid[data-count] > button { grid-column:auto!important; min-height:58px; }
-            .law-grid[data-count="1"] > button:last-child, .law-grid[data-count="3"] > button:last-child, .law-grid[data-count="5"] > button:last-child, .law-grid[data-count="7"] > button:last-child, .law-grid[data-count="9"] > button:last-child { grid-column:1 / -1!important; }
+            .law-grid > button, .law-grid[data-count] > button { grid-column:auto!important; min-height:88px; }
+            .law-grid[data-count="1"] > button:last-child, .law-grid[data-count="3"] > button:last-child, .law-grid[data-count="5"] > button:last-child { grid-column:1 / -1!important; }
         }
         .upgrade-toast { position:fixed; top:84px; left:50%; transform:translateX(-50%); width:min(92vw,720px); z-index:48; backdrop-filter:blur(16px); }
         .upgrade-toast-pop { animation:upgradeToastPop .55s cubic-bezier(.2,.9,.2,1.15) both; }
@@ -510,13 +519,14 @@
                 <div>
                     <h4 class="text-xl font-bold text-slate-200 mb-2" id="my-tech-title">나의 생산 방식: 1단계 [전통]</h4>
                     <p class="font-bold text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg inline-block shadow-inner" id="my-tech-desc">효과: 욕심 +5💰 / 데미지 -10🌿</p>
+                    <p id="my-tech-progress" class="tech-progress-hint">다음 기술 단계까지 자산을 모아보세요.</p>
                 </div>
                 <div class="flex gap-3">
                     <button type="button" id="btn-upgrade-tier2" onclick="upgradeTechTier(2)" class="bg-slate-700 hover:bg-slate-600 border border-slate-500 px-5 py-3 rounded-xl font-bold text-base text-amber-300 transition shadow-md relative z-50">
                         2단계 산업화 <span class="bg-black/40 px-2 py-0.5 rounded text-xs text-yellow-300">-15💰</span>
                     </button>
                     <button type="button" id="btn-upgrade-tier3" onclick="upgradeTechTier(3)" class="bg-slate-700 hover:bg-slate-600 border border-slate-500 px-5 py-3 rounded-xl font-bold text-base text-teal-300 transition shadow-md hidden relative z-50">
-                        3단계 생태전환 <span class="bg-black/40 px-2 py-0.5 rounded text-xs text-yellow-300">-30💰</span>
+                        3단계 생태전환 <span class="bg-black/40 px-2 py-0.5 rounded text-xs text-yellow-300">-24💰</span>
                     </button>
                 </div>
             </div>
@@ -551,8 +561,8 @@
 
                 <div id="proposal-buttons-wrapper" class="w-full text-center">
                     <h4 class="text-2xl font-black text-yellow-300 mb-3">마을 자치 회의 & 생태 법안 발의</h4>
-                    <p class="font-bold text-base text-slate-300 mb-6">라운드당 딱 1개의 안건만 상정 가능합니다. 가장 필요한 안건을 먼저 선점하세요!</p>
-                    
+                    <p class="font-bold text-base text-slate-300 mb-4">라운드당 딱 1개의 안건만 상정 가능합니다. 가장 필요한 안건을 먼저 선점하세요!</p>
+                    <p id="law-menu-hint" class="law-menu-hint">상황에 맞는 법안만 표시되며, 상위·비상 법안이 열리면 겹치는 하위안은 자동으로 정리됩니다.</p>
                     <div id="law-buttons-container" class="law-grid" data-count="0"></div>
 
                     <div class="w-full border-t border-slate-600/50 pt-6 mt-4">
@@ -620,17 +630,17 @@
                     <p class="text-slate-400 mb-3">자산을 모아 나의 생산 방식을 업그레이드 하세요. 기술 발전도는 남들에게도 노출됩니다.</p>
                     <ul class="space-y-3">
                         <li class="bg-slate-900 p-4 rounded-xl border border-amber-500/30">🏭 <strong class="text-amber-300 font-bold">2단계 [산업화] (15💰):</strong> 욕심 +10💰 / 파괴 -20🌿 <br><span class="text-slate-400 text-sm">수익은 2배로 폭증하지만 숲 파괴도 2배가 되는 위험한 선택입니다.</span></li>
-                        <li class="bg-slate-900 p-4 rounded-xl border border-teal-500/30">🔬 <strong class="text-teal-300 font-bold">3단계 [생태전환] (30💰):</strong> 욕심 +10💰 / 파괴 -5🌿 <br><span class="text-slate-400 text-sm">막대한 부를 이뤘으면서도 파괴는 최소화되며, 돌보기 치유량이 극대화(+15🌿)됩니다.</span></li>
+                        <li class="bg-slate-900 p-4 rounded-xl border border-teal-500/30">🔬 <strong class="text-teal-300 font-bold">3단계 [생태전환] (24💰, 7라운드부터):</strong> 욕심 +10💰 / 파괴 -7🌿 <br><span class="text-slate-400 text-sm">산업화의 수익성을 유지하면서 생태부담을 크게 낮추며, 돌보기 회복량은 +15🌿입니다. 녹색전환 지원법이나 기술혁신 사건이 있으면 전환 비용이 더 낮아집니다.</span></li>
                     </ul>
                 </div>
                 
                 <div class="bg-slate-800/50 p-6 rounded-2xl shadow-inner border border-slate-700/50">
                     <h4 class="text-xl font-bold text-emerald-400 mb-3">3. 자치 회의 & 내부 고발 시스템</h4>
                     <p class="text-slate-300 mb-2">• <strong class="text-indigo-300 font-bold">1안건 선점:</strong> 회의 안건은 라운드당 딱 1개만 상정됩니다. 안건이 발의되면 15초 의무토론 후 15초 실제 투표를 진행합니다.</p>
-                    <p class="text-slate-300 mb-2">• <strong class="text-violet-300 font-bold">규범 선택지:</strong> 수익 삭감·보상금뿐 아니라 공동 복원기금, 환경정보 공개, 저충격 생산 기준, 배급제, 환경 부담금, 공장 중단 등 서로 다른 방식으로 공동체를 조정할 수 있습니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-violet-300 font-bold">상황형 규범:</strong> 법안은 무한히 쌓이지 않습니다. 규제·돌봄·복원·책임·기술전환의 역할별 계보에서 상위안이나 비상안이 열리면 겹치는 하위안은 자동으로 교체됩니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-rose-400 font-bold">내부고발 룰:</strong> '돌보기 결의안' 발동 시 이를 어기고 욕심/적당히를 선택하면 <strong>시스템이 당신의 정체와 전 재산을 강제로 폭로(주홍글씨)</strong>합니다. 이 폭로 상태는 돌보기를 선택해 신뢰를 회복하기 전까지 계속 유지됩니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-yellow-400 font-bold">무응답 페널티:</strong> 선택 제한 시간(30초) 초과 시 '적당히' 파괴력(-2)은 주면서 수익은 0💰이 되는 '태만' 처리를 받습니다.</p>
-                    <p class="text-slate-300 mb-2">• <strong class="text-sky-300 font-bold">돌발 사건:</strong> 2라운드부터 사건 확률이 점진적으로 증가합니다. 풍년·봄비·복원 지원 같은 호재와 가뭄·산불·홍수·폭염·병충해·자원 가격 급등이 섞여 등장하며, 숲이 약할수록 재난 쪽으로 확률이 기웁니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-sky-300 font-bold">돌발 사건:</strong> 2라운드부터 사건 확률이 점진적으로 증가합니다. 풍년·봄비·복원 지원 같은 호재와 가뭄·산불·홍수·폭염·병충해·자원 가격 급등이 섞여 등장하며, 7라운드 이후에는 생태전환 비용을 낮추는 '녹색기술 돌파'도 등장합니다. 숲이 약할수록 재난 쪽으로 확률이 기웁니다.</p>
                     <p class="text-slate-300 mb-0">• <strong class="text-emerald-300 font-bold">숲의 자정작용:</strong> 특별한 재난이 없다면 매 라운드 생태 점수가 스스로 회복됩니다. 생태 점수 70 이상은 +6, 40~69는 +4, 1~39는 +2이며 가뭄에는 회복이 멈춥니다. 시작 생태 점수 100은 조원 수에 따른 유불리를 막기 위해 동일하게 유지하며, 행동 효과는 참여 인원에 맞춰 정규화됩니다.</p>
                 </div>
             </div>
@@ -659,24 +669,31 @@
             heatwave: { name: '장기 폭염', desc: '이번 라운드 숲의 자정작용이 2 감소합니다.', tone: 'orange', target: 'hp' },
             pest: { name: '병충해 확산', desc: "이번 라운드 '적당히'의 숲 피해가 2 더 커집니다.", tone: 'orange', target: 'need' },
             market_rush: { name: '자원 가격 급등', desc: "'욕심내기' 수익 +2, 대신 파괴도 +3. 유혹이 커집니다.", tone: 'amber', target: 'greed' },
+            eco_innovation: { name: '녹색기술 돌파', desc: '이번 라운드 생태전환(3단계) 투자비용이 4💰 낮아집니다.', tone: 'emerald', target: 'tech' },
             tipping_point: { name: '생태계 임계점', desc: '공유지가 한계선에 닿았습니다. 돌보기 쪽이 우세하면 큰 회복, 욕심 쪽이 우세하면 연쇄 붕괴가 발생합니다.', tone: 'rose', target: 'hp' }
         };
 
         const LAW_INFO = {
-            tax: { name: '욕심 수익 삭감', desc: "이번 라운드 '욕심내기' 수익이 절반으로 줄어듭니다." },
-            eco_tax: { name: '환경 부담금', desc: "'욕심내기' 수익에서 2를 부담금으로 내고, 숲 회복에 기여합니다." },
-            mandatory_care: { name: '돌보기 결의안', desc: "돌보지 않은 플레이어는 행동과 자산이 공개되어 신뢰를 잃습니다." },
-            transparency: { name: '환경정보 공개제', desc: "'욕심내기'를 선택한 플레이어의 행동과 자산이 공개됩니다." },
-            restoration_fund: { name: '공동 복원기금', desc: '이번 라운드 모든 조원이 최대 1💰씩 분담하고 숲 복원에 투자합니다.' },
-            low_impact: { name: '저충격 생산 기준', desc: "'욕심내기'의 생태 파괴량을 5 줄입니다(최소 파괴 4)." },
-            rationing: { name: '자원 배급제', desc: "이번 라운드 '욕심내기'가 봉쇄됩니다." },
-            tech_ban: { name: '공장 임시 중단', desc: '이번 라운드 생산 기술 효과가 1단계 수준으로 제한됩니다.' },
-            subsidy_2: { name: '돌보기 보상금 2원', desc: '돌보기 기여자에게 조원들이 지급하는 보조금이 2원으로 적용됩니다.' },
-            subsidy_3: { name: '돌보기 보상금 3원', desc: '돌보기 기여자에게 조원들이 지급하는 보조금이 3원으로 적용됩니다.' }
+            tax: { name: '욕심 수익 삭감', short: "욕심 수익 50%", family: 'control', familyLabel: '채취 규제', desc: "이번 라운드 '욕심내기' 수익이 절반으로 줄어듭니다." },
+            eco_tax: { name: '환경 부담금', short: '욕심 -2💰 · 숲 회복', family: 'control', familyLabel: '채취 규제 II', desc: "'욕심내기' 수익에서 2를 부담금으로 내고, 숲 회복에 기여합니다." },
+            rationing: { name: '비상 자원 배급제', short: '욕심 선택 봉쇄', family: 'control', familyLabel: '위기 규제', desc: "생태 위기에서 이번 라운드 '욕심내기' 선택을 봉쇄합니다." },
+            subsidy_2: { name: '돌봄 보상제', short: '돌보기 보상 2💰', family: 'care', familyLabel: '돌봄 인센티브', desc: '이번 라운드 돌보기 기여자에게 조원들이 지급하는 보상금이 2원으로 적용됩니다.' },
+            subsidy_3: { name: '강화 돌봄 보상제', short: '돌보기 보상 3💰', family: 'care', familyLabel: '돌봄 인센티브 II', desc: '상위 돌봄 보상제로, 이번 라운드 돌보기 기여자에게 지급하는 보상금이 3원으로 적용됩니다.' },
+            restoration_fund: { name: '공동 복원기금', short: '각 1💰 · 숲 복원', family: 'restore', familyLabel: '공동 복원', desc: '이번 라운드 모든 조원이 최대 1💰씩 분담하고 숲 복원에 투자합니다.' },
+            emergency_restoration: { name: '비상 생태복원령', short: '최대 2💰 · 강한 복원', family: 'restore', familyLabel: '위기 복원', desc: '숲이 위기에 빠졌을 때 각자 최대 2💰을 긴급 투입해 더 강한 복원을 시도합니다.' },
+            transparency: { name: '환경정보 공개제', short: '욕심 선택자 공개', family: 'accountability', familyLabel: '책임 공개', desc: "'욕심내기'를 선택한 플레이어의 행동과 자산이 공개됩니다." },
+            mandatory_care: { name: '돌보기 결의안', short: '비협력자 행동·자산 공개', family: 'accountability', familyLabel: '책임 강화', desc: '돌보지 않은 플레이어는 행동과 자산이 공개되어 신뢰를 잃습니다.' },
+            low_impact: { name: '저충격 생산 기준', short: '욕심 피해 -5🌿', family: 'tech', familyLabel: '생산 기준', desc: "'욕심내기'의 생태 파괴량을 5 줄입니다(최소 파괴 4)." },
+            tech_ban: { name: '산업설비 비상중단', short: '2단계만 전통 수준 제한', family: 'tech', familyLabel: '위기 생산규제', desc: '이번 라운드 2단계 산업화 설비만 1단계 수준으로 제한합니다. 3단계 생태전환 기술은 영향을 받지 않습니다.' },
+            green_transition: { name: '녹색전환 지원법', short: '3단계 비용 6💰 할인', family: 'tech', familyLabel: '기술 전환', desc: '이번 라운드 3단계 생태전환 투자비용을 6💰 낮춰 산업화에서 친환경 기술로 넘어가기 쉽게 합니다.' }
         };
 
         const EXTENSION_BLOCK_ROUNDS = 3;
         const LATE_EVENT_START_ROUND = 13;
+        const TECH_COSTS = { 2: 15, 3: 24 };
+        const TIER3_UNLOCK_ROUND = 7;
+        const GREEN_TRANSITION_DISCOUNT = 6;
+        const ECO_INNOVATION_DISCOUNT = 4;
 
         // Firebase 래퍼
         const initializeApp = (config) => firebase.initializeApp(config);
@@ -1308,6 +1325,7 @@
             if (target === 'greed') return document.getElementById('action-btn-greed');
             if (target === 'need') return document.getElementById('action-btn-need');
             if (target === 'care') return document.getElementById('action-btn-care');
+            if (target === 'tech') return document.getElementById('my-tech-panel');
             if (target === 'hp') return document.getElementById('hp-bar')?.parentElement || document.getElementById('hp-bar');
             return document.getElementById('forest-story-banner');
         }
@@ -1382,6 +1400,9 @@
                 : hp >= 40
                 ? [['boom', 1.5], ['activist', 1.5], ['rain', 1.4], ['eco_grant', 1.0], ['market_rush', 1.1], ['drought', 1.4], ['wildfire', 1.4], ['flood', 1.2], ['heatwave', 1.3], ['pest', 1.2]]
                 : [['rain', 1.4], ['activist', 1.1], ['eco_grant', .7], ['market_rush', .6], ['drought', 2.1], ['wildfire', 2.0], ['flood', 1.5], ['heatwave', 1.7], ['pest', 1.4]];
+
+            // 중반 이후에는 3단계 진입을 촉진하는 기술 이벤트가 희귀하게 섞입니다.
+            if (roundNum >= 7) pool.push(['eco_innovation', hp >= 40 ? 1.0 : .55]);
 
             // 한 번 클라이맥스를 겪은 뒤 연장전에서는 희귀하게 재발할 수 있습니다.
             if (roundNum >= 16 && state?.lateEventTriggered) pool.push(['tipping_point', .75]);
@@ -1498,28 +1519,94 @@
             } catch (error) { if(!auto) alert("결정 전송 실패"); }
         };
 
+        function getTierUpgradeCost(targetTier, state={}) {
+            if (targetTier === 2) return TECH_COSTS[2];
+            let cost = TECH_COSTS[3];
+            const discount = Math.max(
+                state?.activeLaw === 'green_transition' ? GREEN_TRANSITION_DISCOUNT : 0,
+                state?.activeEvent === 'eco_innovation' ? ECO_INNOVATION_DISCOUNT : 0
+            );
+            return Math.max(18, cost - discount);
+        }
+
+        function getAvailableLaws(data) {
+            const state = data?.state || {};
+            const roundNum = Number(state.round || 1);
+            const hp = Number(state.hp || 0);
+            const players = Object.values(data?.players || {});
+            const industrialCount = players.filter(p => Number(p?.techTier || 1) === 2).length;
+            const lastLaw = state.lastLaw || null;
+            const laws = [];
+
+            // 채취 규제: 평시에는 경제적 규제, 위기에는 직접 배급으로 자동 교체
+            if (roundNum >= 8 && hp < 40) laws.push('rationing');
+            else if (roundNum >= 9) laws.push('eco_tax');
+            else laws.push('tax');
+
+            // 돌봄 인센티브: 6R부터 상위안이 하위안을 완전히 대체
+            laws.push(roundNum >= 6 ? 'subsidy_3' : 'subsidy_2');
+
+            // 복원: HP가 크게 낮아지면 동일 역할의 비상안으로 교체
+            laws.push(roundNum >= 8 && hp < 45 ? 'emergency_restoration' : 'restoration_fund');
+
+            // 책임 공개: 7R부터 더 강한 결의안으로 승급
+            if (roundNum >= 7) laws.push('mandatory_care');
+            else if (roundNum >= 4) laws.push('transparency');
+
+            // 생산 규제: 산업화가 많고 숲이 위험할 때만 비상중단으로 교체
+            if (roundNum >= 5) {
+                if (roundNum >= 9 && hp < 55 && industrialCount >= 2) laws.push('tech_ban');
+                else laws.push('low_impact');
+            }
+
+            // 실제 2단계 플레이어가 있을 때만 전환지원이 의미가 있으므로 조건부 등장
+            if (roundNum >= 7 && industrialCount > 0) laws.push('green_transition');
+
+            // 직전 라운드와 같은 법안은 쿨타임 동안 메뉴에서 아예 제거해 선택지 노이즈를 줄입니다.
+            return laws.filter((law, index) => law !== lastLaw && laws.indexOf(law) === index).slice(0, 6);
+        }
+
+        function renderLawChoice(lawKey) {
+            const info = LAW_INFO[lawKey];
+            if (!info) return '';
+            return `<button type="button" onclick="selectLaw('${lawKey}')" class="law-choice rounded-xl shadow" data-family="${info.family}">
+                <span class="law-family-chip">${info.familyLabel}</span>
+                <span class="law-choice-title">${info.name}</span>
+                <span class="law-choice-desc">${info.short}</span>
+            </button>`;
+        }
+
         window.upgradeTechTier = async (targetTier) => {
             if (!myClass || !myGroup || !myPlayerId) return;
             const playerRef = ref(db, `classes/${myClass}/groups/${myGroup}/players/${myPlayerId}`);
             try {
+                const stateSnap = await get(ref(db, `classes/${myClass}/groups/${myGroup}/state`));
+                const state = stateSnap.val() || {};
+                if (targetTier === 3 && Number(state.round || 0) < TIER3_UNLOCK_ROUND) {
+                    return alert(`3단계 생태전환은 ${TIER3_UNLOCK_ROUND}라운드부터 가능합니다.`);
+                }
+                const cost = getTierUpgradeCost(targetTier, state);
+                let failReason = '';
                 const result = await runTransaction(playerRef, playerData => {
-                    if (!playerData) return;
+                    if (!playerData) { failReason = '플레이어 정보가 없습니다.'; return; }
                     const currentTier = playerData.techTier || 1;
-                    const cost = targetTier === 2 ? 15 : 30;
-                    if (targetTier === 2 && currentTier >= 2) return;
-                    if (targetTier === 3 && currentTier < 2) return;
-                    if (targetTier === 3 && currentTier >= 3) return;
-                    if ((playerData.gold || 0) < cost) return;
+                    if (targetTier === 2 && currentTier >= 2) { failReason = '이미 산업화 단계를 달성했습니다.'; return; }
+                    if (targetTier === 3 && currentTier < 2) { failReason = '먼저 2단계 산업화가 필요합니다.'; return; }
+                    if (targetTier === 3 && currentTier >= 3) { failReason = '이미 생태전환을 완료했습니다.'; return; }
+                    if ((playerData.gold || 0) < cost) { failReason = `${cost}💰이 필요합니다.`; return; }
                     return { ...playerData, gold: (playerData.gold || 0) - cost, techTier: targetTier };
                 });
-                if (!result.committed) return;
+                if (!result.committed) {
+                    if (failReason) alert(failReason);
+                    return;
+                }
                 const upgraded = result.snapshot.val();
                 await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
                     lastUpgrade: {
                         playerId: myPlayerId,
                         playerName: upgraded?.nickname || myName,
                         tier: targetTier,
-                        cost: targetTier === 2 ? 15 : 30,
+                        cost,
                         announcedAt: Date.now()
                     }
                 });
@@ -1793,18 +1880,39 @@
                         
                         document.getElementById('my-current-gold').innerText = myPlayerInfo.gold || 0;
 
+                        const techProgress = document.getElementById('my-tech-progress');
+                        const goldNow = Number(myPlayerInfo.gold || 0);
+                        const tier2Cost = getTierUpgradeCost(2, data.state);
+                        const tier3Cost = getTierUpgradeCost(3, data.state);
+                        const roundNow = Number(data.state.round || 1);
+                        const tier3DiscountLabel = data.state.activeLaw === 'green_transition' ? ' · 녹색전환 지원 적용' : (data.state.activeEvent === 'eco_innovation' ? ' · 기술혁신 할인 적용' : '');
+
+                        [btnT2, btnT3].forEach(btn => { if (btn) { btn.disabled = false; btn.classList.remove('upgrade-btn-locked'); } });
                         if (tTier === 1) {
                             tTitle.innerText = "나의 생산 방식: 1단계 [전통]"; tDesc.innerText = "효과: 욕심 +5💰 / 데미지 -10🌿";
+                            btnT2.innerHTML = `2단계 산업화 <span class="bg-black/40 px-2 py-0.5 rounded text-xs text-yellow-300">-${tier2Cost}💰</span>`;
                             btnT2.classList.remove('hidden'); btnT2.style.display = 'flex';
                             btnT3.classList.add('hidden'); btnT3.style.display = 'none';
+                            if (goldNow < tier2Cost) { btnT2.disabled = true; btnT2.classList.add('upgrade-btn-locked'); }
+                            if (techProgress) techProgress.innerText = goldNow >= tier2Cost ? '2단계 산업화 투자 가능' : `2단계까지 ${tier2Cost - goldNow}💰 남음`;
                         } else if (tTier === 2) {
-                            tTitle.innerText = "나의 생산 방식: 2단계 [산업화]"; tDesc.innerText = "효과: 욕심 +10💰 / 데미지 -20🌿 (위험한 성장)";
+                            tTitle.innerText = "나의 생산 방식: 2단계 [산업화]"; tDesc.innerText = "효과: 욕심 +10💰 / 데미지 -20🌿 (고수익·고위험)";
                             btnT2.classList.add('hidden'); btnT2.style.display = 'none';
                             btnT3.classList.remove('hidden'); btnT3.style.display = 'flex';
+                            if (roundNow < TIER3_UNLOCK_ROUND) {
+                                btnT3.disabled = true; btnT3.classList.add('upgrade-btn-locked');
+                                btnT3.innerHTML = `3단계 생태전환 <span class="bg-black/40 px-2 py-0.5 rounded text-xs text-slate-300">${TIER3_UNLOCK_ROUND}R 해금</span>`;
+                                if (techProgress) techProgress.innerText = `3단계는 ${TIER3_UNLOCK_ROUND}라운드부터 전환 가능합니다.`;
+                            } else {
+                                btnT3.innerHTML = `3단계 생태전환 <span class="bg-black/40 px-2 py-0.5 rounded text-xs text-teal-200">-${tier3Cost}💰</span>`;
+                                if (goldNow < tier3Cost) { btnT3.disabled = true; btnT3.classList.add('upgrade-btn-locked'); }
+                                if (techProgress) techProgress.innerText = goldNow >= tier3Cost ? `3단계 전환 가능${tier3DiscountLabel}` : `3단계까지 ${tier3Cost - goldNow}💰 남음${tier3DiscountLabel}`;
+                            }
                         } else if (tTier === 3) {
-                            tTitle.innerText = "나의 생산 방식: 3단계 [생태전환]"; tDesc.innerText = "효과: 욕심 +10💰 / 데미지 -5🌿 (성장과 보전 공존)";
+                            tTitle.innerText = "나의 생산 방식: 3단계 [생태전환]"; tDesc.innerText = "효과: 욕심 +10💰 / 데미지 -7🌿 · 돌보기 +15🌿";
                             btnT2.classList.add('hidden'); btnT2.style.display = 'none';
                             btnT3.classList.add('hidden'); btnT3.style.display = 'none';
+                            if (techProgress) techProgress.innerText = '생태전환 완료 · 산업설비 비상중단의 영향을 받지 않습니다.';
                         }
                     }
 
@@ -1910,7 +2018,7 @@
                     if (upgradeNotice && upgrade && Date.now() - (upgrade.announcedAt || 0) < 7000) {
                         const tierName = upgrade.tier === 3 ? '3단계 생태전환' : '2단계 산업화';
                         const icon = upgrade.tier === 3 ? '♻️' : '🏭';
-                        const cost = upgrade.cost || (upgrade.tier === 3 ? 30 : 15);
+                        const cost = upgrade.cost || (upgrade.tier === 3 ? TECH_COSTS[3] : TECH_COSTS[2]);
                         document.getElementById('upgrade-notice-text').innerText = `${icon} ${upgrade.playerName || '플레이어'}님이 ${cost}💰을 투자해 ${tierName}에 진입했습니다!`;
                         upgradeNotice.classList.remove('hidden'); upgradeNotice.style.display = 'block';
                         if ((upgrade.announcedAt || 0) > lastUpgradeSeenAt) {
@@ -2242,22 +2350,18 @@
                             activeVoteBox.classList.add('hidden'); activeVoteBox.style.display = 'none';
 
                             const cRound = data.state.round;
-                            let lawsHTML = '';
-                            
-                            lawsHTML += `<button onclick="selectLaw('tax')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-sm font-bold border border-slate-500 shadow transition">욕심 수익 삭감</button>`;
-                            lawsHTML += `<button onclick="selectLaw('subsidy_2')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-sm font-bold border border-slate-500 shadow transition">돌보기 보상금 2원</button>`;
-                            lawsHTML += `<button onclick="selectLaw('restoration_fund')" class="bg-cyan-900 hover:bg-cyan-800 text-cyan-100 rounded-xl text-sm font-bold border border-cyan-700 shadow transition">공동 복원기금</button>`;
-                            // 한 번에 3개가 튀어나오지 않고 한 개씩 해금되어, 법안판의 변화와 학습이 눈에 들어오도록 조정
-                            if (cRound >= 4) lawsHTML += `<button onclick="selectLaw('mandatory_care')" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 rounded-xl text-sm font-bold border border-emerald-600 shadow transition">돌보기 결의안</button>`;
-                            if (cRound >= 5) lawsHTML += `<button onclick="selectLaw('transparency')" class="bg-violet-900 hover:bg-violet-800 text-violet-100 rounded-xl text-sm font-bold border border-violet-700 shadow transition">환경정보 공개제</button>`;
-                            if (cRound >= 6) lawsHTML += `<button onclick="selectLaw('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-teal-100 rounded-xl text-sm font-bold border border-teal-600 shadow transition">돌보기 보상금 3원</button>`;
-                            if (cRound >= 7) lawsHTML += `<button onclick="selectLaw('low_impact')" class="bg-emerald-900 hover:bg-emerald-800 text-emerald-100 rounded-xl text-sm font-bold border border-emerald-700 shadow transition">저충격 생산 기준</button>`;
-                            if (cRound >= 8) lawsHTML += `<button onclick="selectLaw('rationing')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 rounded-xl text-sm font-bold border border-amber-600 shadow transition">자원 배급제</button>`;
-                            if (cRound >= 10) lawsHTML += `<button onclick="selectLaw('eco_tax')" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 rounded-xl text-sm font-bold border border-indigo-600 shadow transition">환경 부담금</button>`;
-                            if (cRound >= 12) lawsHTML += `<button onclick="selectLaw('tech_ban')" class="bg-rose-800 hover:bg-rose-700 text-rose-100 rounded-xl text-sm font-bold border border-rose-600 shadow transition">공장 임시 중단</button>`;
+                            const availableLaws = getAvailableLaws(data);
                             const lawContainer = document.getElementById('law-buttons-container');
-                            lawContainer.innerHTML = lawsHTML;
-                            lawContainer.dataset.count = String(lawContainer.querySelectorAll('button').length);
+                            lawContainer.innerHTML = availableLaws.map(renderLawChoice).join('');
+                            lawContainer.dataset.count = String(availableLaws.length);
+                            const lawHint = document.getElementById('law-menu-hint');
+                            if (lawHint) {
+                                const industrialCount = Object.values(players).filter(p => Number(p?.techTier || 1) === 2).length;
+                                const contextBits = [`${availableLaws.length}개 안건`];
+                                if (data.state.hp < 45) contextBits.push('생태위기 대응안 활성');
+                                if (industrialCount > 0 && cRound >= 7) contextBits.push('녹색전환 지원 가능');
+                                lawHint.innerText = `${contextBits.join(' · ')} · 겹치는 하위 법안과 직전 법안은 자동 정리됩니다.`;
+                            }
 
                             const targetsContainer = document.getElementById('sanction-targets-container');
                             targetsContainer.innerHTML = '';
@@ -2366,7 +2470,8 @@
             pKeys.forEach(k => {
                 let choice = data.players[k].choice;
                 const tier = data.players[k].techTier || 1;
-                const effectiveTier = (activeLaw === 'tech_ban') ? 1 : tier;
+                // 비상중단은 오염도가 큰 2단계 산업설비만 제한하고, 3단계 생태전환은 보호합니다.
+                const effectiveTier = (activeLaw === 'tech_ban' && tier === 2) ? 1 : tier;
 
                 const isTimeout = (choice === 'timeout');
                 if (isTimeout) choice = 'need';
@@ -2377,7 +2482,7 @@
                 if(choice === 'greed') { 
                     let damage = 10; 
                     if (effectiveTier === 2) damage = 20; 
-                    else if (effectiveTier === 3) damage = 5;
+                    else if (effectiveTier === 3) damage = 7;
                     
                     if (activeEvent === 'wildfire') damage += 5;
                     if (activeEvent === 'market_rush') damage += 3;
@@ -2465,6 +2570,17 @@
                     }
                 });
                 totalRawHpChange += (contributors * 3);
+            } else if (activeLaw === 'emergency_restoration') {
+                let totalPaid = 0;
+                pKeys.forEach(k => {
+                    const paid = Math.min(2, Math.max(0, data.players[k].gold || 0));
+                    if (paid > 0) {
+                        data.players[k].gold -= paid;
+                        data.players[k].roundEarnings = Math.max(0, (data.players[k].roundEarnings || 0) - paid);
+                        totalPaid += paid;
+                    }
+                });
+                totalRawHpChange += (totalPaid * 2.5);
             }
 
             if (careCount > 0) {
@@ -2514,9 +2630,9 @@
                 boom: '풍년으로 적당히 수익이 증가했습니다.', activist: '생태 회복 운동으로 돌보기 효과가 커졌습니다.',
                 rain: '봄비가 숲의 회복을 도왔습니다.', eco_grant: '돌보기 참여자에게 생태복원 지원금이 지급됐습니다.',
                 pest: '병충해로 적당히 생산의 생태 부담이 커졌습니다.', market_rush: '자원 가격 급등으로 욕심의 수익과 파괴가 함께 커졌습니다.',
-                tipping_point: tippingPointText
+                eco_innovation: '녹색기술 돌파로 이번 라운드 생태전환 투자비용이 낮아졌습니다.', tipping_point: tippingPointText
             };
-            const lawExtra = activeLaw === 'restoration_fund' ? '공동 복원기금이 숲 복원에 투입됐습니다. ' : activeLaw === 'low_impact' ? '저충격 생산 기준이 파괴량을 완화했습니다. ' : '';
+            const lawExtra = activeLaw === 'restoration_fund' ? '공동 복원기금이 숲 복원에 투입됐습니다. ' : activeLaw === 'emergency_restoration' ? '비상 생태복원령으로 긴급 자금이 숲에 투입됐습니다. ' : activeLaw === 'low_impact' ? '저충격 생산 기준이 파괴량을 완화했습니다. ' : activeLaw === 'green_transition' ? '녹색전환 지원으로 생태전환 투자비용이 낮아졌습니다. ' : '';
             const eventExtra = eventExtraMap[activeEvent] || '';
             
             data.state.lastResolution = {
