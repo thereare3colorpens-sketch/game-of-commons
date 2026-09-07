@@ -111,9 +111,13 @@
         @keyframes barFlow { to { background-position:220% 0; } }
         @keyframes barSheen { 0%,30% { transform:translateX(-80%); opacity:0; } 48% { opacity:.72; } 70%,100% { transform:translateX(80%); opacity:0; } }
 
-        .player-card { position:relative; overflow:hidden; isolation:isolate; }
+        .player-card { position:relative; overflow:visible; isolation:isolate; }
         .player-card > * { position:relative; z-index:2; }
-        .player-card::before { content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.65; }
+        .player-card::before { content:''; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.65; border-radius:inherit; }
+        .player-card.is-exposed { padding-top:2.8rem!important; }
+        .exposure-ribbon { position:absolute!important; z-index:12!important; top:0; left:0; right:0; min-height:34px; display:flex; align-items:center; justify-content:center; gap:.35rem; border-radius:1.45rem 1.45rem 0 0; background:linear-gradient(90deg, rgba(190,18,60,.96), rgba(225,29,72,.98), rgba(190,18,60,.96)); color:white; border-bottom:1px solid rgba(253,164,175,.55); box-shadow:0 8px 20px rgba(225,29,72,.26); font-size:11px; font-weight:900; letter-spacing:.04em; white-space:nowrap; }
+        .player-card.is-exposed .tier-emblem { top:39px; }
+        .exposed-assets { margin-top:.35rem; padding:.42rem .72rem; border-radius:.7rem; background:rgba(69,10,10,.82); border:1px solid rgba(251,113,133,.5); color:#fecdd3; font-size:.78rem; font-weight:900; box-shadow:inset 0 0 18px rgba(225,29,72,.12); }
         .player-card-tier-2 { border-color:rgba(245,158,11,.82)!important; background:linear-gradient(145deg, rgba(120,53,15,.60), rgba(15,23,42,.95))!important; box-shadow:0 0 24px rgba(245,158,11,.22), inset 0 1px 0 rgba(251,191,36,.16)!important; }
         .player-card-tier-2::before { background:radial-gradient(circle at 82% 18%, rgba(251,191,36,.24), transparent 32%), repeating-linear-gradient(90deg, transparent 0 13px, rgba(245,158,11,.035) 13px 14px); }
         .player-card-tier-3 { border-color:rgba(45,212,191,.90)!important; background:linear-gradient(145deg, rgba(13,92,87,.58), rgba(15,23,42,.95))!important; box-shadow:0 0 30px rgba(45,212,191,.27), inset 0 1px 0 rgba(153,246,228,.18)!important; animation:tierThreeBreath 3.4s ease-in-out infinite; }
@@ -124,6 +128,22 @@
         .tech-panel-tier-3 { border-color:rgba(45,212,191,.62)!important; box-shadow:0 0 34px rgba(45,212,191,.18)!important; }
 
         .notice-card { min-height:96px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        /* 법안은 최대 3열로 정렬. 3개=1x3, 4개=2x2, 5개=3+2(가운데), 6개=3x2 */
+        .law-grid { width:100%; max-width:920px; margin:0 auto 2rem; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.75rem; align-items:stretch; }
+        .law-grid > button { grid-column:span 2; width:100%; min-height:54px; padding:.7rem .75rem!important; line-height:1.25; }
+        .law-grid[data-count="1"] > button { grid-column:2 / span 4; }
+        .law-grid[data-count="2"] > button, .law-grid[data-count="4"] > button { grid-column:span 3; }
+        .law-grid[data-count="5"] > button:nth-child(4) { grid-column:2 / span 2; }
+        .law-grid[data-count="5"] > button:nth-child(5) { grid-column:4 / span 2; }
+        .law-grid[data-count="7"] > button:nth-child(7) { grid-column:3 / span 2; }
+        .law-grid[data-count="8"] > button:nth-child(7) { grid-column:2 / span 2; }
+        .law-grid[data-count="8"] > button:nth-child(8) { grid-column:4 / span 2; }
+        .law-grid[data-count="10"] > button:nth-child(10) { grid-column:3 / span 2; }
+        @media (max-width:640px) {
+            .law-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.6rem; }
+            .law-grid > button, .law-grid[data-count] > button { grid-column:auto!important; min-height:58px; }
+            .law-grid[data-count="1"] > button:last-child, .law-grid[data-count="3"] > button:last-child, .law-grid[data-count="5"] > button:last-child, .law-grid[data-count="7"] > button:last-child, .law-grid[data-count="9"] > button:last-child { grid-column:1 / -1!important; }
+        }
         .upgrade-toast { position:fixed; top:84px; left:50%; transform:translateX(-50%); width:min(92vw,720px); z-index:48; backdrop-filter:blur(16px); }
         .upgrade-toast-pop { animation:upgradeToastPop .55s cubic-bezier(.2,.9,.2,1.15) both; }
         @keyframes upgradeToastPop { from { opacity:0; transform:translate(-50%,-18px) scale(.94); } to { opacity:1; transform:translate(-50%,0) scale(1); } }
@@ -424,12 +444,12 @@
             <button type="button" id="btn-restart-game" onclick="resetGame()" class="hidden bg-indigo-600 hover:bg-indigo-500 px-10 py-4 rounded-xl font-bold text-xl text-white shadow-lg transition hover:scale-105">방장: 다시 시작하기</button>
         </div>
 
-        <!-- 15라운드 연장 투표 모달 -->
+        <!-- 15라운드 이후 3라운드 블록 연장 투표 -->
         <div id="extension-vote-section" class="w-full hidden glass-panel p-10 rounded-3xl mb-6 text-center shadow-xl z-10 border border-slate-600 flex-col items-center">
             <h3 class="text-3xl font-bold text-yellow-400 mb-4">기본 15라운드 완료!</h3>
-            <p class="font-medium text-slate-300 text-xl mb-8">여기서 순위를 확정할까요, 아니면 계속 도전할까요?</p>
+            <p class="font-medium text-slate-300 text-xl mb-8">여기서 순위를 확정할까요, 아니면 3라운드를 더 도전할까요?</p>
             <div class="flex justify-center gap-6 mb-4 w-full">
-                <button type="button" id="btn-ext-extend" onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-4 rounded-xl font-bold text-xl text-white transition shadow-lg hover:scale-105">계속 도전</button>
+                <button type="button" id="btn-ext-extend" onclick="submitExtensionVote('extend')" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-4 rounded-xl font-bold text-xl text-white transition shadow-lg hover:scale-105">3라운드 더 도전</button>
                 <button type="button" id="btn-ext-end" onclick="submitExtensionVote('end')" class="bg-slate-700 hover:bg-slate-600 px-10 py-4 rounded-xl font-bold text-xl text-white transition border border-slate-500 shadow hover:scale-105">종료하기</button>
             </div>
             <div class="font-bold text-indigo-300 text-base mt-4" id="ext-vote-status">찬성: 0명 / 반대: 0명</div>
@@ -519,7 +539,7 @@
             </div>
             
             <!-- 블라인드 결과창 -->
-            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-5 mb-10 px-2 w-full"></div>
+            <div id="reveal-grid" class="w-full grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-7 mb-10 px-2"></div>
             
             <!-- 자치 회의 패널 -->
             <div id="sanction-panel" class="hidden w-full glass-panel p-8 rounded-3xl mb-8 text-center shadow-2xl flex-col items-center">
@@ -533,7 +553,7 @@
                     <h4 class="text-2xl font-black text-yellow-300 mb-3">마을 자치 회의 & 생태 법안 발의</h4>
                     <p class="font-bold text-base text-slate-300 mb-6">라운드당 딱 1개의 안건만 상정 가능합니다. 가장 필요한 안건을 먼저 선점하세요!</p>
                     
-                    <div id="law-buttons-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
+                    <div id="law-buttons-container" class="law-grid" data-count="0"></div>
 
                     <div class="w-full border-t border-slate-600/50 pt-6 mt-4">
                         <p class="font-bold text-sm text-slate-400 mb-4">특정 조원 제재 (수익 몰수) 발의</p>
@@ -638,7 +658,8 @@
             flood: { name: '집중호우와 홍수', desc: '정산 시 공유지가 직접 훼손되어 생태 점수가 추가로 감소합니다.', tone: 'sky', target: 'hp' },
             heatwave: { name: '장기 폭염', desc: '이번 라운드 숲의 자정작용이 2 감소합니다.', tone: 'orange', target: 'hp' },
             pest: { name: '병충해 확산', desc: "이번 라운드 '적당히'의 숲 피해가 2 더 커집니다.", tone: 'orange', target: 'need' },
-            market_rush: { name: '자원 가격 급등', desc: "'욕심내기' 수익 +2, 대신 파괴도 +3. 유혹이 커집니다.", tone: 'amber', target: 'greed' }
+            market_rush: { name: '자원 가격 급등', desc: "'욕심내기' 수익 +2, 대신 파괴도 +3. 유혹이 커집니다.", tone: 'amber', target: 'greed' },
+            tipping_point: { name: '생태계 임계점', desc: '공유지가 한계선에 닿았습니다. 돌보기 쪽이 우세하면 큰 회복, 욕심 쪽이 우세하면 연쇄 붕괴가 발생합니다.', tone: 'rose', target: 'hp' }
         };
 
         const LAW_INFO = {
@@ -653,6 +674,9 @@
             subsidy_2: { name: '돌보기 보상금 2원', desc: '돌보기 기여자에게 조원들이 지급하는 보조금이 2원으로 적용됩니다.' },
             subsidy_3: { name: '돌보기 보상금 3원', desc: '돌보기 기여자에게 조원들이 지급하는 보조금이 3원으로 적용됩니다.' }
         };
+
+        const EXTENSION_BLOCK_ROUNDS = 3;
+        const LATE_EVENT_START_ROUND = 13;
 
         // Firebase 래퍼
         const initializeApp = (config) => firebase.initializeApp(config);
@@ -993,7 +1017,7 @@
                         state: { 
                             round: 1, hp: 100, phase: 'waiting', leader: null, 
                             sanctionVote: null, resolvingVote: null, voteResult: null, extVote: null, activeLaw: null, lastLaw: null, 
-                            subsidyAmount: 1, voteUsed: false, bettingEndTime: null, activeEvent: 'none', pendingLaw: null, activeLawRound: null, lastEvent: null, lastResolution: null
+                            subsidyAmount: 1, voteUsed: false, bettingEndTime: null, activeEvent: 'none', pendingLaw: null, activeLawRound: null, lastEvent: null, lastResolution: null, lateEventTriggered: false
                         }, 
                         players: {} 
                     };
@@ -1034,6 +1058,7 @@
                 updates[`groups/${i}/state/activeLawRound`] = null;
                 updates[`groups/${i}/state/lastEvent`] = null;
                 updates[`groups/${i}/state/lastResolution`] = null;
+                updates[`groups/${i}/state/lateEventTriggered`] = false;
                 updates[`groups/${i}/state/leader`] = null;
                 updates[`groups/${i}/players`] = null; 
             }
@@ -1047,7 +1072,7 @@
                 'state/hp': 100, 'state/round': 1, 'state/phase': 'waiting',
                 'state/activeLaw': null, 'state/lastLaw': null, 'state/voteUsed': false,
                 'state/sanctionVote': null, 'state/resolvingVote': null, 'state/voteResult': null, 'state/extVote': null, 'state/subsidyAmount': 1,
-                'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/lastEvent': null, 'state/lastResolution': null, 'state/leader': null,
+                'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/lastEvent': null, 'state/lastResolution': null, 'state/lateEventTriggered': false, 'state/leader': null,
                 'players': null
             };
             await update(ref(db, `classes/${myClass}/groups/${gId}`), updates);
@@ -1301,7 +1326,7 @@
 
         async function startNextRoundAtomic(data, nextRound) {
             const nextLaw = data.state.pendingLaw || null;
-            const nextEvent = chooseNextEvent(nextRound, data.state.hp, data.state.lastEvent || 'none');
+            const nextEvent = chooseNextEvent(nextRound, data.state.hp, data.state.lastEvent || 'none', data.state);
             const startedAt = Date.now();
             const updates = {
                 'state/round': nextRound,
@@ -1319,6 +1344,7 @@
                 'state/subsidyAmount': nextLaw === 'subsidy_3' ? 3 : nextLaw === 'subsidy_2' ? 2 : 1,
                 'state/activeEvent': nextEvent,
                 'state/lastEvent': nextEvent === 'none' ? (data.state.lastEvent || null) : nextEvent,
+                'state/lateEventTriggered': !!data.state.lateEventTriggered || nextEvent === 'tipping_point',
                 'state/lastResolution': null,
                 'state/roundStartedAt': startedAt,
                 'state/bettingEndTime': startedAt + 30000,
@@ -1335,8 +1361,16 @@
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), updates);
         }
 
-        function chooseNextEvent(roundNum, hp, lastEvent='none') {
+        function chooseNextEvent(roundNum, hp, lastEvent='none', state={}) {
             if (roundNum <= 1) return 'none';
+
+            // 13~15R 사이에는 후반부 대형 사건이 반드시 한 번 발생합니다.
+            // 13R 35% → 14R 65% → 15R 100%라 예측 불가능성은 유지하되 클라이맥스는 보장합니다.
+            if (roundNum >= LATE_EVENT_START_ROUND && !state?.lateEventTriggered) {
+                const climaxChance = roundNum >= 15 ? 1 : (roundNum === 14 ? 0.65 : 0.35);
+                if (Math.random() < climaxChance) return 'tipping_point';
+            }
+
             // 사건은 긴장감을 주되 매 라운드 재난처럼 느껴지지 않게 조정합니다.
             const baseChance = Math.min(0.58, 0.24 + Math.max(0, roundNum - 2) * 0.018);
             const crisisBonus = hp < 40 ? 0.10 : hp < 70 ? 0.04 : 0;
@@ -1349,7 +1383,9 @@
                 ? [['boom', 1.5], ['activist', 1.5], ['rain', 1.4], ['eco_grant', 1.0], ['market_rush', 1.1], ['drought', 1.4], ['wildfire', 1.4], ['flood', 1.2], ['heatwave', 1.3], ['pest', 1.2]]
                 : [['rain', 1.4], ['activist', 1.1], ['eco_grant', .7], ['market_rush', .6], ['drought', 2.1], ['wildfire', 2.0], ['flood', 1.5], ['heatwave', 1.7], ['pest', 1.4]];
 
-            if (lastEvent && lastEvent !== 'none') pool = pool.map(([name, weight]) => [name, name === lastEvent ? weight * 0.35 : weight]);
+            // 한 번 클라이맥스를 겪은 뒤 연장전에서는 희귀하게 재발할 수 있습니다.
+            if (roundNum >= 16 && state?.lateEventTriggered) pool.push(['tipping_point', .75]);
+            if (lastEvent && lastEvent !== 'none') pool = pool.map(([name, weight]) => [name, name === lastEvent ? weight * 0.25 : weight]);
             const totalWeight = pool.reduce((sum, item) => sum + item[1], 0);
             let roll = Math.random() * totalWeight;
             for (const [eventName, weight] of pool) {
@@ -1648,7 +1684,7 @@
                     'state/activeLaw': null, 'state/lastLaw': null, 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/voteUsed': false,
                     'state/sanctionVote': null, 'state/resolvingVote': null, 'state/resolvingRound': null, 'state/voteResult': null, 'state/extVote': null,
                     'state/subsidyAmount': 1, 'state/bettingEndTime': null, 'state/roundStartedAt': null, 'state/transitionId': null,
-                    'state/activeEvent': 'none', 'state/lastEvent': null, 'state/lastResolution': null, 'state/lastUpgrade': null, 'state/leader': leader
+                    'state/activeEvent': 'none', 'state/lastEvent': null, 'state/lastResolution': null, 'state/lateEventTriggered': false, 'state/lastUpgrade': null, 'state/leader': leader
                 };
                 
                 pKeys.forEach(name => {
@@ -1795,7 +1831,12 @@
                     } else if (data.state.phase === 'extension_vote') {
                         extSection.classList.remove('hidden'); extSection.style.display = 'flex';
                         const extTitle = extSection.querySelector('h3');
-                        if (extTitle) extTitle.innerText = data.state.round === 15 ? '기본 15라운드 달성' : `연장 ${data.state.round - 15}라운드 종료`;
+                        const extensionPlayed = Math.max(0, data.state.round - 15);
+                        if (extTitle) extTitle.innerText = data.state.round === 15 ? '기본 15라운드 달성' : `연장 ${extensionPlayed}라운드 완료`;
+                        const extDesc = extSection.querySelector('p');
+                        if (extDesc) extDesc.innerText = `여기서 순위를 확정할까요, 아니면 ${EXTENSION_BLOCK_ROUNDS}라운드를 더 도전할까요?`;
+                        const extYesLabel = document.getElementById('btn-ext-extend');
+                        if (extYesLabel) extYesLabel.innerText = `${EXTENSION_BLOCK_ROUNDS}라운드 더 도전`;
                         
                         const votes = data.state.extVote?.votes || {};
                         const pKeys = Object.keys(data.players || {});
@@ -1840,9 +1881,14 @@
                                     const freshData = freshSnap.val();
                                     if (freshData?.state?.phase === 'extension_vote') {
                                         await startNextRoundAtomic(freshData, freshData.state.round + 1);
+                                        // 중요: 이 리스너는 아직 extension_vote의 오래된 snapshot(data)을 들고 있습니다.
+                                        // 여기서 계속 렌더하면 방장 화면만 투표 화면/제출완료 상태로 되돌아갔다가
+                                        // 다른 플레이어의 다음 DB 변경 때 비로소 풀리는 레이스가 발생합니다.
+                                        return;
                                     }
                                 } else {
                                     await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), { phase: 'victory', extVote: null });
+                                    return;
                                 }
                             }
                         }
@@ -2075,11 +2121,15 @@
                             const tierClass = tier === 3 ? 'player-card-tier-3' : tier === 2 ? 'player-card-tier-2' : '';
                             const tierLabel = tier === 3 ? '<span class="tier-emblem text-teal-200">ECO TECH</span>' : tier === 2 ? '<span class="tier-emblem text-amber-200">INDUSTRIAL</span>' : '';
                             const tierBadge = tier === 3 ? '<span class="mt-2 text-[10px] bg-teal-500/15 text-teal-200 border border-teal-400/25 px-2 py-1 rounded-full font-black">3단계 · 생태전환</span>' : tier === 2 ? '<span class="mt-2 text-[10px] bg-amber-500/15 text-amber-200 border border-amber-400/25 px-2 py-1 rounded-full font-black">2단계 · 산업화</span>' : '<span class="mt-2 text-[10px] text-slate-500 font-bold">1단계 · 전통</span>';
+                            const isPubliclyExposed = !!pData.exposed;
+                            const exposureRibbon = isPubliclyExposed ? '<div class="exposure-ribbon">🚨 폭로 상태 · 자산 공개 중</div>' : '';
+                            const exposureClass = isPubliclyExposed ? 'is-exposed border-rose-500/80 shadow-[0_0_22px_rgba(225,29,72,.32)]' : '';
+                            const publicAsset = isPubliclyExposed ? `<div class="exposed-assets">공개 자산 · ${pData.gold || 0}💰</div>` : '';
                             
                             if (submitted) {
-                                grid.innerHTML += `<div class="player-card ${tierClass} w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center h-40 shadow-inner">${tierLabel}<div class="text-xs mb-1 text-slate-500 uppercase tracking-wider">LOCKED</div><div class="font-bold text-base text-slate-300 flex items-center">${pName}${hostTag}</div>${tierBadge}<div class="font-body text-xs mt-2 bg-slate-950/55 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600/70">제출 완료</div></div>`;
+                                grid.innerHTML += `<div class="player-card ${tierClass} ${exposureClass} w-full bg-slate-800 p-5 rounded-2xl border border-slate-600 flex flex-col items-center justify-center min-h-44 shadow-inner">${tierLabel}${exposureRibbon}<div class="text-xs mb-1 text-slate-500 uppercase tracking-wider">LOCKED</div><div class="font-bold text-base text-slate-300 flex items-center">${pName}${hostTag}</div>${tierBadge}${publicAsset}<div class="font-body text-xs mt-2 bg-slate-950/55 px-3 py-1 rounded-lg text-slate-300 font-bold border border-slate-600/70">제출 완료</div></div>`;
                             } else {
-                                grid.innerHTML += `<div class="player-card ${tierClass} w-full bg-slate-900 p-5 rounded-2xl border border-slate-700 flex flex-col items-center justify-center h-40">${tierLabel}<div class="font-bold text-base text-slate-400 flex items-center">${pName}${hostTag}</div>${tierBadge}<div class="font-body text-sm mt-2 text-slate-500 font-bold animate-pulse">고민 중...</div></div>`;
+                                grid.innerHTML += `<div class="player-card ${tierClass} ${exposureClass} w-full bg-slate-900 p-5 rounded-2xl border border-slate-700 flex flex-col items-center justify-center min-h-44">${tierLabel}${exposureRibbon}<div class="font-bold text-base text-slate-400 flex items-center">${pName}${hostTag}</div>${tierBadge}${publicAsset}<div class="font-body text-sm mt-2 text-slate-500 font-bold animate-pulse">고민 중...</div></div>`;
                             }
                         });
                     }
@@ -2133,18 +2183,22 @@
                                 }
 
                                 if (isExposed && !isEnd) {
-                                    exposeBadge = `<div class="absolute -top-3 bg-rose-600 text-white text-[11px] font-black px-3 py-1 rounded-md shadow-md border border-rose-400 z-10">🚨 위반 폭로!</div>`;
-                                    bgColor = 'bg-rose-950/50 border-2 border-rose-500 shadow-[0_0_25px_rgba(225,29,72,0.6)]';
+                                    exposeBadge = `<div class="exposure-ribbon">🚨 규범 위반 · 행동/자산 공개</div>`;
+                                    bgColor = 'bg-rose-950/50 border-2 border-rose-500 shadow-[0_0_28px_rgba(225,29,72,0.62)]';
                                 }
+                                const exposedClass = (isExposed && !isEnd) ? 'is-exposed' : '';
+                                const assetDisplay = (isExposed && !isEnd)
+                                    ? `<div class="exposed-assets">⚠ 공개 자산 · ${displayGold}💰</div>`
+                                    : `<div class="bg-slate-900 px-4 py-1.5 rounded-xl text-yellow-400 font-black text-lg border border-slate-700 shadow-inner">${displayGold} 자산</div>`;
                                 
                                 grid.innerHTML += `
-                                    <div class="player-card relative w-full ${bgColor} ${tierCardClass} p-5 rounded-3xl border flex flex-col items-center justify-center h-48 transition-transform hover:scale-[1.02]">
+                                    <div class="player-card ${exposedClass} relative w-full ${bgColor} ${tierCardClass} p-5 rounded-3xl border flex flex-col items-center justify-center min-h-52 transition-transform hover:scale-[1.02]">
                                         ${tTier === 3 ? '<span class="tier-emblem text-teal-200">ECO TECH</span>' : tTier === 2 ? '<span class="tier-emblem text-amber-200">INDUSTRIAL</span>' : ''}
                                         ${exposeBadge}
                                         <div class="text-5xl mb-3">${icon}</div>
                                         <div class="font-bold text-base text-slate-200 mb-2 flex items-center">${pName}${hostTag}</div>
                                         <div class="mb-3">${tierBadge}</div>
-                                        <div class="bg-slate-900 px-4 py-1.5 rounded-xl text-yellow-400 font-black text-lg border border-slate-700 shadow-inner">${displayGold} 자산</div>
+                                        ${assetDisplay}
                                     </div>
                                 `;
                             });
@@ -2190,24 +2244,20 @@
                             const cRound = data.state.round;
                             let lawsHTML = '';
                             
-                            lawsHTML += `<button onclick="selectLaw('tax')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-3 rounded-xl text-sm font-bold border border-slate-500 shadow transition">욕심 수익 삭감</button>`;
-                            lawsHTML += `<button onclick="selectLaw('subsidy_2')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-3 rounded-xl text-sm font-bold border border-slate-500 shadow transition">돌보기 보상금 2원</button>`;
-                            lawsHTML += `<button onclick="selectLaw('restoration_fund')" class="bg-cyan-900 hover:bg-cyan-800 text-cyan-100 px-4 py-3 rounded-xl text-sm font-bold border border-cyan-700 shadow transition">공동 복원기금</button>`;
-                            
-                            if (cRound >= 4) {
-                                lawsHTML += `<button onclick="selectLaw('mandatory_care')" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-2 rounded-xl text-sm font-bold border border-emerald-600 shadow transition">돌보기 결의안</button>`;
-                                lawsHTML += `<button onclick="selectLaw('transparency')" class="bg-violet-900 hover:bg-violet-800 text-violet-100 px-4 py-3 rounded-xl text-sm font-bold border border-violet-700 shadow transition">환경정보 공개제</button>`;
-                                lawsHTML += `<button onclick="selectLaw('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-teal-100 px-4 py-3 rounded-xl text-sm font-bold border border-teal-600 shadow transition">돌보기 보상금 3원</button>`;
-                            }
-                            if (cRound >= 7) {
-                                lawsHTML += `<button onclick="selectLaw('low_impact')" class="bg-emerald-900 hover:bg-emerald-800 text-emerald-100 px-4 py-3 rounded-xl text-sm font-bold border border-emerald-700 shadow transition">저충격 생산 기준</button>`;
-                                lawsHTML += `<button onclick="selectLaw('rationing')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 px-4 py-3 rounded-xl text-sm font-bold border border-amber-600 shadow transition">자원 배급제</button>`;
-                            }
-                            if (cRound >= 10) {
-                                lawsHTML += `<button onclick="selectLaw('eco_tax')" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 px-4 py-3 rounded-xl text-sm font-bold border border-indigo-600 shadow transition">환경 부담금</button>`;
-                                lawsHTML += `<button onclick="selectLaw('tech_ban')" class="bg-rose-800 hover:bg-rose-700 text-rose-100 px-4 py-3 rounded-xl text-sm font-bold border border-rose-600 shadow transition">공장 임시 중단</button>`;
-                            }
-                            document.getElementById('law-buttons-container').innerHTML = lawsHTML;
+                            lawsHTML += `<button onclick="selectLaw('tax')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-sm font-bold border border-slate-500 shadow transition">욕심 수익 삭감</button>`;
+                            lawsHTML += `<button onclick="selectLaw('subsidy_2')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-sm font-bold border border-slate-500 shadow transition">돌보기 보상금 2원</button>`;
+                            lawsHTML += `<button onclick="selectLaw('restoration_fund')" class="bg-cyan-900 hover:bg-cyan-800 text-cyan-100 rounded-xl text-sm font-bold border border-cyan-700 shadow transition">공동 복원기금</button>`;
+                            // 한 번에 3개가 튀어나오지 않고 한 개씩 해금되어, 법안판의 변화와 학습이 눈에 들어오도록 조정
+                            if (cRound >= 4) lawsHTML += `<button onclick="selectLaw('mandatory_care')" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 rounded-xl text-sm font-bold border border-emerald-600 shadow transition">돌보기 결의안</button>`;
+                            if (cRound >= 5) lawsHTML += `<button onclick="selectLaw('transparency')" class="bg-violet-900 hover:bg-violet-800 text-violet-100 rounded-xl text-sm font-bold border border-violet-700 shadow transition">환경정보 공개제</button>`;
+                            if (cRound >= 6) lawsHTML += `<button onclick="selectLaw('subsidy_3')" class="bg-teal-800 hover:bg-teal-700 text-teal-100 rounded-xl text-sm font-bold border border-teal-600 shadow transition">돌보기 보상금 3원</button>`;
+                            if (cRound >= 7) lawsHTML += `<button onclick="selectLaw('low_impact')" class="bg-emerald-900 hover:bg-emerald-800 text-emerald-100 rounded-xl text-sm font-bold border border-emerald-700 shadow transition">저충격 생산 기준</button>`;
+                            if (cRound >= 8) lawsHTML += `<button onclick="selectLaw('rationing')" class="bg-amber-800 hover:bg-amber-700 text-amber-100 rounded-xl text-sm font-bold border border-amber-600 shadow transition">자원 배급제</button>`;
+                            if (cRound >= 10) lawsHTML += `<button onclick="selectLaw('eco_tax')" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 rounded-xl text-sm font-bold border border-indigo-600 shadow transition">환경 부담금</button>`;
+                            if (cRound >= 12) lawsHTML += `<button onclick="selectLaw('tech_ban')" class="bg-rose-800 hover:bg-rose-700 text-rose-100 rounded-xl text-sm font-bold border border-rose-600 shadow transition">공장 임시 중단</button>`;
+                            const lawContainer = document.getElementById('law-buttons-container');
+                            lawContainer.innerHTML = lawsHTML;
+                            lawContainer.dataset.count = String(lawContainer.querySelectorAll('button').length);
 
                             const targetsContainer = document.getElementById('sanction-targets-container');
                             targetsContainer.innerHTML = '';
@@ -2386,6 +2436,25 @@
             if (activeEvent === 'flood') totalRawHpChange -= (2 * pCount);   // 정규화 후 약 -4
             if (activeEvent === 'rain') totalRawHpChange += (3.5 * pCount);   // 1.7배 정규화 후 약 +6
 
+            // 후반부 클라이맥스: 같은 이벤트라도 집단 선택에 따라 결과가 크게 달라집니다.
+            // 직접 점수 보정은 인원수와 무관하게 적용해 2~6인 조의 체감 난이도를 유지합니다.
+            let tippingPointEffect = 0;
+            let tippingPointText = '';
+            if (activeEvent === 'tipping_point') {
+                const careThreshold = Math.ceil(pCount / 2);
+                const greedThreshold = Math.ceil(pCount / 2);
+                if (careCount >= careThreshold && careCount > greedCount) {
+                    tippingPointEffect = 10;
+                    tippingPointText = '공동 대응 성공! 돌보기가 우세해 생태계가 임계점을 넘어 회복했습니다.';
+                } else if (greedCount >= greedThreshold && greedCount > careCount) {
+                    tippingPointEffect = -10;
+                    tippingPointText = '연쇄 붕괴! 욕심이 우세해 생태계가 임계점을 넘어 추가 훼손됐습니다.';
+                } else {
+                    tippingPointEffect = -2;
+                    tippingPointText = '불안정 균형. 어느 쪽도 우세하지 못해 공유지가 소폭 악화됐습니다.';
+                }
+            }
+
             if (activeLaw === 'restoration_fund') {
                 let contributors = 0;
                 pKeys.forEach(k => {
@@ -2429,7 +2498,7 @@
             // 인원수로 먼저 평균낸 뒤 같은 계수를 적용하므로 2~6인 조에서도 난이도 스케일이 크게 흔들리지 않습니다.
             let normalizedHpChange = Math.round((totalRawHpChange / pCount) * 1.7);
             const naturalRegen = getNaturalRegen(data.state.hp, activeEvent);
-            normalizedHpChange += naturalRegen;
+            normalizedHpChange += naturalRegen + tippingPointEffect;
 
             const hpBefore = data.state.hp;
             data.state.hp += normalizedHpChange;
@@ -2444,7 +2513,8 @@
                 flood: '홍수로 공유지가 직접 훼손됐습니다.', wildfire: '산불로 욕심내기의 파괴가 커졌습니다.',
                 boom: '풍년으로 적당히 수익이 증가했습니다.', activist: '생태 회복 운동으로 돌보기 효과가 커졌습니다.',
                 rain: '봄비가 숲의 회복을 도왔습니다.', eco_grant: '돌보기 참여자에게 생태복원 지원금이 지급됐습니다.',
-                pest: '병충해로 적당히 생산의 생태 부담이 커졌습니다.', market_rush: '자원 가격 급등으로 욕심의 수익과 파괴가 함께 커졌습니다.'
+                pest: '병충해로 적당히 생산의 생태 부담이 커졌습니다.', market_rush: '자원 가격 급등으로 욕심의 수익과 파괴가 함께 커졌습니다.',
+                tipping_point: tippingPointText
             };
             const lawExtra = activeLaw === 'restoration_fund' ? '공동 복원기금이 숲 복원에 투입됐습니다. ' : activeLaw === 'low_impact' ? '저충격 생산 기준이 파괴량을 완화했습니다. ' : '';
             const eventExtra = eventExtraMap[activeEvent] || '';
@@ -2455,6 +2525,7 @@
             };
             
             if (activeEvent !== 'none') data.state.lastEvent = activeEvent;
+            if (activeEvent === 'tipping_point') data.state.lateEventTriggered = true;
 
             if(data.state.hp <= 0) {
                 data.state.hp = 0;
@@ -2476,14 +2547,16 @@
             if (data.state.phase !== 'reveal' && data.state.phase !== 'extension_vote') return;
             if (data.state.sanctionVote && !data.state.voteUsed) return alert('진행 중인 회의 투표를 먼저 마쳐주세요.');
             
-            if(data.state.round >= 15 && data.state.hp > 0) {
+            const shouldAskExtension = data.state.hp > 0 && data.state.round >= 15 &&
+                (data.state.round === 15 || ((data.state.round - 15) % EXTENSION_BLOCK_ROUNDS === 0));
+            if (shouldAskExtension) {
                 const pKeys = Object.keys(data.players || {});
                 const initialExtVotes = {};
                 pKeys.forEach(p => { initialExtVotes[p] = null; });
 
                 await update(ref(db, `classes/${myClass}/groups/${myGroup}/state`), {
                     phase: 'extension_vote',
-                    extVote: { votes: initialExtVotes }
+                    extVote: { votes: initialExtVotes, blockRounds: EXTENSION_BLOCK_ROUNDS, openedAt: Date.now() }
                 });
                 return;
             }
