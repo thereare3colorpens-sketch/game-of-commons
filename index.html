@@ -142,6 +142,17 @@
         .law-choice[data-family="restore"] { border-color:rgba(34,211,238,.38); }
         .law-choice[data-family="accountability"] { border-color:rgba(167,139,250,.42); }
         .law-choice[data-family="tech"] { border-color:rgba(74,222,128,.40); }
+        .law-choice[data-family="external"] { border-color:rgba(96,165,250,.46); background:linear-gradient(145deg,rgba(30,58,138,.26),rgba(15,23,42,.96)); }
+        .council-debate-strip { width:100%; max-width:920px; margin:0 auto 1rem; padding:.8rem 1rem; border-radius:1rem; border:1px solid rgba(250,204,21,.28); background:linear-gradient(90deg,rgba(113,63,18,.28),rgba(15,23,42,.74)); display:flex; align-items:center; justify-content:space-between; gap:.8rem; text-align:left; }
+        .council-debate-strip.ready { border-color:rgba(52,211,153,.34); background:linear-gradient(90deg,rgba(6,78,59,.30),rgba(15,23,42,.74)); }
+        .council-debate-timer { min-width:5.3rem; text-align:center; padding:.45rem .7rem; border-radius:.75rem; background:rgba(2,6,23,.76); border:1px solid rgba(148,163,184,.22); color:#fde68a; font-weight:900; }
+        .council-debate-strip.ready .council-debate-timer { color:#a7f3d0; }
+        .compliance-panel { width:100%; margin:-.2rem 0 1.1rem; padding:.9rem 1rem; border-radius:1rem; border:1px solid rgba(251,191,36,.28); background:rgba(69,26,3,.30); }
+        .compliance-actions { display:flex; gap:.65rem; justify-content:center; flex-wrap:wrap; margin-top:.7rem; }
+        .compliance-btn { min-width:145px; padding:.68rem 1rem; border-radius:.85rem; border:1px solid rgba(148,163,184,.25); background:rgba(30,41,59,.82); color:#cbd5e1; font-size:.82rem; font-weight:900; transition:.18s ease; }
+        .compliance-btn.active-comply { border-color:rgba(52,211,153,.62); background:rgba(6,78,59,.55); color:#a7f3d0; box-shadow:0 0 16px rgba(16,185,129,.18); }
+        .compliance-btn.active-defy { border-color:rgba(251,113,133,.72); background:rgba(127,29,29,.58); color:#fecdd3; box-shadow:0 0 18px rgba(244,63,94,.20); }
+        .obligation-chip { display:inline-flex; align-items:center; gap:.25rem; margin-top:.45rem; padding:.28rem .55rem; border-radius:999px; background:rgba(13,148,136,.12); border:1px solid rgba(45,212,191,.25); color:#99f6e4; font-size:.68rem; font-weight:900; }
         .law-family-chip { display:inline-flex; align-items:center; padding:.18rem .48rem; border-radius:999px; background:rgba(15,23,42,.78); border:1px solid rgba(148,163,184,.2); color:#94a3b8; font-size:.64rem; font-weight:900; letter-spacing:.08em; margin-bottom:.42rem; }
         .law-choice-title { display:block; font-size:.92rem; font-weight:900; color:#f8fafc; margin-bottom:.22rem; }
         .law-choice-desc { display:block; font-size:.72rem; line-height:1.35; color:#94a3b8; font-weight:700; }
@@ -297,7 +308,7 @@
             <div class="space-y-6 text-slate-200 text-xl md:text-2xl mb-12 leading-relaxed">
                 <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700 shadow-inner">
                     <h3 class="text-2xl text-yellow-400 font-black mb-3">1. 게임의 목표 (협력 속의 경쟁)</h3>
-                    <p>기본 15라운드 동안 생태 점수가 0점이 되지 않도록 파국을 막아내야 합니다. 무사히 생존했을 때, <strong>가장 많은 자산(💰)을 모은 플레이어가 최종 1위</strong>가 됩니다.</p>
+                    <p>기본 15라운드 동안 생태 점수가 0점이 되지 않도록 파국을 막아내야 합니다. 무사히 생존했을 때, <strong>현금 + 기술의 잔존가치 + 생태전환 선투자금 - 미납 의무금을 합친 ‘최종 자산가치’가 가장 높은 플레이어가 1위</strong>가 됩니다.</p>
                 </div>
                 <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700 shadow-inner">
                     <h3 class="text-2xl text-teal-400 font-black mb-3">2. 턴 진행과 성장 (테크 업그레이드)</h3>
@@ -348,8 +359,8 @@
             
             <div class="space-y-6 text-slate-200 text-lg md:text-xl mb-10 leading-relaxed font-medium">
                 <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-700 shadow-inner">
-                    <h3 class="text-2xl text-yellow-400 mb-2 font-black">🎯 최종 목표: 부유한 생존자</h3>
-                    <p>기본 15라운드 동안 생태 점수를 지켜내어 파국을 피하세요. 무사히 살아남았을 때, <strong>가장 많은 자산(💰)을 모은 플레이어가 최종 1위</strong>가 됩니다.</p>
+                    <h3 class="text-2xl text-yellow-400 mb-2 font-black">🎯 최종 목표: 지속가능한 번영</h3>
+                    <p>기본 15라운드 동안 생태 점수를 지켜내어 파국을 피하세요. 무사히 살아남았을 때, <strong>현금 + 기술 잔존가치 + 생태전환 선투자금 - 미납 의무금을 합친 ‘최종 자산가치’가 가장 높은 플레이어가 1위</strong>가 됩니다.</p>
                 </div>
                 <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-700 shadow-inner">
                     <h3 class="text-2xl text-teal-400 mb-2 font-black">🕹️ 행동 선택과 성장</h3>
@@ -357,7 +368,7 @@
                 </div>
                 <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-700 shadow-inner">
                     <h3 class="text-2xl text-emerald-400 mb-2 font-black">⚖️ 돌발 기후와 자치 회의</h3>
-                    <p>숲이 파괴될수록 혹독한 기상 재난이 발생합니다. 파국을 피하려면 <strong>마을 자치 회의를 열어 법안을 통과</strong>시켜 조원들의 이기심을 통제하세요.</p>
+                    <p>숲이 파괴될수록 혹독한 기상 재난이 발생합니다. 파국을 피하려면 <strong>마을 자치 회의에서 후보 안건을 먼저 토론한 뒤 법안을 통과</strong>시켜 조원들의 이기심을 통제하세요.</p>
                 </div>
                 <p class="text-base text-slate-400 text-center mt-4">※ 행동 수치와 블라인드 룰 등 세부 규칙은 게임 화면 상단의 <strong>[상세 룰북 📖]</strong>에서 언제든 확인 가능합니다.</p>
             </div>
@@ -510,6 +521,15 @@
                 제출 전까지 자유롭게 변경 가능합니다. 시간 초과 시 무응답자는 태만 처리됩니다.
             </div>
 
+            <div id="law-compliance-panel" class="compliance-panel hidden text-center">
+                <div class="text-sm font-black text-amber-200">이 규범은 개인적으로 불복종할 수 있습니다</div>
+                <div id="law-compliance-desc" class="text-xs md:text-sm text-slate-400 font-bold mt-1">준수하면 법의 효과를 따릅니다. 불복종하면 효과를 피할 수 있지만 벌금 2~4💰·자산 공개·위반 기록을 감수합니다.</div>
+                <div class="compliance-actions">
+                    <button type="button" id="btn-law-comply" onclick="selectLawCompliance('comply')" class="compliance-btn active-comply">✓ 규범 준수</button>
+                    <button type="button" id="btn-law-defy" onclick="selectLawCompliance('defy')" class="compliance-btn">⚠ 불복종 · 벌금/공개</button>
+                </div>
+            </div>
+
             <button type="button" id="btn-submit-action" onclick="confirmActionSubmit()" class="hidden bg-emerald-600 hover:bg-emerald-500 px-16 py-5 rounded-2xl font-black text-2xl text-white shadow-lg transition hover:scale-105 mb-10 w-full md:w-auto tracking-wide relative z-50">
                 결정 완료
             </button>
@@ -560,9 +580,13 @@
                 </div>
 
                 <div id="proposal-buttons-wrapper" class="w-full text-center">
-                    <h4 class="text-2xl font-black text-yellow-300 mb-3">마을 자치 회의 & 생태 법안 발의</h4>
-                    <p class="font-bold text-base text-slate-300 mb-4">라운드당 딱 1개의 안건만 상정 가능합니다. 가장 필요한 안건을 먼저 선점하세요!</p>
+                    <h4 class="text-2xl font-black text-yellow-300 mb-3">마을 자치회의 · 의제 토론 & 표결</h4>
+                    <p class="font-bold text-base text-slate-300 mb-4">라운드당 딱 1개의 안건만 상정합니다. 먼저 후보들을 토론한 뒤 가장 필요한 안건 하나를 선택하세요.</p>
                     <p id="law-menu-hint" class="law-menu-hint">상황에 맞는 법안만 표시되며, 상위·비상 법안이 열리면 겹치는 하위안은 자동으로 정리됩니다.</p>
+                    <div id="council-debate-strip" class="council-debate-strip">
+                        <div><div class="font-black text-yellow-200 text-sm md:text-base">먼저 ‘무엇을 표결할지’ 토론하세요</div><div id="council-debate-caption" class="text-xs md:text-sm text-slate-400 font-bold mt-1">후보 법안과 제재안을 비교한 뒤, 토론이 끝나면 하나를 상정할 수 있습니다.</div></div>
+                        <div id="council-debate-timer" class="council-debate-timer">25초</div>
+                    </div>
                     <div id="law-buttons-container" class="law-grid" data-count="0"></div>
 
                     <div class="w-full border-t border-slate-600/50 pt-6 mt-4">
@@ -576,7 +600,7 @@
                     <h5 id="law-preview-title" class="text-2xl font-black text-indigo-400 mb-4"></h5>
                     <p id="law-preview-desc" class="text-slate-300 text-lg mb-8 leading-relaxed"></p>
                     <div class="flex justify-center gap-5">
-                        <button type="button" onclick="confirmLawVote()" class="bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-bold text-lg text-white transition shadow-lg hover:scale-105 relative z-50">이 안건 상정하기</button>
+                        <button type="button" id="btn-confirm-agenda" onclick="confirmLawVote()" class="bg-indigo-600 hover:bg-indigo-500 px-8 py-4 rounded-xl font-bold text-lg text-white transition shadow-lg hover:scale-105 relative z-50">토론 후 이 안건 상정</button>
                         <button type="button" onclick="cancelLawSelection()" class="bg-slate-700 hover:bg-slate-600 px-8 py-4 rounded-xl font-bold text-lg text-white transition border border-slate-500 relative z-50">취소</button>
                     </div>
                 </div>
@@ -636,11 +660,14 @@
                 
                 <div class="bg-slate-800/50 p-6 rounded-2xl shadow-inner border border-slate-700/50">
                     <h4 class="text-xl font-bold text-emerald-400 mb-3">3. 자치 회의 & 내부 고발 시스템</h4>
-                    <p class="text-slate-300 mb-2">• <strong class="text-indigo-300 font-bold">1안건 선점:</strong> 회의 안건은 라운드당 딱 1개만 상정됩니다. 안건이 발의되면 15초 의무토론 후 15초 실제 투표를 진행합니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-indigo-300 font-bold">1안건 선점:</strong> 회의 안건은 라운드당 딱 1개만 상정됩니다. 결과 공개 후 초반 25초·중반 20초·후반 15초 동안 어떤 안건을 표결할지 먼저 토론하고, 이후 하나를 상정해 15초 동안 실제 투표합니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-violet-300 font-bold">상황형 규범:</strong> 법안은 무한히 쌓이지 않습니다. 규제·돌봄·복원·책임·기술전환의 역할별 계보에서 상위안이나 비상안이 열리면 겹치는 하위안은 자동으로 교체됩니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-rose-400 font-bold">내부고발 룰:</strong> '돌보기 결의안' 발동 시 이를 어기고 욕심/적당히를 선택하면 <strong>시스템이 당신의 정체와 전 재산을 강제로 폭로(주홍글씨)</strong>합니다. 이 폭로 상태는 돌보기를 선택해 신뢰를 회복하기 전까지 계속 유지됩니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-yellow-400 font-bold">무응답 페널티:</strong> 선택 제한 시간(30초) 초과 시 '적당히' 파괴력(-2)은 주면서 수익은 0💰이 되는 '태만' 처리를 받습니다.</p>
                     <p class="text-slate-300 mb-2">• <strong class="text-sky-300 font-bold">돌발 사건:</strong> 2라운드부터 사건 확률이 점진적으로 증가합니다. 풍년·봄비·복원 지원 같은 호재와 가뭄·산불·홍수·폭염·병충해·자원 가격 급등이 섞여 등장하며, 7라운드 이후에는 생태전환 비용을 낮추는 '녹색기술 돌파'도 등장합니다. 숲이 약할수록 재난 쪽으로 확률이 기웁니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-blue-300 font-bold">현실형 정책:</strong> 국제 녹색기금, 탄소국경조정제, 기후전환 의무투자처럼 실제 환경정책의 원리를 단순화한 안건이 후반부에 등장합니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-rose-300 font-bold">규범 불복종:</strong> 일부 강제형 법안은 개인이 불복종할 수 있습니다. 법의 개인효과를 피하는 대신 벌금은 첫 위반 2💰에서 재범 시 최대 4💰까지 상승하며, 자산 공개와 위반기록을 감수합니다. 돈이 부족하면 벌금은 다음 소득으로 이월됩니다.</p>
+                    <p class="text-slate-300 mb-2">• <strong class="text-teal-300 font-bold">최종 자산가치:</strong> 생존에 성공한 뒤 순위는 현금뿐 아니라 기술 잔존가치(2단계 10, 3단계 28), 미사용 생태전환 선투자금, 미납 의무금을 함께 반영합니다. 마지막 순간의 투자도 자산으로 일부 인정됩니다.</p>
                     <p class="text-slate-300 mb-0">• <strong class="text-emerald-300 font-bold">숲의 자정작용:</strong> 특별한 재난이 없다면 매 라운드 생태 점수가 스스로 회복됩니다. 생태 점수 70 이상은 +6, 40~69는 +4, 1~39는 +2이며 가뭄에는 회복이 멈춥니다. 시작 생태 점수 100은 조원 수에 따른 유불리를 막기 위해 동일하게 유지하며, 행동 효과는 참여 인원에 맞춰 정규화됩니다.</p>
                 </div>
             </div>
@@ -685,7 +712,10 @@
             mandatory_care: { name: '돌보기 결의안', short: '비협력자 행동·자산 공개', family: 'accountability', familyLabel: '책임 강화', desc: '돌보지 않은 플레이어는 행동과 자산이 공개되어 신뢰를 잃습니다.' },
             low_impact: { name: '저충격 생산 기준', short: '욕심 피해 -5🌿', family: 'tech', familyLabel: '생산 기준', desc: "'욕심내기'의 생태 파괴량을 5 줄입니다(최소 파괴 4)." },
             tech_ban: { name: '산업설비 비상중단', short: '2단계만 전통 수준 제한', family: 'tech', familyLabel: '위기 생산규제', desc: '이번 라운드 2단계 산업화 설비만 1단계 수준으로 제한합니다. 3단계 생태전환 기술은 영향을 받지 않습니다.' },
-            green_transition: { name: '녹색전환 지원법', short: '3단계 비용 6💰 할인', family: 'tech', familyLabel: '기술 전환', desc: '이번 라운드 3단계 생태전환 투자비용을 6💰 낮춰 산업화에서 친환경 기술로 넘어가기 쉽게 합니다.' }
+            green_transition: { name: '녹색전환 지원법', short: '3단계 비용 6💰 할인', family: 'tech', familyLabel: '기술 전환', desc: '이번 라운드 3단계 생태전환 투자비용을 6💰 낮춰 산업화에서 친환경 기술로 넘어가기 쉽게 합니다.' },
+            global_green_fund: { name: '국제 녹색기금 협약', short: '1💰 출자 · 국제기금 매칭 복원', family: 'external', familyLabel: '국제 협력', desc: '준수자는 1💰을 출자하고 국제 환경기금이 매칭하여 숲 복원 효과를 키웁니다. 불복종하면 출자를 피할 수 있지만 벌금·자산 공개를 감수합니다.' },
+            mandatory_transition: { name: '기후전환 의무투자', short: '최대 2💰 선투자 · 3단계 비용 감소', family: 'tech', familyLabel: '전환 의무', desc: '3단계 미달 플레이어는 최대 2💰을 생태전환 전용 자금으로 선투자합니다. 부족분은 다음 소득에서 자동 납부되며, 적립액만큼 3단계 비용이 낮아집니다. 불복종 시 벌금·공개가 발생합니다.' },
+            carbon_border: { name: '탄소국경조정제', short: '2단계 생산 수익 -2💰 · 3단계 면제', family: 'external', familyLabel: '국제 규제', desc: '산업화(2단계)의 욕심내기·적당히 수익에서 2💰을 조정비용으로 차감합니다. 생태전환(3단계)은 면제됩니다. 불복종 시 벌금·공개가 발생합니다.' }
         };
 
         const EXTENSION_BLOCK_ROUNDS = 3;
@@ -694,6 +724,16 @@
         const TIER3_UNLOCK_ROUND = 7;
         const GREEN_TRANSITION_DISCOUNT = 6;
         const ECO_INNOVATION_DISCOUNT = 4;
+        const LAW_VOTE_MS = 15000;
+        function getAgendaDiscussionMs(roundNum) {
+            const r = Number(roundNum || 1);
+            return r <= 3 ? 25000 : (r <= 8 ? 20000 : 15000);
+        }
+        const LAW_DEFIANCE_FINE = 2; // 첫 위반 2, 재범 3, 상습 4
+        const MAX_TRANSITION_CREDIT = 6;
+        const MANDATORY_TRANSITION_DUE = 2;
+        const TECH_ASSET_VALUE = { 1: 0, 2: 10, 3: 28 };
+        const DEFIABLE_LAWS = new Set(['tax','eco_tax','rationing','restoration_fund','emergency_restoration','tech_ban','global_green_fund','mandatory_transition','carbon_border']);
 
         // Firebase 래퍼
         const initializeApp = (config) => firebase.initializeApp(config);
@@ -743,6 +783,7 @@
         }
 
         let localChoice = ""; 
+        let localLawCompliance = 'comply';
         let currentLocalRound = 0; 
         let currentActiveLaw = null; 
         let selectedLawToPropose = null; 
@@ -860,48 +901,62 @@
                 }
             }
 
-            // 2. 자치회의 타이머
-            if (state.phase === 'reveal' && state.sanctionVote && state.sanctionVote.createdAt && !state.voteUsed) {
-                const vote = state.sanctionVote;
+            // 2. 자치회의: 먼저 후보 안건을 토론하고, 상정 뒤에는 바로 15초 표결
+            if (state.phase === 'reveal' && !state.voteUsed) {
                 const nowTs = Date.now();
-                const discussionEndAt = vote.discussionEndAt || ((vote.createdAt || nowTs) + 15000);
-                const votingEndAt = vote.votingEndAt || ((vote.createdAt || nowTs) + 30000);
-                const discussionRemain = Math.max(0, Math.ceil((discussionEndAt - nowTs) / 1000));
-                const votingRemain = Math.max(0, Math.ceil((votingEndAt - nowTs) / 1000));
-                
-                const timerText = document.getElementById('vote-timer-text');
-                const btnYes = document.getElementById('btn-vote-yes');
-                const btnNo = document.getElementById('btn-vote-no');
-                const votes = vote.votes || {};
-                const yes = Object.values(votes).filter(v => v === true).length;
-                const no = Object.values(votes).filter(v => v === false).length;
-                const pCount = Object.keys(currentGroupData.players || {}).length;
-                const myVote = votes[myPlayerId];
-
-                const countEl = document.getElementById('sanction-vote-count');
-                if (countEl) countEl.innerText = `찬성: ${yes}명 / 반대: ${no}명 (참여: ${yes + no}/${pCount}명)`;
-
-                const discussionOver = nowTs >= discussionEndAt;
-                const voteOver = nowTs >= votingEndAt;
-
-                if (!discussionOver) {
-                    if(timerText) timerText.innerText = `의무토론 ${discussionRemain}초 · 투표 준비 중`;
-                    if(btnYes) { btnYes.disabled = true; btnYes.classList.add('opacity-40', 'cursor-not-allowed'); }
-                    if(btnNo) { btnNo.disabled = true; btnNo.classList.add('opacity-40', 'cursor-not-allowed'); }
-                } else if (!voteOver) {
-                    if(timerText) timerText.innerText = myVote === undefined ? `투표 가능 · ${votingRemain}초 남음` : `내 투표: ${myVote ? '찬성' : '반대'} · ${votingRemain}초`;
-                    const locked = myVote !== undefined;
-                    if(btnYes) { btnYes.disabled = locked; btnYes.classList.toggle('opacity-40', locked); btnYes.classList.toggle('cursor-not-allowed', locked); }
-                    if(btnNo) { btnNo.disabled = locked; btnNo.classList.toggle('opacity-40', locked); btnNo.classList.toggle('cursor-not-allowed', locked); }
-                    
-                    if ((yes + no) >= pCount) tryResolveSanctionVote(false);
-                } else {
-                    if(timerText) timerText.innerText = `투표 종료 · 결과 집계 중`;
-                    if(btnYes) btnYes.disabled = true;
-                    if(btnNo) btnNo.disabled = true;
-                    tryResolveSanctionVote(true);
+                if (!state.sanctionVote) {
+                    const debateEndAt = Number(state.councilDiscussionEndAt || 0);
+                    const remain = Math.max(0, Math.ceil((debateEndAt - nowTs) / 1000));
+                    const strip = document.getElementById('council-debate-strip');
+                    const timer = document.getElementById('council-debate-timer');
+                    const caption = document.getElementById('council-debate-caption');
+                    const confirmBtn = document.getElementById('btn-confirm-agenda');
+                    const ready = !debateEndAt || nowTs >= debateEndAt;
+                    if (strip) strip.classList.toggle('ready', ready);
+                    if (timer) timer.innerText = ready ? '상정 가능' : `${remain}초`;
+                    if (caption) caption.innerText = ready ? '토론 종료 · 이제 가장 필요하다고 합의한 안건 하나를 상정하세요.' : '후보 법안과 제재안을 비교하며 어떤 문제를 우선 해결할지 토론하세요.';
+                    if (confirmBtn) {
+                        confirmBtn.disabled = !ready;
+                        confirmBtn.classList.toggle('opacity-40', !ready);
+                        confirmBtn.classList.toggle('cursor-not-allowed', !ready);
+                        confirmBtn.innerText = ready ? '이 안건 상정 · 15초 표결' : `토론 중 · ${remain}초`;
+                    }
+                } else if (state.sanctionVote.createdAt) {
+                    const vote = state.sanctionVote;
+                    const discussionEndAt = vote.discussionEndAt || (vote.createdAt || 0); // 구버전 호환
+                    const votingEndAt = vote.votingEndAt || ((vote.createdAt || nowTs) + LAW_VOTE_MS);
+                    const votingRemain = Math.max(0, Math.ceil((votingEndAt - nowTs) / 1000));
+                    const timerText = document.getElementById('vote-timer-text');
+                    const btnYes = document.getElementById('btn-vote-yes');
+                    const btnNo = document.getElementById('btn-vote-no');
+                    const votes = vote.votes || {};
+                    const yes = Object.values(votes).filter(v => v === true).length;
+                    const no = Object.values(votes).filter(v => v === false).length;
+                    const pCount = Object.keys(currentGroupData.players || {}).length;
+                    const myVote = votes[myPlayerId];
+                    const countEl = document.getElementById('sanction-vote-count');
+                    if (countEl) countEl.innerText = `찬성: ${yes}명 / 반대: ${no}명 (참여: ${yes + no}/${pCount}명)`;
+                    const votingOpen = nowTs >= discussionEndAt;
+                    const voteOver = nowTs >= votingEndAt;
+                    if (!votingOpen) {
+                        if(timerText) timerText.innerText = '투표 준비 중';
+                        if(btnYes) btnYes.disabled = true;
+                        if(btnNo) btnNo.disabled = true;
+                    } else if (!voteOver) {
+                        if(timerText) timerText.innerText = myVote === undefined ? `표결 진행 · ${votingRemain}초 남음` : `내 투표: ${myVote ? '찬성' : '반대'} · ${votingRemain}초`;
+                        const locked = myVote !== undefined;
+                        if(btnYes) { btnYes.disabled = locked; btnYes.classList.toggle('opacity-40', locked); btnYes.classList.toggle('cursor-not-allowed', locked); }
+                        if(btnNo) { btnNo.disabled = locked; btnNo.classList.toggle('opacity-40', locked); btnNo.classList.toggle('cursor-not-allowed', locked); }
+                        if ((yes + no) >= pCount) tryResolveSanctionVote(false);
+                    } else {
+                        if(timerText) timerText.innerText = '투표 종료 · 결과 집계 중';
+                        if(btnYes) btnYes.disabled = true;
+                        if(btnNo) btnNo.disabled = true;
+                        tryResolveSanctionVote(true);
+                    }
                 }
             }
+
         }, 500);
 
         window.addEventListener('beforeunload', (e) => {
@@ -1034,7 +1089,7 @@
                         state: { 
                             round: 1, hp: 100, phase: 'waiting', leader: null, 
                             sanctionVote: null, resolvingVote: null, voteResult: null, extVote: null, activeLaw: null, lastLaw: null, 
-                            subsidyAmount: 1, voteUsed: false, bettingEndTime: null, activeEvent: 'none', pendingLaw: null, activeLawRound: null, lastEvent: null, lastResolution: null, lateEventTriggered: false
+                            subsidyAmount: 1, voteUsed: false, bettingEndTime: null, activeEvent: 'none', pendingLaw: null, activeLawRound: null, lastEvent: null, lastResolution: null, lateEventTriggered: false, councilDiscussionEndAt: null
                         }, 
                         players: {} 
                     };
@@ -1076,6 +1131,7 @@
                 updates[`groups/${i}/state/lastEvent`] = null;
                 updates[`groups/${i}/state/lastResolution`] = null;
                 updates[`groups/${i}/state/lateEventTriggered`] = false;
+                updates[`groups/${i}/state/councilDiscussionEndAt`] = null;
                 updates[`groups/${i}/state/leader`] = null;
                 updates[`groups/${i}/players`] = null; 
             }
@@ -1089,7 +1145,7 @@
                 'state/hp': 100, 'state/round': 1, 'state/phase': 'waiting',
                 'state/activeLaw': null, 'state/lastLaw': null, 'state/voteUsed': false,
                 'state/sanctionVote': null, 'state/resolvingVote': null, 'state/voteResult': null, 'state/extVote': null, 'state/subsidyAmount': 1,
-                'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/lastEvent': null, 'state/lastResolution': null, 'state/lateEventTriggered': false, 'state/leader': null,
+                'state/bettingEndTime': null, 'state/activeEvent': 'none', 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/lastEvent': null, 'state/lastResolution': null, 'state/lateEventTriggered': false, 'state/councilDiscussionEndAt': null, 'state/leader': null,
                 'players': null
             };
             await update(ref(db, `classes/${myClass}/groups/${gId}`), updates);
@@ -1226,6 +1282,7 @@
                 if (!isReconnecting) {
                     updates[`${groupPath}/players/${myPlayerId}`] = {
                         nickname: nickname, choice: "", gold: 0, techTier: 1, exposed: false, sanctioned: false,
+                        transitionCredit: 0, transitionDebt: 0, regulatoryDebt: 0, violations: 0, lastViolationRound: 0, lawCompliance: 'comply', lawComplianceRound: null,
                         joinedAt: Date.now(), roundEarnings: 0, deviceId: myDeviceId, stats: { greed:0, need:0, care:0 }
                     };
                 } else {
@@ -1364,6 +1421,7 @@
                 'state/lastEvent': nextEvent === 'none' ? (data.state.lastEvent || null) : nextEvent,
                 'state/lateEventTriggered': !!data.state.lateEventTriggered || nextEvent === 'tipping_point',
                 'state/lastResolution': null,
+                'state/councilDiscussionEndAt': null,
                 'state/roundStartedAt': startedAt,
                 'state/bettingEndTime': startedAt + 30000,
                 'state/transitionId': `${nextRound}-${startedAt}`
@@ -1373,6 +1431,8 @@
                 updates[`players/${k}/choiceRound`] = null;
                 updates[`players/${k}/choiceSubmittedAt`] = null;
                 updates[`players/${k}/roundEarnings`] = 0;
+                updates[`players/${k}/lawCompliance`] = 'comply';
+                updates[`players/${k}/lawComplianceRound`] = null;
                 updates[`players/${k}/sanctioned`] = false;
             });
             // 상태 전환과 모든 플레이어 선택 초기화를 한 번의 multi-location update로 동기화
@@ -1464,11 +1524,36 @@
             }, 2250);
         }
 
+        window.selectLawCompliance = (mode) => {
+            if (mode !== 'comply' && mode !== 'defy') return;
+            localLawCompliance = mode;
+            const complyBtn = document.getElementById('btn-law-comply');
+            const defyBtn = document.getElementById('btn-law-defy');
+            if (complyBtn) complyBtn.className = `compliance-btn ${mode === 'comply' ? 'active-comply' : ''}`;
+            if (defyBtn) defyBtn.className = `compliance-btn ${mode === 'defy' ? 'active-defy' : ''}`;
+            const greedBtn = document.getElementById('action-btn-greed');
+            if (greedBtn && currentActiveLaw === 'rationing') {
+                const blocked = mode !== 'defy';
+                greedBtn.disabled = blocked;
+                greedBtn.classList.toggle('action-locked', blocked);
+                greedBtn.innerHTML = blocked ? '<div class="text-5xl mb-3 opacity-60">제한</div><div class="text-2xl font-black text-rose-300">욕심내기</div>' : '<div class="text-5xl mb-3 drop-shadow-lg">⚠</div><div class="text-2xl font-black text-rose-300">욕심내기 · 불복종</div>';
+                if (blocked && localChoice === 'greed') {
+                    localChoice = '';
+                    const subBtn = document.getElementById('btn-submit-action');
+                    if (subBtn) { subBtn.classList.add('hidden'); subBtn.style.display = 'none'; }
+                    ['greed','need','care'].forEach(id => {
+                        const b = document.getElementById(`action-btn-${id}`);
+                        if (b && id !== 'greed') b.className = 'w-full bg-slate-800 border-2 border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-lg hover:bg-slate-700 cursor-pointer';
+                    });
+                }
+            }
+        };
+
         window.selectActionLocal = (choice) => {
             const greedBtn = document.getElementById('action-btn-greed');
             if(greedBtn && greedBtn.disabled && choice === 'greed') return; 
             
-            if (currentActiveLaw === 'rationing' && choice === 'greed') {
+            if (currentActiveLaw === 'rationing' && choice === 'greed' && localLawCompliance !== 'defy') {
                 alert("자원 배급제가 시행 중입니다. '욕심내기' 선택이 제한됩니다.");
                 return;
             }
@@ -1508,7 +1593,9 @@
                 await update(ref(db, `classes/${myClass}/groups/${myGroup}/players/${myPlayerId}`), {
                     choice: localChoice,
                     choiceRound: roundNum,
-                    choiceSubmittedAt: Date.now()
+                    choiceSubmittedAt: Date.now(),
+                    lawCompliance: DEFIABLE_LAWS.has(currentActiveLaw) ? localLawCompliance : 'comply',
+                    lawComplianceRound: roundNum
                 });
                 const subBtn = document.getElementById('btn-submit-action');
                 if(subBtn) {
@@ -1519,14 +1606,35 @@
             } catch (error) { if(!auto) alert("결정 전송 실패"); }
         };
 
-        function getTierUpgradeCost(targetTier, state={}) {
+        function getTierUpgradeCost(targetTier, state={}, player=null) {
             if (targetTier === 2) return TECH_COSTS[2];
             let cost = TECH_COSTS[3];
-            const discount = Math.max(
+            const policyDiscount = Math.max(
                 state?.activeLaw === 'green_transition' ? GREEN_TRANSITION_DISCOUNT : 0,
                 state?.activeEvent === 'eco_innovation' ? ECO_INNOVATION_DISCOUNT : 0
             );
-            return Math.max(18, cost - discount);
+            const prepaid = Math.max(0, Math.min(MAX_TRANSITION_CREDIT, Number(player?.transitionCredit || 0)));
+            return Math.max(12, cost - policyDiscount - prepaid);
+        }
+
+        function getFinalAssetBreakdown(player={}) {
+            const cash = Math.max(0, Number(player.gold || 0));
+            const tier = Math.max(1, Math.min(3, Number(player.techTier || 1)));
+            const techValue = TECH_ASSET_VALUE[tier] || 0;
+            const transitionCredit = Math.max(0, Number(player.transitionCredit || 0));
+            const unpaid = Math.max(0, Number(player.transitionDebt || 0)) + Math.max(0, Number(player.regulatoryDebt || 0));
+            return { cash, techValue, transitionCredit, unpaid, total: cash + techValue + transitionCredit - unpaid };
+        }
+
+        function doesLawApplyToPlayer(lawKey, player={}) {
+            const tier = Number(player?.techTier || 1);
+            if (lawKey === 'mandatory_transition') return tier < 3;
+            if (lawKey === 'carbon_border' || lawKey === 'tech_ban') return tier === 2;
+            return true;
+        }
+
+        function isPlayerDefying(player, state, lawKey=state?.activeLaw) {
+            return !!lawKey && DEFIABLE_LAWS.has(lawKey) && doesLawApplyToPlayer(lawKey, player) && Number(player?.lawComplianceRound || 0) === Number(state?.round || 0) && player?.lawCompliance === 'defy';
         }
 
         function getAvailableLaws(data) {
@@ -1535,42 +1643,48 @@
             const hp = Number(state.hp || 0);
             const players = Object.values(data?.players || {});
             const industrialCount = players.filter(p => Number(p?.techTier || 1) === 2).length;
+            const tier3Count = players.filter(p => Number(p?.techTier || 1) === 3).length;
             const lastLaw = state.lastLaw || null;
             const laws = [];
 
-            // 채취 규제: 평시에는 경제적 규제, 위기에는 직접 배급으로 자동 교체
+            // 1) 채취 규제: 경제적 규제 → 부담금 → 생태위기 직접 배급
             if (roundNum >= 8 && hp < 40) laws.push('rationing');
             else if (roundNum >= 9) laws.push('eco_tax');
             else laws.push('tax');
 
-            // 돌봄 인센티브: 6R부터 상위안이 하위안을 완전히 대체
+            // 2) 돌봄 인센티브는 단계적으로 강화
             laws.push(roundNum >= 6 ? 'subsidy_3' : 'subsidy_2');
 
-            // 복원: HP가 크게 낮아지면 동일 역할의 비상안으로 교체
-            laws.push(roundNum >= 8 && hp < 45 ? 'emergency_restoration' : 'restoration_fund');
+            // 3) 복원 재원은 때때로 국제기금 협약으로 대체되어 메뉴의 성격이 변합니다.
+            if (roundNum >= 6 && hp >= 35 && roundNum % 3 === 0) laws.push('global_green_fund');
+            else laws.push(roundNum >= 8 && hp < 45 ? 'emergency_restoration' : 'restoration_fund');
 
-            // 책임 공개: 7R부터 더 강한 결의안으로 승급
+            // 4) 책임·감시: 정보 공개에서 더 강한 공동체 규범으로 진화
             if (roundNum >= 7) laws.push('mandatory_care');
             else if (roundNum >= 4) laws.push('transparency');
 
-            // 생산 규제: 산업화가 많고 숲이 위험할 때만 비상중단으로 교체
+            // 5) 생산정책: 위기에는 중단, 평시 후반에는 국제 탄소규제, 그 외에는 기술기준
             if (roundNum >= 5) {
                 if (roundNum >= 9 && hp < 55 && industrialCount >= 2) laws.push('tech_ban');
+                else if (roundNum >= 9 && industrialCount > 0 && roundNum % 2 === 1) laws.push('carbon_border');
                 else laws.push('low_impact');
             }
 
-            // 실제 2단계 플레이어가 있을 때만 전환지원이 의미가 있으므로 조건부 등장
-            if (roundNum >= 7 && industrialCount > 0) laws.push('green_transition');
+            // 6) 전환정책: 지원과 의무투자를 번갈아 제시해 '보조금 vs 규제' 선택을 만듭니다.
+            if (roundNum >= 7 && industrialCount > 0) {
+                if (roundNum >= 8 && tier3Count < players.length && roundNum % 2 === 0) laws.push('mandatory_transition');
+                else laws.push('green_transition');
+            }
 
-            // 직전 라운드와 같은 법안은 쿨타임 동안 메뉴에서 아예 제거해 선택지 노이즈를 줄입니다.
             return laws.filter((law, index) => law !== lastLaw && laws.indexOf(law) === index).slice(0, 6);
         }
 
         function renderLawChoice(lawKey) {
             const info = LAW_INFO[lawKey];
             if (!info) return '';
+            const defyChip = DEFIABLE_LAWS.has(lawKey) ? '<span class="ml-1 text-[9px] px-1.5 py-0.5 rounded-full border border-rose-400/25 bg-rose-500/10 text-rose-200 font-black">불복종 가능</span>' : '';
             return `<button type="button" onclick="selectLaw('${lawKey}')" class="law-choice rounded-xl shadow" data-family="${info.family}">
-                <span class="law-family-chip">${info.familyLabel}</span>
+                <span class="law-family-chip">${info.familyLabel}</span>${defyChip}
                 <span class="law-choice-title">${info.name}</span>
                 <span class="law-choice-desc">${info.short}</span>
             </button>`;
@@ -1585,7 +1699,9 @@
                 if (targetTier === 3 && Number(state.round || 0) < TIER3_UNLOCK_ROUND) {
                     return alert(`3단계 생태전환은 ${TIER3_UNLOCK_ROUND}라운드부터 가능합니다.`);
                 }
-                const cost = getTierUpgradeCost(targetTier, state);
+                const playerSnap = await get(playerRef);
+                const playerBefore = playerSnap.val() || {};
+                const cost = getTierUpgradeCost(targetTier, state, playerBefore);
                 let failReason = '';
                 const result = await runTransaction(playerRef, playerData => {
                     if (!playerData) { failReason = '플레이어 정보가 없습니다.'; return; }
@@ -1593,8 +1709,9 @@
                     if (targetTier === 2 && currentTier >= 2) { failReason = '이미 산업화 단계를 달성했습니다.'; return; }
                     if (targetTier === 3 && currentTier < 2) { failReason = '먼저 2단계 산업화가 필요합니다.'; return; }
                     if (targetTier === 3 && currentTier >= 3) { failReason = '이미 생태전환을 완료했습니다.'; return; }
-                    if ((playerData.gold || 0) < cost) { failReason = `${cost}💰이 필요합니다.`; return; }
-                    return { ...playerData, gold: (playerData.gold || 0) - cost, techTier: targetTier };
+                    const liveCost = getTierUpgradeCost(targetTier, state, playerData);
+                    if ((playerData.gold || 0) < liveCost) { failReason = `${liveCost}💰이 필요합니다.`; return; }
+                    return { ...playerData, gold: (playerData.gold || 0) - liveCost, techTier: targetTier, transitionCredit: targetTier === 3 ? 0 : Number(playerData.transitionCredit || 0) };
                 });
                 if (!result.committed) {
                     if (failReason) alert(failReason);
@@ -1632,6 +1749,15 @@
                 selectedLawToPropose = { type: 'law', lawType: lawType, question: qText, description: descText };
             }
             pTitle.innerText = qText; pDesc.innerText = descText;
+            const confirmBtn = document.getElementById('btn-confirm-agenda');
+            const debateEndAt = Number(currentGroupData?.state?.councilDiscussionEndAt || 0);
+            const ready = !debateEndAt || Date.now() >= debateEndAt;
+            if (confirmBtn) {
+                confirmBtn.disabled = !ready;
+                confirmBtn.classList.toggle('opacity-40', !ready);
+                confirmBtn.classList.toggle('cursor-not-allowed', !ready);
+                confirmBtn.innerText = ready ? '이 안건 상정 · 15초 표결' : '후보 검토 중 · 토론을 먼저 마치세요';
+            }
         };
 
         window.cancelLawSelection = () => {
@@ -1649,6 +1775,7 @@
                 if (!state) return;
                 if (state.voteUsed) return alert("이번 라운드의 회의는 이미 종료되었습니다.");
                 if (state.sanctionVote) return alert("이미 진행 중인 투표가 있습니다!");
+                if (Date.now() < Number(state.councilDiscussionEndAt || 0)) return alert('먼저 후보 안건 토론을 마쳐주세요. 토론 시간이 끝난 뒤 하나를 상정할 수 있습니다.');
                 if (selectedLawToPropose.type === 'law' && state.lastLaw === selectedLawToPropose.lawType) {
                     return alert("⚠️ 직전 라운드에 발동했던 법안은 연속으로 통과시킬 수 없습니다. (쿨타임)");
                 }
@@ -1661,7 +1788,7 @@
                         sanctionVote: {
                             type: selectedLawToPropose.type, lawType: selectedLawToPropose.lawType || null, target: selectedLawToPropose.target || null,
                             question: selectedLawToPropose.question, description: selectedLawToPropose.description,
-                            createdAt: Date.now(), discussionEndAt: Date.now() + 15000, votingEndAt: Date.now() + 30000, votes: {}
+                            createdAt: Date.now(), votingEndAt: Date.now() + LAW_VOTE_MS, votes: {}
                         },
                         voteResult: null
                     };
@@ -1676,10 +1803,10 @@
                 const voteRef = ref(db, `classes/${myClass}/groups/${myGroup}/state/sanctionVote`);
                 const snap = await get(voteRef); const vote = snap.val(); if (!vote) return;
                 const nowTs = Date.now();
-                const discussionEndAt = vote.discussionEndAt || ((vote.createdAt || 0) + 15000);
-                const votingEndAt = vote.votingEndAt || ((vote.createdAt || 0) + 30000);
+                const discussionEndAt = vote.discussionEndAt || (vote.createdAt || 0);
+                const votingEndAt = vote.votingEndAt || ((vote.createdAt || 0) + LAW_VOTE_MS);
                 
-                if (nowTs < discussionEndAt) return alert("의무토론 시간이 끝난 뒤 투표할 수 있습니다.");
+                if (nowTs < discussionEndAt) return alert("투표 준비 중입니다.");
                 if (nowTs >= votingEndAt) return alert("투표 시간이 종료되었습니다.");
                 if (vote.votes && Object.prototype.hasOwnProperty.call(vote.votes, myPlayerId)) return;
                 
@@ -1703,8 +1830,8 @@
                 const yes = Object.values(votes).filter(v => v === true).length;
                 const no = Object.values(votes).filter(v => v === false).length;
                 const voted = yes + no;
-                const discussionEndAt = vote.discussionEndAt || ((vote.createdAt || 0) + 15000);
-                const votingEndAt = vote.votingEndAt || ((vote.createdAt || 0) + 30000);
+                const discussionEndAt = vote.discussionEndAt || (vote.createdAt || 0);
+                const votingEndAt = vote.votingEndAt || ((vote.createdAt || 0) + LAW_VOTE_MS);
                 
                 if (Date.now() < discussionEndAt) return;
                 if (!force && Date.now() < votingEndAt && voted < pKeys.length) return;
@@ -1771,18 +1898,20 @@
                     'state/activeLaw': null, 'state/lastLaw': null, 'state/pendingLaw': null, 'state/activeLawRound': null, 'state/voteUsed': false,
                     'state/sanctionVote': null, 'state/resolvingVote': null, 'state/resolvingRound': null, 'state/voteResult': null, 'state/extVote': null,
                     'state/subsidyAmount': 1, 'state/bettingEndTime': null, 'state/roundStartedAt': null, 'state/transitionId': null,
-                    'state/activeEvent': 'none', 'state/lastEvent': null, 'state/lastResolution': null, 'state/lateEventTriggered': false, 'state/lastUpgrade': null, 'state/leader': leader
+                    'state/activeEvent': 'none', 'state/lastEvent': null, 'state/lastResolution': null, 'state/lateEventTriggered': false, 'state/councilDiscussionEndAt': null, 'state/lastUpgrade': null, 'state/leader': leader
                 };
                 
                 pKeys.forEach(name => {
                     updates[`players/${name}/choice`] = ''; updates[`players/${name}/choiceRound`] = null; updates[`players/${name}/choiceSubmittedAt`] = null;
                     updates[`players/${name}/gold`] = 0; updates[`players/${name}/techTier`] = 1;
                     updates[`players/${name}/exposed`] = false; updates[`players/${name}/sanctioned`] = false; updates[`players/${name}/roundEarnings`] = 0;
+                    updates[`players/${name}/transitionCredit`] = 0; updates[`players/${name}/transitionDebt`] = 0; updates[`players/${name}/regulatoryDebt`] = 0;
+                    updates[`players/${name}/violations`] = 0; updates[`players/${name}/lastViolationRound`] = 0; updates[`players/${name}/lawCompliance`] = 'comply'; updates[`players/${name}/lawComplianceRound`] = null;
                     updates[`players/${name}/stats`] = { greed: 0, need: 0, care: 0 };
                 });
 
                 await update(groupRef, updates);
-                currentLocalRound = 0; localChoice = ''; selectedLawToPropose = null; lastHp = null;
+                currentLocalRound = 0; localChoice = ''; localLawCompliance = 'comply'; selectedLawToPropose = null; lastHp = null;
             } catch (e) {
                 alert(`재시작 오류: ${e.message}`);
             }
@@ -1883,9 +2012,12 @@
                         const techProgress = document.getElementById('my-tech-progress');
                         const goldNow = Number(myPlayerInfo.gold || 0);
                         const tier2Cost = getTierUpgradeCost(2, data.state);
-                        const tier3Cost = getTierUpgradeCost(3, data.state);
+                        const tier3Cost = getTierUpgradeCost(3, data.state, myPlayerInfo);
                         const roundNow = Number(data.state.round || 1);
-                        const tier3DiscountLabel = data.state.activeLaw === 'green_transition' ? ' · 녹색전환 지원 적용' : (data.state.activeEvent === 'eco_innovation' ? ' · 기술혁신 할인 적용' : '');
+                        const prepaid = Number(myPlayerInfo.transitionCredit || 0);
+                        const transitionDebt = Number(myPlayerInfo.transitionDebt || 0);
+                        const policyLabel = data.state.activeLaw === 'green_transition' ? '녹색전환 지원' : (data.state.activeEvent === 'eco_innovation' ? '기술혁신 할인' : '');
+                        const tier3DiscountLabel = `${policyLabel ? ` · ${policyLabel}` : ''}${prepaid > 0 ? ` · 선투자 ${prepaid}💰 반영` : ''}${transitionDebt > 0 ? ` · 의무투자 미납 ${transitionDebt}💰` : ''}`;
 
                         [btnT2, btnT3].forEach(btn => { if (btn) { btn.disabled = false; btn.classList.remove('upgrade-btn-locked'); } });
                         if (tTier === 1) {
@@ -2029,31 +2161,38 @@
                         upgradeNotice.classList.add('hidden'); upgradeNotice.style.display = 'none';
                     }
 
-                    // 🌟 랭킹 리더보드 출력 🌟
+                    // 🌟 최종 자산가치 랭킹: 현금만이 아니라 투자된 기술의 잔존가치를 함께 평가
                     if (data.state.phase === 'gameover' || data.state.phase === 'victory') {
                         const pKeys = Object.keys(data.players || {});
-                        let sortedPlayers = pKeys.map(k => ({ id: k, ...data.players[k] }));
-                        sortedPlayers.sort((a, b) => (b.gold || 0) - (a.gold || 0));
+                        let sortedPlayers = pKeys.map(k => ({ id: k, ...data.players[k], finalAsset: getFinalAssetBreakdown(data.players[k]) }));
+                        sortedPlayers.sort((a, b) =>
+                            (b.finalAsset.total - a.finalAsset.total) ||
+                            (b.finalAsset.cash - a.finalAsset.cash) ||
+                            ((a.violations || 0) - (b.violations || 0)) ||
+                            ((b.stats?.care || 0) - (a.stats?.care || 0))
+                        );
 
-                        let statsHTML = `<div class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 text-left mb-6 shadow-inner max-w-2xl mx-auto">
-                            <h4 class="text-xl md:text-2xl font-black text-yellow-300 mb-5 text-center drop-shadow-sm">최종 자산 랭킹 · 성적표</h4>
+                        let statsHTML = `<div class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 text-left mb-6 shadow-inner max-w-3xl mx-auto">
+                            <h4 class="text-xl md:text-2xl font-black text-yellow-300 mb-2 text-center drop-shadow-sm">최종 자산가치 랭킹 · 성적표</h4>
+                            <p class="text-xs md:text-sm text-slate-400 text-center font-bold mb-5">현금 + 기술 잔존가치 + 미사용 생태전환 선투자금 − 미납 의무금</p>
                             <div class="space-y-3">`;
                         
                         sortedPlayers.forEach((p, index) => {
                             const pStats = p.stats || {greed:0, need:0, care:0};
-                            const isFirst = (index === 0 && data.state.phase === 'victory'); 
+                            const b = p.finalAsset;
+                            const isFirst = (index === 0 && data.state.phase === 'victory');
                             const rankClass = isFirst ? 'rank-1 shadow-[0_0_15px_rgba(251,191,36,0.3)] border-slate-600' : 'border border-slate-700/50';
                             const crown = isFirst ? '👑' : `${index + 1}위`;
-
-                            statsHTML += `<div class="flex justify-between items-center bg-slate-800/80 px-4 py-3 rounded-xl ${rankClass}">
-                                <div class="font-black text-base text-white flex items-center gap-2"><span class="text-yellow-400 text-sm w-8 text-center">${crown}</span> ${p.nickname || p.id}</div>
-                                <div class="flex flex-col items-end">
-                                    <div class="text-yellow-400 font-black text-lg mb-1.5 drop-shadow-sm">${p.gold || 0} 자산</div>
-                                    <div class="text-[11px] md:text-xs font-bold flex gap-2">
-                                        <span class="text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/20">돌보기 ${pStats.care || 0}회</span>
-                                        <span class="text-amber-400 bg-amber-900/30 px-2 py-0.5 rounded border border-amber-500/20">적당히 ${pStats.need || 0}회</span>
-                                        <span class="text-rose-400 bg-rose-900/30 px-2 py-0.5 rounded border border-rose-500/20">욕심 ${pStats.greed || 0}회</span>
-                                    </div>
+                            const tierName = Number(p.techTier || 1) === 3 ? '생태전환' : Number(p.techTier || 1) === 2 ? '산업화' : '전통';
+                            statsHTML += `<div class="bg-slate-800/80 px-4 py-3 rounded-xl ${rankClass}">
+                                <div class="flex justify-between items-start gap-4">
+                                    <div class="font-black text-base text-white flex items-center gap-2"><span class="text-yellow-400 text-sm w-8 text-center">${crown}</span> ${p.nickname || p.id}</div>
+                                    <div class="text-right"><div class="text-yellow-300 font-black text-xl">${b.total} 가치</div><div class="text-[11px] text-slate-400 font-bold">현금 ${b.cash} + 기술 ${b.techValue}${b.transitionCredit ? ` + 선투자 ${b.transitionCredit}` : ''}${b.unpaid ? ` − 미납 ${b.unpaid}` : ''}</div></div>
+                                </div>
+                                <div class="mt-2 flex flex-wrap justify-end gap-2 text-[10px] md:text-xs font-bold">
+                                    <span class="text-teal-300 bg-teal-900/25 px-2 py-0.5 rounded border border-teal-500/20">기술 ${p.techTier || 1}단계 · ${tierName}</span>
+                                    <span class="text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded border border-emerald-500/20">돌보기 ${pStats.care || 0}회</span>
+                                    <span class="text-rose-300 bg-rose-900/25 px-2 py-0.5 rounded border border-rose-500/20">규범위반 ${p.violations || 0}회</span>
                                 </div>
                             </div>`;
                         });
@@ -2085,7 +2224,7 @@
                     // 만약 현재 학생이 DB에 없다면 (유령 상태) 강제로 다시 밀어넣기
                     if (!isTeacher && myPlayerId && myClass && myGroup && !pKeys.includes(myPlayerId)) {
                         update(ref(db, `${makeGroupPath(myClass, myGroup)}/players/${myPlayerId}`), {
-                            nickname: myName, choice: "", gold: 0, techTier: 1, exposed: false, roundEarnings: 0, deviceId: myDeviceId, stats: { greed:0, need:0, care:0 }
+                            nickname: myName, choice: "", gold: 0, techTier: 1, exposed: false, roundEarnings: 0, transitionCredit: 0, transitionDebt: 0, regulatoryDebt: 0, violations: 0, lastViolationRound: 0, lawCompliance: 'comply', lawComplianceRound: null, deviceId: myDeviceId, stats: { greed:0, need:0, care:0 }
                         });
                         return; 
                     }
@@ -2103,6 +2242,7 @@
                     if (currentLocalRound !== data.state.round) {
                         currentLocalRound = data.state.round;
                         localChoice = "";
+                        localLawCompliance = 'comply';
                         const btnClasses = "w-full bg-slate-800 border-2 border-slate-700 py-8 rounded-3xl transition flex flex-col items-center shadow-md cursor-pointer hover:bg-slate-700";
                         ['greed', 'need', 'care'].forEach(id => {
                             const b = document.getElementById(`action-btn-${id}`);
@@ -2184,13 +2324,23 @@
                         if (data.state.activeLaw && LAW_INFO[data.state.activeLaw]) {
                             lawNotice.classList.remove('hidden'); lawNotice.style.display = 'block';
                             lawNoticeText.innerText = LAW_INFO[data.state.activeLaw].name;
-                            lawNoticeDesc.innerText = `적용 중 · ${LAW_INFO[data.state.activeLaw].desc}`;
+                            const defyHint = DEFIABLE_LAWS.has(data.state.activeLaw) ? ' · 개인 불복종 가능(위반 벌금 2~4💰)' : '';
+                            lawNoticeDesc.innerText = `적용 중 · ${LAW_INFO[data.state.activeLaw].desc}${defyHint}`;
                         } else {
                             lawNotice.classList.add('hidden'); lawNotice.style.display = 'none';
                         }
                         syncRoundNoticeLayout('betting');
 
                         const bTimerDisplay = document.getElementById('betting-timer-display');
+                        const compliancePanel = document.getElementById('law-compliance-panel');
+                        if (compliancePanel) {
+                            const canDefy = !isTeacher && DEFIABLE_LAWS.has(data.state.activeLaw) && doesLawApplyToPlayer(data.state.activeLaw, myPlayerInfo || {}) && (!myChoice || myChoice === '');
+                            compliancePanel.classList.toggle('hidden', !canDefy);
+                            compliancePanel.style.display = canDefy ? 'block' : 'none';
+                            const cDesc = document.getElementById('law-compliance-desc');
+                            if (cDesc && canDefy) cDesc.innerText = `${LAW_INFO[data.state.activeLaw]?.name || '이번 규범'} · 준수하면 법의 효과를 따릅니다. 불복종하면 해당 개인효과를 피하지만 벌금 2~4💰·자산 공개·위반 기록을 감수합니다.`;
+                            if (canDefy) selectLawCompliance(localLawCompliance);
+                        }
                         
                         if (!isTeacher && (!myChoice || myChoice === "")) {
                             document.getElementById('action-buttons-container').classList.remove('hidden');
@@ -2206,9 +2356,12 @@
 
                         const greedBtn = document.getElementById('action-btn-greed');
                         if (greedBtn) {
-                            if (data.state.activeLaw === 'rationing') {
+                            if (data.state.activeLaw === 'rationing' && localLawCompliance !== 'defy') {
                                 greedBtn.disabled = true; greedBtn.classList.add('action-locked');
                                 greedBtn.innerHTML = '<div class="text-5xl mb-3 opacity-60">제한</div><div class="text-2xl font-black text-rose-300">욕심내기</div>';
+                            } else if (data.state.activeLaw === 'rationing' && localLawCompliance === 'defy') {
+                                greedBtn.disabled = false; greedBtn.classList.remove('action-locked');
+                                greedBtn.innerHTML = '<div class="text-5xl mb-3 drop-shadow-lg">⚠</div><div class="text-2xl font-black text-rose-300">욕심내기 · 불복종</div>';
                             } else {
                                 greedBtn.disabled = false; greedBtn.classList.remove('action-locked');
                                 greedBtn.innerHTML = '<div class="text-5xl mb-3 drop-shadow-lg">😈</div><div class="text-2xl font-black text-rose-400">욕심내기</div>';
@@ -2230,7 +2383,8 @@
                             const tierLabel = tier === 3 ? '<span class="tier-emblem text-teal-200">ECO TECH</span>' : tier === 2 ? '<span class="tier-emblem text-amber-200">INDUSTRIAL</span>' : '';
                             const tierBadge = tier === 3 ? '<span class="mt-2 text-[10px] bg-teal-500/15 text-teal-200 border border-teal-400/25 px-2 py-1 rounded-full font-black">3단계 · 생태전환</span>' : tier === 2 ? '<span class="mt-2 text-[10px] bg-amber-500/15 text-amber-200 border border-amber-400/25 px-2 py-1 rounded-full font-black">2단계 · 산업화</span>' : '<span class="mt-2 text-[10px] text-slate-500 font-bold">1단계 · 전통</span>';
                             const isPubliclyExposed = !!pData.exposed;
-                            const exposureRibbon = isPubliclyExposed ? '<div class="exposure-ribbon">🚨 폭로 상태 · 자산 공개 중</div>' : '';
+                            const recentViolation = Number(pData.lastViolationRound || 0) >= Number(data.state.round || 0) - 1;
+                            const exposureRibbon = isPubliclyExposed ? `<div class="exposure-ribbon">${recentViolation ? '🚫 규범 불복종' : '🚨 폭로 상태'} · 자산 공개 중</div>` : '';
                             const exposureClass = isPubliclyExposed ? 'is-exposed border-rose-500/80 shadow-[0_0_22px_rgba(225,29,72,.32)]' : '';
                             const publicAsset = isPubliclyExposed ? `<div class="exposed-assets">공개 자산 · ${pData.gold || 0}💰</div>` : '';
                             
@@ -2242,6 +2396,8 @@
                         });
                     }
                     else if (currentPhase === 'reveal') {
+                        const compliancePanel = document.getElementById('law-compliance-panel');
+                        if (compliancePanel) { compliancePanel.classList.add('hidden'); compliancePanel.style.display = 'none'; }
                         sRev.classList.remove('hidden'); sRev.style.display = 'flex';
 
                         const lawBanner = document.getElementById('active-law-banner');
@@ -2343,7 +2499,7 @@
                             document.getElementById('sanction-vote-question').innerText = sVoteData.question;
                             document.getElementById('sanction-vote-desc').innerText = sVoteData.description;
                             const voteHint = document.getElementById('vote-timer-text');
-                            if (voteHint) voteHint.innerText = '의무토론 준비 중...';
+                            if (voteHint) voteHint.innerText = '안건 상정 완료 · 15초 표결';
                         } else {
                             pWrapper.classList.remove('hidden'); pWrapper.style.display = 'block';
                             closedMsg.classList.add('hidden'); closedMsg.style.display = 'none';
@@ -2360,7 +2516,7 @@
                                 const contextBits = [`${availableLaws.length}개 안건`];
                                 if (data.state.hp < 45) contextBits.push('생태위기 대응안 활성');
                                 if (industrialCount > 0 && cRound >= 7) contextBits.push('녹색전환 지원 가능');
-                                lawHint.innerText = `${contextBits.join(' · ')} · 겹치는 하위 법안과 직전 법안은 자동 정리됩니다.`;
+                                lawHint.innerText = `${contextBits.join(' · ')} · 규제·지원·국제협력·기술전환 안건이 상황에 따라 교체됩니다.`;
                             }
 
                             const targetsContainer = document.getElementById('sanction-targets-container');
@@ -2373,7 +2529,7 @@
 
                         // 🌟 방장용 다음 라운드 버튼 강제 렌더링 🌟
                         const btnNext = document.getElementById('btn-next-round');
-                        if ((isGroupLeader || isTeacher) && (!data.state.sanctionVote || data.state.voteUsed)) {
+                        if ((isGroupLeader || isTeacher) && data.state.voteUsed) {
                             btnNext.classList.remove('hidden'); btnNext.style.display = 'block';
                         } else {
                             btnNext.classList.add('hidden'); btnNext.style.display = 'none';
@@ -2403,6 +2559,8 @@
                 startUpdates[`players/${pid}/choice`] = '';
                 startUpdates[`players/${pid}/choiceRound`] = null;
                 startUpdates[`players/${pid}/choiceSubmittedAt`] = null;
+                startUpdates[`players/${pid}/lawCompliance`] = 'comply';
+                startUpdates[`players/${pid}/lawComplianceRound`] = null;
             });
             await update(ref(db, `classes/${myClass}/groups/${myGroup}`), startUpdates);
         });
@@ -2453,7 +2611,7 @@
                     data.players[k].choiceRound = data.state.round;
                     data.players[k].choiceSubmittedAt = Date.now();
                 }
-                if (activeLaw === 'rationing' && data.players[k].choice === 'greed') {
+                if (activeLaw === 'rationing' && data.players[k].choice === 'greed' && !isPlayerDefying(data.players[k], data.state, activeLaw)) {
                     data.players[k].choice = 'need';
                 }
             });
@@ -2471,7 +2629,8 @@
                 let choice = data.players[k].choice;
                 const tier = data.players[k].techTier || 1;
                 // 비상중단은 오염도가 큰 2단계 산업설비만 제한하고, 3단계 생태전환은 보호합니다.
-                const effectiveTier = (activeLaw === 'tech_ban' && tier === 2) ? 1 : tier;
+                const defiesLaw = isPlayerDefying(data.players[k], data.state, activeLaw);
+                const effectiveTier = (activeLaw === 'tech_ban' && tier === 2 && !defiesLaw) ? 1 : tier;
 
                 const isTimeout = (choice === 'timeout');
                 if (isTimeout) choice = 'need';
@@ -2486,7 +2645,7 @@
                     
                     if (activeEvent === 'wildfire') damage += 5;
                     if (activeEvent === 'market_rush') damage += 3;
-                    if (activeLaw === 'low_impact') damage = Math.max(4, damage - 5);
+                    if (activeLaw === 'low_impact' && !defiesLaw) damage = Math.max(4, damage - 5);
                     totalRawHpChange -= damage; 
 
                     let earned = 5;
@@ -2494,12 +2653,13 @@
                     if (activeEvent === 'market_rush') earned += 2;
                     earned = Math.max(1, Math.floor(earned * greedMultiplier));
                     if (isCrisis) earned = Math.max(1, Math.floor(earned * 0.75));
-                    if (activeLaw === 'tax') earned = Math.max(1, Math.floor(earned / 2));
+                    if (activeLaw === 'tax' && !defiesLaw) earned = Math.max(1, Math.floor(earned / 2));
                     
-                    if (activeLaw === 'eco_tax') {
+                    if (activeLaw === 'eco_tax' && !defiesLaw) {
                         earned = Math.max(0, earned - 2); 
                         totalRawHpChange += 5; 
                     }
+                    if (activeLaw === 'carbon_border' && tier === 2 && !defiesLaw) earned = Math.max(0, earned - 2);
 
                     data.players[k].gold += earned;
                     data.players[k].roundEarnings += earned;
@@ -2512,6 +2672,7 @@
                     
                     if (activeEvent === 'boom') earned += 2; 
                     if (isTimeout) earned = 0; 
+                    if (activeLaw === 'carbon_border' && tier === 2 && !defiesLaw) earned = Math.max(0, earned - 2);
                     
                     data.players[k].gold += earned;
                     data.players[k].roundEarnings += earned;
@@ -2532,8 +2693,13 @@
                 if (activeLaw === 'transparency' && choice === 'greed') {
                     data.players[k].exposed = true;
                 }
+                if (defiesLaw) {
+                    data.players[k].exposed = true;
+                    data.players[k].violations = Number(data.players[k].violations || 0) + 1;
+                    data.players[k].lastViolationRound = Number(data.state.round || 0);
+                }
 
-                if (data.players[k].exposed === true && choice === 'care') {
+                if (data.players[k].exposed === true && choice === 'care' && !defiesLaw) {
                     data.players[k].exposed = false; 
                 }
             });
@@ -2560,27 +2726,23 @@
                 }
             }
 
-            if (activeLaw === 'restoration_fund') {
+            if (activeLaw === 'restoration_fund' || activeLaw === 'emergency_restoration' || activeLaw === 'global_green_fund') {
+                let totalPaid = 0;
                 let contributors = 0;
                 pKeys.forEach(k => {
-                    if ((data.players[k].gold || 0) >= 1) {
-                        data.players[k].gold -= 1;
-                        data.players[k].roundEarnings = Math.max(0, (data.players[k].roundEarnings || 0) - 1);
+                    if (isPlayerDefying(data.players[k], data.state, activeLaw)) return;
+                    const due = activeLaw === 'emergency_restoration' ? 2 : 1;
+                    const paid = Math.min(due, Math.max(0, Number(data.players[k].gold || 0)));
+                    if (paid > 0) {
+                        data.players[k].gold -= paid;
+                        data.players[k].roundEarnings = Math.max(0, Number(data.players[k].roundEarnings || 0) - paid);
+                        totalPaid += paid;
                         contributors++;
                     }
                 });
-                totalRawHpChange += (contributors * 3);
-            } else if (activeLaw === 'emergency_restoration') {
-                let totalPaid = 0;
-                pKeys.forEach(k => {
-                    const paid = Math.min(2, Math.max(0, data.players[k].gold || 0));
-                    if (paid > 0) {
-                        data.players[k].gold -= paid;
-                        data.players[k].roundEarnings = Math.max(0, (data.players[k].roundEarnings || 0) - paid);
-                        totalPaid += paid;
-                    }
-                });
-                totalRawHpChange += (totalPaid * 2.5);
+                if (activeLaw === 'restoration_fund') totalRawHpChange += totalPaid * 3;
+                else if (activeLaw === 'emergency_restoration') totalRawHpChange += totalPaid * 2.5;
+                else if (activeLaw === 'global_green_fund') totalRawHpChange += totalPaid * 5; // 국제기금 매칭으로 1원당 복원효율 상승
             }
 
             if (careCount > 0) {
@@ -2609,6 +2771,50 @@
                 });
             }
 
+            // 규범 불복종 벌금·이월 의무금 및 생태전환 선투자 정산
+            pKeys.forEach(k => {
+                const player = data.players[k];
+                player.gold = Math.max(0, Number(player.gold || 0));
+
+                // 과거 규범위반 벌금은 이후 소득에서 우선 회수됩니다.
+                let regulatoryDue = Math.max(0, Number(player.regulatoryDebt || 0));
+                if (isPlayerDefying(player, data.state, activeLaw)) {
+                    const violationCountAfterThis = Math.max(1, Number(player.violations || 1));
+                    regulatoryDue += LAW_DEFIANCE_FINE + Math.min(2, violationCountAfterThis - 1);
+                }
+                if (regulatoryDue > 0) {
+                    const paid = Math.min(player.gold, regulatoryDue);
+                    player.gold -= paid;
+                    regulatoryDue -= paid;
+                    player.roundEarnings = Math.max(0, Number(player.roundEarnings || 0) - paid);
+                }
+                player.regulatoryDebt = regulatoryDue;
+
+                // 이전 기후전환 의무투자 미납액도 다음 소득에서 자동 적립됩니다.
+                let transitionDebt = Math.max(0, Number(player.transitionDebt || 0));
+                let transitionCredit = Math.max(0, Math.min(MAX_TRANSITION_CREDIT, Number(player.transitionCredit || 0)));
+                if (transitionDebt > 0 && player.techTier < 3 && transitionCredit < MAX_TRANSITION_CREDIT) {
+                    const payable = Math.min(player.gold, transitionDebt, MAX_TRANSITION_CREDIT - transitionCredit);
+                    player.gold -= payable;
+                    transitionDebt -= payable;
+                    transitionCredit += payable;
+                    player.roundEarnings = Math.max(0, Number(player.roundEarnings || 0) - payable);
+                }
+
+                if (activeLaw === 'mandatory_transition' && player.techTier < 3 && !isPlayerDefying(player, data.state, activeLaw)) {
+                    const room = Math.max(0, MAX_TRANSITION_CREDIT - transitionCredit);
+                    const due = Math.min(MANDATORY_TRANSITION_DUE, room);
+                    const paid = Math.min(player.gold, due);
+                    player.gold -= paid;
+                    transitionCredit += paid;
+                    transitionDebt += (due - paid);
+                    player.roundEarnings = Math.max(0, Number(player.roundEarnings || 0) - paid);
+                }
+                if (player.techTier >= 3) { transitionCredit = 0; transitionDebt = 0; }
+                player.transitionCredit = transitionCredit;
+                player.transitionDebt = transitionDebt;
+            });
+
             // 기존 4배 보정은 2인 조에서 욕심 1회만으로도 한 라운드에 20점 이상을 잃게 했습니다.
             // 1.7배로 조정해 절반이 계속 욕심을 내면 매우 위험하지만, 규범·돌보기로 회복할 여지를 남깁니다.
             // 인원수로 먼저 평균낸 뒤 같은 계수를 적용하므로 2~6인 조에서도 난이도 스케일이 크게 흔들리지 않습니다.
@@ -2632,7 +2838,7 @@
                 pest: '병충해로 적당히 생산의 생태 부담이 커졌습니다.', market_rush: '자원 가격 급등으로 욕심의 수익과 파괴가 함께 커졌습니다.',
                 eco_innovation: '녹색기술 돌파로 이번 라운드 생태전환 투자비용이 낮아졌습니다.', tipping_point: tippingPointText
             };
-            const lawExtra = activeLaw === 'restoration_fund' ? '공동 복원기금이 숲 복원에 투입됐습니다. ' : activeLaw === 'emergency_restoration' ? '비상 생태복원령으로 긴급 자금이 숲에 투입됐습니다. ' : activeLaw === 'low_impact' ? '저충격 생산 기준이 파괴량을 완화했습니다. ' : activeLaw === 'green_transition' ? '녹색전환 지원으로 생태전환 투자비용이 낮아졌습니다. ' : '';
+            const lawExtra = activeLaw === 'restoration_fund' ? '공동 복원기금이 숲 복원에 투입됐습니다. ' : activeLaw === 'emergency_restoration' ? '비상 생태복원령으로 긴급 자금이 숲에 투입됐습니다. ' : activeLaw === 'global_green_fund' ? '국제 녹색기금이 주민 출자금에 매칭되어 복원 효과를 키웠습니다. ' : activeLaw === 'low_impact' ? '저충격 생산 기준이 파괴량을 완화했습니다. ' : activeLaw === 'green_transition' ? '녹색전환 지원으로 생태전환 투자비용이 낮아졌습니다. ' : activeLaw === 'mandatory_transition' ? '기후전환 의무투자가 개인별 생태전환 선투자금으로 적립됐습니다. ' : activeLaw === 'carbon_border' ? '탄소국경조정제가 산업화 생산의 수익을 압박했습니다. ' : '';
             const eventExtra = eventExtraMap[activeEvent] || '';
             
             data.state.lastResolution = {
@@ -2646,8 +2852,10 @@
             if(data.state.hp <= 0) {
                 data.state.hp = 0;
                 data.state.phase = 'gameover';
+                data.state.councilDiscussionEndAt = null;
             } else {
                 data.state.phase = 'reveal';
+                data.state.councilDiscussionEndAt = Date.now() + getAgendaDiscussionMs(data.state.round);
             }
 
             data.state.resolvingRound = null;
@@ -2661,6 +2869,7 @@
             const isGroupLeader = (getGroupLeaderId(data) === myPlayerId);
             if (!isGroupLeader && !isTeacher) return;
             if (data.state.phase !== 'reveal' && data.state.phase !== 'extension_vote') return;
+            if (data.state.phase === 'reveal' && !data.state.voteUsed) return alert('이번 라운드의 안건 토론과 표결을 먼저 마쳐주세요.');
             if (data.state.sanctionVote && !data.state.voteUsed) return alert('진행 중인 회의 투표를 먼저 마쳐주세요.');
             
             const shouldAskExtension = data.state.hp > 0 && data.state.round >= 15 &&
